@@ -4,7 +4,7 @@ const Navbar = () => {
     return (
         <nav className="fixed flex items-center justify-between -mt-16 p-7 w-full h-16 bg-black">
             <div className="text-white">
-                <a href="/" className="hover:text-gray-500 mr-4 active-link">Home</a>
+                <a href="/" className="hover:text-gray-500 mr-4">Home</a>
                 <a href="collection" className="hover:text-gray-500 mr-4">Collection</a>
                 <a href="api" className="hover:text-gray-500">API</a>
             </div>

@@ -11,12 +11,14 @@ const Main = () => {
         fetchBooks();
     }, []);
     return (
-        <div className="mt-16 grid grid-cols-7">
+        <div className="mt-16 grid grid-cols-3">
             {books.map(book => (
-                <div className="inline-block w-[230px] h-[600px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
+                <div className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
                     <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`} alt={book.title} className=" w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
-                    <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
-                    <h2 className="text-sm">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
+                    <div className="ml-4">
+                        <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
+                        <h2 className="text-sm">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
+                    </div>
                 </div>
             ))}
         </div>
