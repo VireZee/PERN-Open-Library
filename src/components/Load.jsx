@@ -3,8 +3,8 @@ import './Styles/Load.css';
 
 const Load = () => {
     return (
-        <div className="mt-16 flex items-center justify-center h-screen">
-            <div className="loader"></div>
+        <div className="mt-16 ">
+            <div className="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
         </div>
     )
 }
