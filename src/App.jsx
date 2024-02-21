@@ -5,7 +5,9 @@ import Home from './components/Home';
 const App = () => {
   return (
     <>
-      <Navbar />
+      <header className="fixed w-screen">
+        <Navbar />
+      </header>
       <Home />
     </>
   )

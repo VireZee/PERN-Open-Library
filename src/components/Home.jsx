@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Load from './Load';
 
 const Home = () => {
+    const [load, setLoad] = useState(true);
     const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const booksPerPage = 9;
@@ -14,6 +16,8 @@ const Home = () => {
                 setTotalPages(Math.ceil(response.data.numFound / booksPerPage));
             } catch (e) {
                 console.error(e);
+            } finally {
+                setLoad(false);
             }
         };
         fetchBooks();
@@ -60,23 +64,30 @@ const Home = () => {
     const endIdx = startIdx + booksPerPage;
     return (
         <>
-            <div className="mt-16 grid grid-cols-3">
-                {books.slice(startIdx, endIdx).map(book => (
-                    <div className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
-                        <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
-                            alt={book.title}
-                            className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
-                        <div className="ml-4">
-                            <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
-                            <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
-                            <h2 className="text-sm line-clamp-[11]">Subjects: {book.subject ? book.subject.join(', ') : 'Unknown'}</h2>
-                        </div>
+            {load ? (
+                <Load />
+            ) : (
+                <>
+                    <div className="mt-16 grid grid-cols-3">
+                        {books.slice(startIdx, endIdx).map(book => (
+                            <div className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
+                                <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
+                                    alt={book.title}
+                                    className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
+                                <div className="ml-4">
+                                    <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
+                                    <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
+                                    <h2 className="text-sm line-clamp-[11]">Subjects: {book.subject ? book.subject.join(', ') : 'Unknown'}</h2>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            <div className="flex justify-center mt-4">
-                {renderPageNumbers()}
-            </div>
+                    <div className="flex justify-center mt-4">
+                        {renderPageNumbers()}
+                    </div>
+                </>
+            )
+            }
         </>
     );
 }

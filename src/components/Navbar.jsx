@@ -6,7 +6,7 @@ const Navbar = () => {
         setActive(btn);
     };
     return (
-        <nav className="fixed flex items-center justify-between -mt-16 p-7 w-full h-16 bg-black">
+        <nav className="flex items-center justify-between -mt-16 p-7 h-16 bg-black">
             <div className="text-white">
                 <a href="#" className={`${active === 'home' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => handleClick('home')}>Home</a>
                 <a href="#" className={`${active === 'col' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => handleClick('col')}>Collection</a>
