@@ -10,27 +10,17 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     useEffect(() => {
-        const handleOnline = () => {
-            setOnline(navigator.onLine);
-        };
+        const handleOnline = () => setOnline(navigator.onLine);
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOnline);
         (async () => {
+            if (!online) return;
             try {
-                if (online) {
-                    setLoad(true);
-                    const cachedData = localStorage.getItem('');
-                    if (cachedData) {
-                        const parsedData = JSON.parse(cachedData);
-                        setBooks(parsedData.docs);
-                        setTotalPages(Math.ceil(parsedData.numFound / 100));
-                    } else {
-                        const response = await axios.get(`https://openlibrary.org/search.json?title=harry+potter&page=${currentPage}`);
-                        setBooks(response.data.docs);
-                        setTotalPages(Math.ceil(response.data.numFound / 100));
-                        localStorage.setItem('', JSON.stringify(response.data));
-                    }
-                }
+                setLoad(true);
+                const response = await axios.get(`https://openlibrary.org/search.json?title=harry+potter&page=${currentPage}`);
+                setBooks(response.data.docs);
+                setTotalPages(Math.ceil(response.data.numFound / 100));
+                localStorage.setItem('', JSON.stringify(response.data));
             } catch (e) {
                 console.error(e);
             } finally {
@@ -44,57 +34,39 @@ const Home = () => {
     }, [currentPage, online]);
     const pageNumbers = () => {
         const pages = [];
+        const addPages = (s, e) => {
+            for (let i = s; i <= e; i++) {
+                pages.push(i);
+            }
+        };
         if (totalPages <= 9) {
-            for (let i = 1; i <= totalPages; i++) {
-                pages.push(i);
-            }
-        } else if (totalPages >= 10 && currentPage <= 6) {
-            for (let i = 1; i <= 7; i++) {
-                pages.push(i);
-            }
-            pages.push('...');
-            pages.push(totalPages);
-        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 4) {
-            pages.push(1);
-            pages.push('...');
-            for (let i = currentPage - 3; i <= currentPage + 1; i++) {
-                pages.push(i);
-            }
-            pages.push('...');
-            pages.push(totalPages);
-        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 3) {
-            pages.push(1);
-            pages.push('...');
-            for (let i = currentPage - 3; i <= currentPage + 1; i++) {
-                pages.push(i);
-            }
-            pages.push(totalPages - 1);
-            pages.push(totalPages);
-        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 2) {
-            pages.push(1);
-            pages.push('...');
-            for (let i = currentPage - 4; i <= currentPage + 1; i++) {
-                pages.push(i);
-            }
-            pages.push(totalPages);
-        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 1) {
-            pages.push(1);
-            pages.push('...');
-            for (let i = currentPage - 5; i <= currentPage + 1; i++) {
-                pages.push(i);
-            }
+            addPages(1, totalPages);
         } else {
-            pages.push(1);
-            pages.push('...');
-            for (let i = currentPage - 6; i <= currentPage; i++) {
-                pages.push(i);
+            if (currentPage <= 6) {
+                addPages(1, 7);
+                pages.push('...', totalPages);
+            } else if (currentPage <= totalPages - 4) {
+                pages.push(1, '...');
+                addPages(currentPage - 3, currentPage + 1);
+                pages.push('...', totalPages);
+            } else if (currentPage <= totalPages - 3) {
+                pages.push(1, '...');
+                addPages(currentPage - 3, currentPage + 1);
+                pages.push(totalPages - 1, totalPages);
+            } else if (currentPage <= totalPages - 2) {
+                pages.push(1, '...');
+                addPages(currentPage - 4, currentPage + 1)
+                pages.push(totalPages);
+            } else if (currentPage <= totalPages - 1) {
+                pages.push(1, '...');
+                addPages(currentPage - 5, currentPage + 1);
+            } else {
+                pages.push(1, '...');
+                addPages(currentPage - 6, currentPage)
             }
         }
         const handlePageClick = (page) => {
-            if (page === '...') {
-                return;
-            }
-            setCurrentPage(page);
+            if (page !== '...') setCurrentPage(page);
         };
         return (
             <>
@@ -110,8 +82,6 @@ const Home = () => {
             </>
         );
     };
-    const startIdx = (currentPage - 1) * 100;
-    const endIdx = startIdx + 100;
     return (
         <>
             {load ? (
@@ -121,7 +91,7 @@ const Home = () => {
                     {online ? (
                         <>
                             <div className="mt-16 grid grid-cols-3">
-                                {books.slice(startIdx, endIdx).map(book => (
+                                {books.map(book => (
                                     <div className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
                                         <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
                                             alt={book.title}
