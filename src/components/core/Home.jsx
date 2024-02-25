@@ -4,52 +4,103 @@ import Load from './Load';
 import Net from '../errors/Internet';
 
 const Home = () => {
+    const [online, setOnline] = useState(navigator.onLine);
     const [load, setLoad] = useState(true);
-    const booksPerPage = 9;
     const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [online, setOnline] = useState(navigator.onLine);
     useEffect(() => {
         const handleOnline = () => {
             setOnline(navigator.onLine);
         };
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOnline);
-        return () => {
-            window.removeEventListener('online', handleOnline);
-            window.removeEventListener('offline', handleOnline);
-        };
-    }, []);
-    useEffect(() => {
         (async () => {
             try {
                 if (online) {
                     setLoad(true);
-                    const cachedData = localStorage.getItem('search');
+                    const cachedData = localStorage.getItem('');
                     if (cachedData) {
                         const parsedData = JSON.parse(cachedData);
                         setBooks(parsedData.docs);
-                        setTotalPages(Math.ceil(parsedData.numFound / booksPerPage));
+                        setTotalPages(Math.ceil(parsedData.numFound / 100));
                     } else {
                         const response = await axios.get(`https://openlibrary.org/search.json?title=harry+potter&page=${currentPage}`);
                         setBooks(response.data.docs);
-                        setTotalPages(Math.ceil(response.data.numFound / booksPerPage));
-                        localStorage.setItem('search', JSON.stringify(response.data));
+                        setTotalPages(Math.ceil(response.data.numFound / 100));
+                        localStorage.setItem('', JSON.stringify(response.data));
                     }
                 }
+            } catch (e) {
+                console.error(e);
             } finally {
                 setLoad(false);
             }
         })();
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOnline);
+        };
     }, [currentPage, online]);
-    const renderPageNumbers = () => {
-        const pages = totalPages <= 7 ? Array.from({ length: totalPages }, (_, i) => i + 1) : [1, 2, 3, 4, 5, 6, 7, '...', totalPages];
+    const pageNumbers = () => {
+        const pages = [];
+        if (totalPages <= 9) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+        } else if (totalPages >= 10 && currentPage <= 6) {
+            for (let i = 1; i <= 7; i++) {
+                pages.push(i);
+            }
+            pages.push('...');
+            pages.push(totalPages);
+        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 4) {
+            pages.push(1);
+            pages.push('...');
+            for (let i = currentPage - 3; i <= currentPage + 1; i++) {
+                pages.push(i);
+            }
+            pages.push('...');
+            pages.push(totalPages);
+        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 3) {
+            pages.push(1);
+            pages.push('...');
+            for (let i = currentPage - 3; i <= currentPage + 1; i++) {
+                pages.push(i);
+            }
+            pages.push(totalPages - 1);
+            pages.push(totalPages);
+        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 2) {
+            pages.push(1);
+            pages.push('...');
+            for (let i = currentPage - 4; i <= currentPage + 1; i++) {
+                pages.push(i);
+            }
+            pages.push(totalPages);
+        } else if (totalPages >= 10 && currentPage >= 7 && currentPage <= totalPages - 1) {
+            pages.push(1);
+            pages.push('...');
+            for (let i = currentPage - 5; i <= currentPage + 1; i++) {
+                pages.push(i);
+            }
+        } else {
+            pages.push(1);
+            pages.push('...');
+            for (let i = currentPage - 6; i <= currentPage; i++) {
+                pages.push(i);
+            }
+        }
+        const handlePageClick = (page) => {
+            if (page === '...') {
+                return;
+            }
+            setCurrentPage(page);
+        };
         return (
             <>
-                {pages.map((page, index) => (
+                {pages.map((page, idx) => (
                     <span
-                        key={index}
+                        key={idx}
                         onClick={() => handlePageClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === currentPage ? 'bg-blue-500 text-white' : ''}`}
                     >
@@ -59,13 +110,8 @@ const Home = () => {
             </>
         );
     };
-    const handlePageClick = (page) => {
-        if (page === '...') {
-            setCurrentPage(page);
-        }
-    };
-    const startIdx = (currentPage - 1) * booksPerPage;
-    const endIdx = startIdx + booksPerPage;
+    const startIdx = (currentPage - 1) * 100;
+    const endIdx = startIdx + 100;
     return (
         <>
             {load ? (
@@ -88,7 +134,7 @@ const Home = () => {
                                 ))}
                             </div>
                             <div className="flex justify-center">
-                                {renderPageNumbers()}
+                                {pageNumbers()}
                             </div>
                         </>
                     ) : (
