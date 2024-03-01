@@ -3,7 +3,7 @@ import axios from 'axios';
 import Load from './Load';
 import Net from '../errors/Internet';
 
-const Home = () => {
+const Home = ({ search }) => {
     const [online, setOnline] = useState(navigator.onLine);
     const [load, setLoad] = useState(true);
     const [books, setBooks] = useState([]);
@@ -17,7 +17,8 @@ const Home = () => {
             try {
                 if (online) {
                     setLoad(true);
-                    const response = await axios.get(`https://openlibrary.org/search.json?title=harry+potter&page=${currentPage}`);
+                    const encoded = search ? search.split(' ').join('+') : 'harry+potter';
+                    const response = await axios.get(`https://openlibrary.org/search.json?title=${encoded}&page=${currentPage}`);
                     setBooks(response.data.docs);
                     setTotalPages(Math.ceil(response.data.numFound / 100));
                 }
@@ -31,7 +32,7 @@ const Home = () => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOnline);
         };
-    }, [currentPage, online]);
+    }, [currentPage, online, search]);
     const pageNumbers = () => {
         const pages = [];
         const addPages = (s, e) => {
@@ -65,7 +66,7 @@ const Home = () => {
                 addPages(currentPage - 6, currentPage)
             }
         }
-        const handlePageClick = (page) => {
+        const handleClick = (page) => {
             if (page !== '...') setCurrentPage(page);
         };
         return (
@@ -73,7 +74,7 @@ const Home = () => {
                 {pages.map((page, idx) => (
                     <span
                         key={idx}
-                        onClick={() => handlePageClick(page)}
+                        onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === currentPage ? 'bg-blue-500 text-white' : ''}`}
                     >
                         {page}

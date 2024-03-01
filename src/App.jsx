@@ -1,15 +1,17 @@
 import React from 'react';
-import Navbar from './components/app/Navbar';
-import Home from './components/app/Home';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
 
 const App = () => {
-  return (
-    <>
-      <header className="fixed w-screen">
-        <Navbar />
-      </header>
-      <Home />
-    </>
-  )
+    const [search, setSearch] = React.useState();
+    const handleSearch = (s) => setSearch(s);
+    return (
+        <>
+            <header className="fixed w-screen">
+                <Navbar onSearch={handleSearch} />
+            </header>
+            <Home search={search} />
+        </>
+    )
 }
 export default App;
