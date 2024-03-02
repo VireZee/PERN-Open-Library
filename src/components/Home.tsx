@@ -3,12 +3,20 @@ import axios from 'axios';
 import Load from './Load';
 import Net from '../errors/Internet';
 
-const Home = ({ search }) => {
-    const [online, setOnline] = useState(navigator.onLine);
-    const [load, setLoad] = useState(true);
-    const [books, setBooks] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+interface Props {
+    search: string | undefined;
+}
+interface Books {
+    cover_i: number;
+    title: string;
+    author_name: string[];
+}
+const Home: React.FC<Props> = ({ search }) => {
+    const [online, setOnline] = useState<boolean>(navigator.onLine);
+    const [load, setLoad] = useState<boolean>(true);
+    const [books, setBooks] = useState<Books[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(1);
     useEffect(() => {
         const handleOnline = () => setOnline(navigator.onLine);
         window.addEventListener('online', handleOnline);
@@ -35,7 +43,7 @@ const Home = ({ search }) => {
     }, [currentPage, online, search]);
     const pageNumbers = () => {
         const pages = [];
-        const addPages = (s, e) => {
+        const addPages = (s: number, e: number) => {
             for (let i = s; i <= e; i++) {
                 pages.push(i);
             }
@@ -66,7 +74,7 @@ const Home = ({ search }) => {
                 addPages(currentPage - 6, currentPage)
             }
         }
-        const handleClick = (page) => {
+        const handleClick = (page: any) => {
             if (page !== '...') setCurrentPage(page);
         };
         return (

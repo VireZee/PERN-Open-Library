@@ -1,9 +1,12 @@
 import React from 'react';
 import _debounce from 'lodash/debounce';
 
-const Navbar = ({ onSearch }) => {
-    const [active, setActive] = React.useState('home');
-    const debSearch = _debounce((val) => onSearch(val), 500);
+interface Props {
+    onSearch: (v: string) => void;
+}
+const Navbar: React.FC<Props> = ({ onSearch }) => {
+    const [active, setActive] = React.useState<string>('home');
+    const debSearch = _debounce((val: string) => onSearch(val), 750);
     return (
         <nav className="flex items-center justify-between -mt-16 p-7 h-16 bg-black">
             <div className="text-white">
