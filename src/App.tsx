@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 
 const App: React.FC = () => {
-    const [search, setSearch] = React.useState<string>();
-    const handleSearch = (s: string) => setSearch(s);
+    const [change, setChange] = useState<boolean>(false);
+    const [search, setSearch] = useState<string>();
+    const changeHandler = (c: boolean) => setChange(c);
+    const searchHandler = (s: string) => setSearch(s);
     return (
         <>
             <header className="fixed w-screen">
-                <Navbar onSearch={handleSearch} />
+                <Navbar onChange={changeHandler} onSearch={searchHandler} />
             </header>
-            <Home search={search} />
+            <main>
+                <Home change={change} search={search} />
+            </main>
         </>
     )
 }
