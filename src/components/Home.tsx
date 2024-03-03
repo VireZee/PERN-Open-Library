@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Load from './Load';
-import Net from '../errors/Internet';
-import NB from '../errors/NoBooks';
+import Net from './errors/Internet';
+import NB from './errors/NoBooks';
 
 interface Props {
     change: boolean;
@@ -19,25 +19,50 @@ const Home: React.FC<Props> = ({ change, search }) => {
     const [books, setBooks] = useState<Books[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
+    const urlParams = React.useMemo(() => new URLSearchParams(window.location.search), []);
+    const str = urlParams.get('title') || urlParams.get('isbn');
+    const pg = urlParams.get('page');
     useEffect(() => {
         const handleOnline = () => setOnline(navigator.onLine);
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOnline);
         (async () => {
+            const booksData = (res: AxiosResponse) => {
+                if (res.data.numFound === 0) {
+                    setBooks([]);
+                } else {
+                    setBooks(res.data.docs);
+                    setTotalPages(Math.ceil(res.data.numFound / 100));
+                }
+            };
+            const fetch = async () => {
+                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title';
+                const query = search ? search.split(' ').join('+') : 'harry+potter';
+                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${currentPage}`);
+                booksData(response);
+            };
             try {
-                if (online) {
-                    setLoad(true);
-                    if (change) {
-                        setCurrentPage(1);
-                    }
-                    const encoded = search ? search.split(' ').join('+') : 'harry+potter';
-                    const response = await axios.get(`https://openlibrary.org/search.json?title=${encoded}&page=${currentPage}`);
-                    if (response.data.numFound === 0) {
-                        setBooks([]);
-                    } else {
-                        setBooks(response.data.docs);
-                        setTotalPages(Math.ceil(response.data.numFound / 100));
-                    }
+                switch (online) {
+                    case true:
+                        setLoad(true);
+                        if (urlParams.toString() === '') {
+                            if (change) {
+                                setCurrentPage(1);
+                            }
+                            await fetch();
+                        } else {
+                            if (change) {
+                                setCurrentPage(1);
+                                await fetch();
+                            } else {
+                                const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title';
+                                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${str}&page=${pg}`);
+                                booksData(response);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             } catch (e) {
                 console.error(e);
@@ -49,7 +74,7 @@ const Home: React.FC<Props> = ({ change, search }) => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOnline);
         };
-    }, [online, currentPage, change, search]);
+    }, [online, currentPage, change, search, urlParams, str, pg]);
     const pageNumbers = () => {
         const pages = [];
         const addPages = (s: number, e: number) => {
@@ -84,7 +109,12 @@ const Home: React.FC<Props> = ({ change, search }) => {
             }
         }
         const handleClick = (page: any) => {
-            if (page !== '...') setCurrentPage(page);
+            if (page !== '...') {
+                setCurrentPage(page);
+                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title';
+                const query = search ? search.split(' ').join('+') : 'harry+potter';
+                window.location.assign(`s?${type}=${query}&page=${page}`);
+            }
         };
         return (
             <>
