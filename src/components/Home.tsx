@@ -46,8 +46,12 @@ const Home: React.FC<Props> = ({ change, search }) => {
                     case true:
                         setLoad(true);
                         if (urlParams.toString() === '') {
-                            if (change) {
-                                setCurrentPage(1);
+                            switch (change) {
+                                case true:
+                                    setCurrentPage(1);
+                                    break;
+                                default:
+                                    break;
                             }
                             await fetch();
                         } else {
@@ -109,11 +113,12 @@ const Home: React.FC<Props> = ({ change, search }) => {
             }
         }
         const handleClick = (page: any) => {
-            if (page !== '...') {
-                setCurrentPage(page);
-                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title';
-                const query = search ? search.split(' ').join('+') : 'harry+potter';
-                window.location.assign(`s?${type}=${query}&page=${page}`);
+            switch (page) {
+                case '...':
+                    break;
+                default:
+                    setCurrentPage(page);
+                    break;
             }
         };
         return (
@@ -124,7 +129,9 @@ const Home: React.FC<Props> = ({ change, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === currentPage ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        {page}
+                        <a href={`s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : 'harry+potter'}&page=${page}`}>
+                            {page}
+                        </a>
                     </span>
                 ))}
             </>
