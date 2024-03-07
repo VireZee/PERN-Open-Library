@@ -4,7 +4,7 @@ import Home from './components/Home';
 
 const App: React.FC = () => {
     const [change, setChange] = useState<boolean>(false);
-    const [search, setSearch] = useState<string>();
+    const [search, setSearch] = useState<string>('harry+potter');
     const changeHandler = (c: boolean) => setChange(c);
     const searchHandler = (s: string) => setSearch(s);
     return (
