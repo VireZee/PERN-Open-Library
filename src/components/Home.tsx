@@ -5,22 +5,21 @@ import Net from './errors/Internet';
 import NB from './errors/NoBooks';
 
 interface Props {
-    change: boolean;
-    search: string;
+    search: string | undefined;
 }
 interface Books {
     cover_i: number;
     title: string;
     author_name: string[];
 }
-const Home: React.FC<Props> = ({ change, search }) => {
+const Home: React.FC<Props> = ({ search }) => {
     const [online, setOnline] = useState<boolean>(navigator.onLine);
     const [load, setLoad] = useState<boolean>(true);
     const [books, setBooks] = useState<Books[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const urlParams = React.useMemo(() => new URLSearchParams(window.location.search), []);
-    const str = urlParams.get('title')! || urlParams.get('isbn')!;
+    const urlParams = new URLSearchParams(window.location.search);
+    const str = urlParams.get('title') || urlParams.get('isbn');
     const pg = Number(urlParams.get('page')) || 1;
     useEffect(() => {
         const handleOnline = () => setOnline(navigator.onLine);
@@ -36,8 +35,8 @@ const Home: React.FC<Props> = ({ change, search }) => {
                 }
             };
             const fetch = async () => {
-                const type = /^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title';
-                const query = search.split(' ').join('+');
+                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title';
+                const query = search ? search.split(' ').join('+') : 'harry+potter';
                 const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${currentPage}`);
                 booksData(response);
             };
@@ -45,22 +44,16 @@ const Home: React.FC<Props> = ({ change, search }) => {
                 switch (online) {
                     case true:
                         setLoad(true);
-                        if (urlParams.toString() === '') {
-                            switch (change) {
-                                case true:
-                                    setCurrentPage(1);
-                                    break;
-                                default:
-                                    break;
-                            }
+                        if (urlParams === null) {
                             await fetch();
                         } else {
-                            if (change) {
+                            if (search) {
                                 setCurrentPage(1);
                                 await fetch();
                             } else {
-                                const type = /^\d{10}(\d{3})?$/.test(str) ? 'isbn' : 'title';
-                                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${str}&page=${pg}`);
+                                const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title';
+                                const query = str ? str.split(' ').join('+') : 'harry+potter';
+                                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`);
                                 booksData(response);
                             }
                         }
@@ -78,7 +71,7 @@ const Home: React.FC<Props> = ({ change, search }) => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOnline);
         };
-    }, [online, change, search]);
+    }, [online, search]);
     const pageNumbers = () => {
         const pages = [];
         const addPages = (s: number, e: number) => {
@@ -129,7 +122,7 @@ const Home: React.FC<Props> = ({ change, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === pg ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        <a href={`s?${/^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title'}=${search.split(' ').join('+')}&page=${page}`}>
+                        <a href={`s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : 'harry+potter'}&page=${currentPage}`}>
                             {page}
                         </a>
                     </span>
