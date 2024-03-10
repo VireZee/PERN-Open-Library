@@ -76,7 +76,7 @@ const Home: React.FC<Props> = ({ search }) => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOnline);
         };
-    }, [online, search]);
+    }, [online, search]); 
     const pageNumbers = () => {
         const pages = [];
         const addPages = (s: number, e: number) => {
