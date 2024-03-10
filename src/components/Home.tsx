@@ -120,7 +120,7 @@ const Home: React.FC<Props> = ({ search }) => {
                     <span
                         key={idx}
                         onClick={() => handleClick(page)}
-                        className={`cursor-pointer px-3 py-1 rounded-full ${page === pg ? 'bg-blue-500 text-white' : ''}`}
+                        className={`cursor-pointer px-3 py-1 rounded-full ${page === (search ? 1 : pg) ? 'bg-blue-500 text-white' : ''}`}
                     >
                         <a href={`s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : 'harry+potter'}&page=${currentPage}`}>
                             {page}
