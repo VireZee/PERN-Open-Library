@@ -12,15 +12,20 @@ interface Books {
     title: string;
     author_name: string[];
 }
+interface URLParams {
+    title?: string;
+    isbn?: string;
+    page?: string;
+}
 const Home: React.FC<Props> = ({ search }) => {
     const [online, setOnline] = useState<boolean>(navigator.onLine);
     const [load, setLoad] = useState<boolean>(true);
     const [books, setBooks] = useState<Books[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const urlParams = new URLSearchParams(window.location.search);
-    const str = urlParams.get('title') || urlParams.get('isbn');
-    const pg = Number(urlParams.get('page')) || 1;
+    const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search));
+    const str = title || isbn;
+    const pg = Number(page) || 1;
     useEffect(() => {
         const handleOnline = () => setOnline(navigator.onLine);
         window.addEventListener('online', handleOnline);
@@ -44,7 +49,7 @@ const Home: React.FC<Props> = ({ search }) => {
                 switch (online) {
                     case true:
                         setLoad(true);
-                        if (urlParams === null) {
+                        if ((title === null || isbn === null) && page === null) {
                             await fetch();
                         } else {
                             if (search) {
