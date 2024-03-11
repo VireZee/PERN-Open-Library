@@ -15,7 +15,7 @@ const Navbar: React.FC<Props> = ({ onSearch }) => {
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search));
     const str = title || isbn;
     return (
-        <nav className="flex items-center justify-between -mt-16 p-7 h-16 bg-black">
+        <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-black">
             <div className="text-white">
                 <Link to="" className={`${active === 'home' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => setActive('home')}>Home</Link>
                 <Link to="collection" className={`${active === 'col' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => setActive('col')}>Collection</Link>

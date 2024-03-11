@@ -13,12 +13,12 @@ import API from './components/API';
 const App: React.FC = () => {
     const [search, setSearch] = useState<string>();
     const searchHandler = (s: string) => setSearch(s);
+    const Navbar = ['/register', '/login'].includes(window.location.pathname);
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
-                {window.location.pathname !== '/login' && window.location.pathname !== '/register' && (
-                    <Nav onSearch={searchHandler} />
-                )}
+                {!Navbar && <Nav onSearch={searchHandler} />}
+                {Navbar && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-black no-underline">&#8592; Back</a>}
             </header>
             <main>
                 <Routes>
