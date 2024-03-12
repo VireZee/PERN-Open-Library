@@ -1,10 +1,10 @@
 import React from 'react';
-import '../styles/Load.css';
+import '../styles/Load.scss';
 
 const Load: React.FC = () => {
     return (
         <div className="mt-16">
-            <div className="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="loader w-[50px] aspect-square grid absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
         </div>
     )
 }

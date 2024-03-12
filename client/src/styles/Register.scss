@@ -1,0 +1,281 @@
+// @import url('https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,700');
+
+// /* global vars */
+// $font: 'Montserrat', sans-serif;
+// $body-bg-color: #1f2029;
+// $text-color: #fff;
+// $text-color-faded: rgba(255, 255, 255, .3);
+// $inverse-text-color: #522ea9;
+// $gradient-primary: 135deg, rgb(103, 58, 183) 20%, rgb(81, 45, 168);
+// $transition-duration: .25s;
+// $transition-delay: .125s;
+// $transition-property: all;
+// $transition-easing: cubic-bezier(.694,.048,.335,1);
+
+// /* reset & base */
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+// }
+
+// html, body {
+//   padding: 0;
+//   margin: 0;
+//   overflow-x: hidden;
+// }
+
+// html {
+//   font-size: 62.5%;
+// }
+
+// body {
+//   color: $text-color;
+//   font-family: $font;
+//   font-weight: 400;
+//   font-size: 1.4rem;
+//   text-rendering: optimizeLegibility;
+//   -webkit-font-smoothing: antialiased;
+//   &::-webkit-scrollbar {
+//     width: .5rem;
+//   }
+//   &::-webkit-scrollbar-track {
+//     background: rgb(81, 45, 168);
+//   }
+//   &::-webkit-scrollbar-thumb {
+//     background: rgba(255, 255, 255, .25);
+//     &:hover {
+//       background: rgba(255, 255, 255, .5);
+//     }
+//   }
+// }
+
+// /* Overlay */
+// .overlay {
+//   position: relative;
+//   display: flex;
+//   width: 100%;
+//   height: 100%;
+//   min-height: 100vh;
+//   // background-image: linear-gradient($gradient-primary);
+//    background: url('https://images.pexels.com/photos/176851/pexels-photo-176851.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb');
+//   align-items: center;
+//   overflow: hidden;
+// }
+
+// /* login form */
+// .login {
+//   display: flex;
+//   width: 100%;
+//   flex-direction: column;
+//   margin: 0 auto;
+//   & .login__inner {
+//     display: flex;
+//     width: 100%;
+//     flex-wrap: wrap;
+//     align-content: center;
+//     padding: 0 2rem;
+//     & .login__header {
+//       display: flex;
+//       width: 100%;
+//       margin-bottom: 10rem;
+//       & .login__title {
+//         display: flex;
+//         width: 100%;
+//         & h1 {
+//           &.login__heading {
+//           font-size: 5.5rem;
+//           font-weight: 100;
+//           color: $text-color;
+//           text-align: center;
+//           margin: 5rem 0 2.5rem 0;
+//           width: 100%;
+//           }
+//         }
+//       }
+//     }
+//     & .login__content {
+//       display: flex;
+//       width: 100%;
+//       flex-wrap: wrap;
+//       & .login__form {
+//         display: flex;
+//         width: 100%;
+//         justify-content: center;
+//         & .form {
+//           display: flex;
+//           width: 100%;
+//           flex-wrap: wrap;
+//           & .form__group {
+//             position: relative;
+//             display: flex;
+//             width: 100%;
+//             margin-bottom: 5rem;
+//             &:last-of-type {
+//               margin-bottom: 0;
+//               flex-direction: column;
+//               justify-content: center;
+//               & .form__text {
+//                 text-align: center;
+//                 margin-bottom: 1.5rem;
+//                 &:last-of-type {
+//                   margin-bottom: 0;
+//                 }
+//               }
+//               & .form__link {
+//                 color: $text-color;
+//               }
+//             }
+//             & .form__icon {
+//               position: absolute;
+//               top: 0;
+//               left: 1rem;
+//               display: flex;
+//               width: 2rem;
+//               height: 100%;
+//               fill: $text-color;
+//             }
+//             & .form__input {
+//               display: flex;
+//               width: 100%;
+//               padding: 2rem 4rem;
+//               background: transparent;
+//               font-size: 1.75rem;
+//               letter-spacing: .125rem;
+//               color: $text-color;
+//               border: none;
+//               outline: none;
+//               box-shadow: none;
+//               border-bottom: .1rem solid $text-color-faded;
+//               &:focus + .form__input-after {
+//                 width: 100%;
+//               }
+//               &:focus ~ .form__label,
+//               &:valid ~ .form__label {
+//                   transform: translate3d(4rem, 0, 0);
+//                   font-size: 1.25rem;
+//                   color: $text-color-faded;
+//               }
+//               &:-webkit-autofill,
+//               &:-webkit-autofill:hover,
+//               &:-webkit-autofill:focus,
+//               &:-webkit-autofill:active {
+//                   transition: 0s 50000s ease all;
+//               }
+//             }
+//             & .form__input-after {
+//               position: absolute;
+//               left: 0;
+//               bottom: 0;
+//               z-index: 99;
+//               display: flex;
+//               width: 0;
+//               height: .1rem;
+//               background-color: $text-color;
+//               transition: $transition-duration $transition-easing $transition-property;
+//             }
+//             & .form__label {
+//               position: absolute;
+//               top: 0;
+//               left: 0;
+//               display: flex;
+//               width: calc(100% - 8rem);
+//               height: 2rem;
+//               font-size: 1.75rem;
+//               transform: translate3d(4rem, 2rem, 0);
+//               will-change: transform;
+//               transform-style: preserve-3d;
+//               transition: $transition-duration $transition-easing $transition-property;
+//               pointer-events: none;
+//             }
+//             & .form__btn {
+//               position: relative;
+//               display: flex;
+//               width: 100%;
+//               justify-content: center;
+//               padding: 2rem 4rem;
+//               cursor: pointer;
+//               border: .1rem solid $text-color;
+//               border-radius: .25rem;
+//               background: transparent;
+//               box-shadow: none;
+//               outline: none;
+//               text-transform: uppercase;
+//               transition: $transition-duration $transition-easing $transition-property;
+//               &::after {
+//                 content: " ";
+//                 position: absolute;
+//                 top: 0;
+//                 left: 0;
+//                 display: flex;
+//                 width: 0;
+//                 height: 100%;
+//                 background-color: #fff;
+//                 transition: $transition-duration $transition-easing $transition-property;
+//               }
+//               &:hover {
+//                 color: $body-bg-color;
+//                 &::after {
+//                   width: 100%;
+//                 }
+//                 & .form__btn-text {
+//                   color: $body-bg-color;
+//                   transition: $transition-duration $transition-easing $transition-property;
+//                 }
+//               }
+//               & .form__btn-text {
+//                 position: relative;
+//                 z-index: 99;
+//                 font-size: 1.75rem;
+//                 letter-spacing: .25rem;
+//                 color: $text-color;
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//     & .login__footer {
+//       display: flex;
+//       width: 100%;
+//       margin-top: 2.5rem;
+//       & .login__subtitle {
+//         display: flex;
+//         width: 100%;
+//         justify-content: center;
+//         & h3 {
+//           &.login__subheading {
+//             font-size: 1.9rem;
+//             font-weight: 200;
+//             margin: 5rem 0 2.5rem 0;
+//             color: $text-color-faded;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+
+// /* 768px */
+// @media (min-width: 48rem) {
+//   .login {
+//     width: 75%;
+//   }
+// }
+// /* 992px */
+// @media (min-width: 62rem) {
+//   .login {
+//     width: 50%;
+//   }
+// }
+// /* 1200px */
+// @media (min-width: 75rem) {
+//   .login {
+//     width: 33%;
+//     & .login__inner {
+//       max-width: 50rem;
+//       margin: 0 auto;
+//     }
+//   }
+// }
