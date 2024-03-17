@@ -1,51 +1,61 @@
 import React from 'react';
 
 const Register: React.FC = () => {
+    const [show, setShow] = React.useState<boolean>(false);
+    const toggle = () => setShow(prevState => !prevState);
     return (
-        <div class="overlay">
-            <div class="login">
-                <div class="login__inner">
-                    <div class="login__header">
-                        <div class="login__title">
-                            <h1 class="login__heading">Sign in</h1>
+        <div className="bg-black flex justify-center items-center h-screen">
+            <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
+                <h1 className="flex justify-center text-2xl font-semibold mb-4">Register</h1>
+                <form action="register">
+                    <div className="mb-4">
+                        <label className="text-md text-gray-700">Email</label>
+                        <input type="email" name="email" className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="text-md text-gray-700">Username</label>
+                        <input type="text" name="username" className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="text-md text-gray-700">Name</label>
+                        <input type="text" name="name" className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="text-md text-gray-700">Password</label>
+                        <div className="relative">
+                            <input type={show ? "text" : "password"} name="password" className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black" />
+                            <button
+                                type="button"
+                                onClick={toggle}
+                                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-700"
+                            >
+                                {show ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M9.997 18c4.418 0 8-4.18 8-9s-3.582-9-8-9C5.579 0 2 4.18 2 9s3.579 9 7.997 9zm0-16c3.309 0 5.997 3.589 5.997 7s-2.688 7-5.997 7C6.688 16 4 12.411 4 9s2.688-7 5.997-7zM8 9a1 1 0 112 0 1 1 0 01-2 0z" clipRule="evenodd" />
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M10 3c4.418 0 8 4.18 8 9s-3.582 9-8 9C5.579 21 2 16.82 2 12s3.579-9 7.997-9zm0 16c3.309 0 5.997-3.589 5.997-7S13.309 5 10 5C6.688 5 4 8.589 4 12s2.688 7 5.997 7zm0-11a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd" />
+                                    </svg>
+                                )}
+                            </button>
                         </div>
                     </div>
-                    <div class="login__content">
-                        <div class="login__form">
-                            <form action="javascript:;" class="form">
-                                <div class="form__group">
-                                    <svg class="form__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M460.6 147.3L353 256.9c-.8.8-.8 2 0 2.8l75.3 80.2c5.1 5.1 5.1 13.3 0 18.4-2.5 2.5-5.9 3.8-9.2 3.8s-6.7-1.3-9.2-3.8l-75-79.9c-.8-.8-2.1-.8-2.9 0L313.7 297c-15.3 15.5-35.6 24.1-57.4 24.2-22.1.1-43.1-9.2-58.6-24.9l-17.6-17.9c-.8-.8-2.1-.8-2.9 0l-75 79.9c-2.5 2.5-5.9 3.8-9.2 3.8s-6.7-1.3-9.2-3.8c-5.1-5.1-5.1-13.3 0-18.4l75.3-80.2c.7-.8.7-2 0-2.8L51.4 147.3c-1.3-1.3-3.4-.4-3.4 1.4V368c0 17.6 14.4 32 32 32h352c17.6 0 32-14.4 32-32V148.7c0-1.8-2.2-2.6-3.4-1.4z" /><path d="M256 295.1c14.8 0 28.7-5.8 39.1-16.4L452 119c-5.5-4.4-12.3-7-19.8-7H79.9c-7.5 0-14.4 2.6-19.8 7L217 278.7c10.3 10.5 24.2 16.4 39 16.4z" /></svg>
-                                    <input class="form__input" type="text" name="email" required>
-                                        <div class="form__input-after"></div>
-                                        <label class="form__label" for="email">Email</label>
-                                </div>
-                                <div class="form__group">
-                                    <svg class="form__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M376 192H188v-48c0-18.1 7.1-35.1 20-48s29.9-20 48-20 35.1 7.1 48 20 20 29.9 20 48c0 7.7 6.3 14 14 14s14-6.3 14-14c0-53.2-43.9-96.7-97.3-96-52.7.7-94.7 44.5-94.7 97.3V192h-24c-22 0-40 18-40 40v192c0 22 18 40 40 40h240c22 0 40-18 40-40V232c0-22-18-40-40-40zM270 316.8v68.8c0 7.5-5.8 14-13.3 14.4-8 .4-14.7-6-14.7-14v-69.2c-11.5-5.6-19.1-17.8-17.9-31.7 1.4-15.5 14.1-27.9 29.6-29 18.7-1.3 34.3 13.5 34.3 31.9 0 12.7-7.3 23.6-18 28.8z" /></svg>
-                                    <input class="form__input" type="password" required>
-                                        <div class="form__input-after"></div>
-                                        <label class="form__label" for="email">Password</label>
-                                </div>
-                                <div class="form__group">
-                                    <button class="form__btn" type="submit">
-                                        <span class="form__btn-text">sign in</span>
-                                    </button>
-                                </div>
-                                <div class="form__group">
-                                    <p class="form__text">Forgot your password? Reset it from
-                                        <a href="#" class="form__link"> here</a>.
-                                    </p>
-                                    <p class="form__text">Don't have an account yet? Sign up from
-                                        <a href="#" class="form__link"> here</a>.
-                                    </p>
-                                </div>
-                            </form>
-                        </div>
+                    <div className="mb-4">
+                        <label className="text-md text-gray-700">Retype Password</label>
+                        <input type="password" name="password" className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black" />
                     </div>
-                    <div class="login__footer">
-                        <div class="login__subtitle">
-                            <h3 class="login__subheading">Flat UI Login Form. A pen by alexdev.</h3>
+                    <div className="flex justify-between mb-4">
+                        <div className="flex items-center">
+                            <input type="checkbox" id="rememberMe" className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded" />
+                            <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">Remember me</label>
                         </div>
+                        <a href="fp" className="font-medium text-black hover:text-black">Forgot your password?</a>
                     </div>
+                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md">Register</button>
+                </form>
+                <div className="mt-4 text-sm text-gray-700 text-center">
+                    Already have an account? <a href="/login" className="font-medium text-black hover:text-black">Log in</a>
                 </div>
             </div>
         </div>

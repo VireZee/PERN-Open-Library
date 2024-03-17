@@ -25,7 +25,7 @@ const Home: React.FC<Props> = ({ search }) => {
     const [totalPages, setTotalPages] = useState<number>(1);
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search));
     const str = title || isbn;
-    const pg = Number(page) || 1;
+    const pg = Number(page);
     useEffect(() => {
         const handleOnline = () => setOnline(navigator.onLine);
         window.addEventListener('online', handleOnline);
