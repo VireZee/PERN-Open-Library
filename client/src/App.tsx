@@ -9,16 +9,15 @@ import FP from './components/auth/ForgotPassword';
 import Col from './components/Collection';
 import API from './components/API';
 
-
 const App: React.FC = () => {
     const [search, setSearch] = useState<string>();
     const searchHandler = (s: string) => setSearch(s);
-    const Navbar = ['/register', '/login'].includes(window.location.pathname);
+    const navbar = ['/register', '/login'].includes(window.location.pathname);
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
-                {!Navbar && <Nav onSearch={searchHandler} />}
-                {Navbar && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back</a>}
+                {!navbar && <Nav onSearch={searchHandler} />}
+                {navbar && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
             </header>
             <main>
                 <Routes>
