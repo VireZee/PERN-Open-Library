@@ -21,7 +21,7 @@ const Navbar: React.FC<Props> = ({ onSearch }) => {
                 <Link to="collection" className={`${active === 'col' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => setActive('col')}>Collection</Link>
                 <Link to="API" className={`${active === 'api' ? 'text-gray-500' : 'hover:text-gray-500'}`} onClick={() => setActive('api')}>API</Link>
             </div>
-            <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onChange={(e) => debSearch(e.target.value)} />
+            <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onChange={e => debSearch(e.target.value)} />
             <div className="text-white">
                 <a href="register" className="hover:text-gray-500 mr-4">Register</a>
                 <a href="login" className="hover:text-gray-500">Already have an account?</a>
