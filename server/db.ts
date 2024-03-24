@@ -1,5 +1,6 @@
-const pgp = require('pg-promise')();
+import pgPromise, { IMain } from 'pg-promise';
 
+const pgp: IMain = pgPromise();
 const dbConfig = {
     host: 'localhost',
     port: 5432,
@@ -8,4 +9,4 @@ const dbConfig = {
     password: '999666'
 };
 const dbConn = pgp(dbConfig);
-module.exports = dbConn;
+export default dbConn;

@@ -14,8 +14,13 @@ const Register: React.FC = () => {
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
             const form = new FormData(e.currentTarget);
-            const data = Object.fromEntries(form.entries());
-            await axios.post('http://localhost:3000/register', data);
+            const data = {
+                email: form.get('email'),
+                username: form.get('username'),
+                name: form.get('name'),
+                password: pass
+            }
+            await axios.post('http://localhost:3001/register', data);
         } catch (e) {
             console.error(e);
         }
