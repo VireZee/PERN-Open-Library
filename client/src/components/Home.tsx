@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import Load from './Load';
 import Net from './errors/Internet';
@@ -12,31 +12,64 @@ interface Books {
     title: string;
     author_name: string[];
 }
+interface State {
+    online: boolean;
+    load: boolean;
+    books: Books[];
+    currentPage: number;
+    totalPages: number;
+}
+type Action =
+    | { type: 'SET_ONLINE'; payload: boolean }
+    | { type: 'SET_LOAD'; payload: boolean }
+    | { type: 'SET_BOOKS'; payload: Books[] }
+    | { type: 'SET_CURRENT_PAGE'; payload: number }
+    | { type: 'SET_TOTAL_PAGES'; payload: number };
 interface URLParams {
     title?: string;
     isbn?: string;
     page?: string;
 }
+const initialState: State = {
+    online: navigator.onLine,
+    load: true,
+    books: [],
+    currentPage: 1,
+    totalPages: 1,
+};
+const reducer = (state: State, action: Action) => {
+    switch (action.type) {
+        case 'SET_ONLINE':
+            return { ...state, online: action.payload };
+        case 'SET_LOAD':
+            return { ...state, load: action.payload };
+        case 'SET_BOOKS':
+            return { ...state, books: action.payload };
+        case 'SET_CURRENT_PAGE':
+            return { ...state, currentPage: action.payload };
+        case 'SET_TOTAL_PAGES':
+            return { ...state, totalPages: action.payload };
+        default:
+            return state;
+    }
+};
 const Home: React.FC<Props> = ({ search }) => {
-    const [online, setOnline] = useState<boolean>(navigator.onLine);
-    const [load, setLoad] = useState<boolean>(true);
-    const [books, setBooks] = useState<Books[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const { online, load, books, currentPage, totalPages } = state;
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search));
     const str = title || isbn;
-    const pg = Number(page);
-    useEffect(() => {
-        const handleOnline = () => setOnline(navigator.onLine);
+    const pg = Number(page) || 1;
+    React.useEffect(() => {
+        const handleOnline = () => dispatch({ type: 'SET_ONLINE', payload: navigator.onLine });
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOnline);
         (async () => {
             const booksData = (res: AxiosResponse) => {
                 if (res.data.numFound === 0) {
-                    setBooks([]);
+                    dispatch({ type: 'SET_BOOKS', payload: [] });
                 } else {
-                    setBooks(res.data.docs);
-                    setTotalPages(Math.ceil(res.data.numFound / 100));
+                    dispatch({ type: 'SET_BOOKS', payload: res.data.docs });
+                    dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(res.data.numFound / 100) });
                 }
             };
             const fetch = async () => {
@@ -48,12 +81,12 @@ const Home: React.FC<Props> = ({ search }) => {
             try {
                 switch (online) {
                     case true:
-                        setLoad(true);
+                        dispatch({ type: 'SET_LOAD', payload: true });
                         if ((title === null || isbn === null) && page === null) {
                             await fetch();
                         } else {
                             if (search) {
-                                setCurrentPage(1);
+                                dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 });
                                 await fetch();
                             } else {
                                 const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title';
@@ -69,14 +102,14 @@ const Home: React.FC<Props> = ({ search }) => {
             } catch (e) {
                 console.error(e);
             } finally {
-                setLoad(false);
+                dispatch({ type: 'SET_LOAD', payload: false });
             }
         })();
         return () => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOnline);
         };
-    }, [online, search]); 
+    }, [online, search]);
     const pageNumbers = () => {
         const pages = [];
         const addPages = (s: number, e: number) => {
@@ -115,7 +148,7 @@ const Home: React.FC<Props> = ({ search }) => {
                 case '...':
                     break;
                 default:
-                    setCurrentPage(page);
+                    dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
                     break;
             }
         };
