@@ -1,26 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 
+interface State {
+    pass: string;
+    rePass: string;
+    match: boolean;
+    show: boolean;
+}
+type Action =
+    | { type: 'SET_PASS'; payload: string }
+    | { type: 'SET_REPASS'; payload: string }
+    | { type: 'SET_MATCH'; payload: boolean }
+    | { type: 'SET_SHOW'; payload: boolean };
+const initialState: State = {
+    pass: '',
+    rePass: '',
+    match: true,
+    show: false
+}
+const reducer = (state: State, action: Action) => {
+    switch (action.type) {
+        case 'SET_PASS':
+            return { ...state, pass: action.payload };
+        case 'SET_REPASS':
+            return { ...state, rePass: action.payload };
+        case 'SET_MATCH':
+            return { ...state, match: action.payload };
+        case 'SET_SHOW':
+            return { ...state, show: action.payload };
+        default:
+            return state;
+    }
+}
 const Register: React.FC = () => {
-    const [pass, setPass] = useState<string>();
-    const [rePass, setRePass] = useState<string>();
-    const [match, setMatch] = useState<boolean>(true);
-    const [show, setShow] = useState<boolean>(false);
-    const toggle = () => setShow(s => !s);
+    const [state, dispatch] = React.useReducer(reducer, initialState);
+    const { pass, rePass, match, show } = state;
+    const toggle = () => dispatch({ type: 'SET_SHOW', payload: !show });
     const handleRetype = (e: string) => {
-        setRePass(e);
-        setMatch(e === pass);
+        dispatch({ type: 'SET_REPASS', payload: e });
+        dispatch({ type: 'SET_MATCH', payload: e === pass });
     };
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
-            const form = new FormData(e.currentTarget);
-            const data = {
-                email: form.get('email'),
-                username: form.get('username'),
-                name: form.get('name'),
-                password: pass
-            }
-            await axios.post('http://localhost:3001/register', data);
         } catch (e) {
             console.error(e);
         }
@@ -49,7 +70,7 @@ const Register: React.FC = () => {
                                 type={show ? "text" : "password"}
                                 name="password"
                                 value={pass}
-                                onChange={e => setPass(e.target.value)}
+                                onChange={e => dispatch({ type: 'SET_PASS', payload: e.target.value })}
                                 className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
                             />
                             <button
