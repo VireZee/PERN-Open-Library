@@ -50,17 +50,19 @@ const Register: React.FC = () => {
         dispatch({ type: 'SET_REPASS', payload: e });
         dispatch({ type: 'SET_MATCH', payload: e === pass });
     };
-    // const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     try {
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // };
+    const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+        try {
+            e.preventDefault();
+            console.log(state)
+        } catch (e) {
+            console.error(e);
+        }
+    };
     return (
         <div className="bg-black flex justify-center items-center h-screen">
             <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
                 <h1 className="flex justify-center text-2xl font-semibold mb-4">Register</h1>
-                <form action="register" method="POST" >
+                <form action="register" method="POST" onSubmit={submit}>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Email</label>
                         <input
