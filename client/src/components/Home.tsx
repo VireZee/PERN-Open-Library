@@ -20,7 +20,7 @@ interface State {
     totalPages: number;
 }
 type Action =
-    | { type: 'SET_ONLINE'; payload: boolean }
+    { type: 'SET_ONLINE'; payload: boolean }
     | { type: 'SET_LOAD'; payload: boolean }
     | { type: 'SET_BOOKS'; payload: Books[] }
     | { type: 'SET_CURRENT_PAGE'; payload: number }
