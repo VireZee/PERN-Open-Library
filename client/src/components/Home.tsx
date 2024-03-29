@@ -77,32 +77,28 @@ const Home: React.FC<Props> = ({ search }) => {
                 const query = search ? search.split(' ').join('+') : 'harry+potter';
                 const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${currentPage}`);
                 booksData(response);
+                dispatch({ type: 'SET_LOAD', payload: false });
             };
-            try {
-                switch (online) {
-                    case true:
-                        dispatch({ type: 'SET_LOAD', payload: true });
-                        if ((title === null || isbn === null) && page === null) {
+            switch (online) {
+                case true:
+                    dispatch({ type: 'SET_LOAD', payload: true });
+                    if ((title === null || isbn === null) && page === null) {
+                        await fetch();
+                    } else {
+                        if (search) {
+                            dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 });
                             await fetch();
                         } else {
-                            if (search) {
-                                dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 });
-                                await fetch();
-                            } else {
-                                const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title';
-                                const query = str ? str.split(' ').join('+') : 'harry+potter';
-                                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`);
-                                booksData(response);
-                            }
+                            const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title';
+                            const query = str ? str.split(' ').join('+') : 'harry+potter';
+                            const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`);
+                            booksData(response);
+                            dispatch({ type: 'SET_LOAD', payload: false });
                         }
-                        break;
-                    default:
-                        break;
-                }
-            } catch (e) {
-                console.error(e);
-            } finally {
-                dispatch({ type: 'SET_LOAD', payload: false });
+                    }
+                    break;
+                default:
+                    dispatch({ type: 'SET_LOAD', payload: false });
             }
         })();
         return () => {

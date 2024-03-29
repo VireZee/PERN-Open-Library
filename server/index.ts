@@ -5,7 +5,11 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 app.listen(3001);
-app.post('/api/register', (req, res) => {
+let storedData = {};
+app.get('/api/register', (_,res) => {
+    res.json(storedData);
+});
+app.post('/api/register', (req) => {
     console.log(req.body);
-    res.redirect('/');
+    storedData = req.body
 });

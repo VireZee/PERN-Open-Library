@@ -53,13 +53,13 @@ const Register: React.FC = () => {
     // const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     //     e.preventDefault();
     const submit = async () => {
-        await axios.post('http://localhost:3001/api/register', state);
+        await axios.post('http://localhost:3001/api/register', { ...state, show: undefined });
     };
     return (
         <div className="bg-black flex justify-center items-center h-screen">
             <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
                 <h1 className="flex justify-center text-2xl font-semibold mb-4">Register</h1>
-                <form action="/" method="POST" onSubmit={submit}>
+                <form action="api/register" method="POST" onSubmit={submit}>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Email</label>
                         <input
