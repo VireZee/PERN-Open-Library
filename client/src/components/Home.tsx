@@ -5,7 +5,7 @@ import Net from './errors/Internet';
 import NB from './errors/NoBooks';
 
 interface Props {
-    search: string | undefined;
+    search: string;
 }
 interface Books {
     cover_i: number;
@@ -116,7 +116,7 @@ const Home: React.FC<Props> = ({ search }) => {
         if (totalPages <= 9) {
             addPages(1, totalPages);
         } else {
-            if (pg <= 6) {
+            if (search ||pg <= 6) {
                 addPages(1, 7);
                 pages.push('...', totalPages);
             } else if (pg <= totalPages - 4) {

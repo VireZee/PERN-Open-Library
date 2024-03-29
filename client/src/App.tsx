@@ -10,7 +10,7 @@ import Col from './components/Collection';
 import API from './components/API';
 
 const App: React.FC = () => {
-    const [search, setSearch] = useState<string>();
+    const [search, setSearch] = useState<string>('');
     const searchHandler = (s: string) => setSearch(s);
     const navbar = ['/register', '/login'].includes(window.location.pathname);
     return (
