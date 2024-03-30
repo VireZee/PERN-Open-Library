@@ -40,7 +40,7 @@ const reducer = (state: State, action: Action) => {
 }
 const Register: React.FC = () => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    const { email, uname, name, pass, rePass, match, show } = state;
+    const { name, uname, email, pass, rePass, match, show } = state;
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         dispatch({ type: 'CHANGE', name, value });
@@ -50,8 +50,6 @@ const Register: React.FC = () => {
         dispatch({ type: 'SET_REPASS', payload: e });
         dispatch({ type: 'SET_MATCH', payload: e === pass });
     };
-    // const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
     const submit = async () => {
         await axios.post('http://localhost:3001/api/register', { ...state, show: undefined });
     };
@@ -59,13 +57,13 @@ const Register: React.FC = () => {
         <div className="bg-black flex justify-center items-center h-screen">
             <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
                 <h1 className="flex justify-center text-2xl font-semibold mb-4">Register</h1>
-                <form action="api/register" method="POST" onSubmit={submit}>
+                <form action="/" method="POST" onSubmit={submit}>
                     <div className="mb-4">
-                        <label className="text-md text-gray-700">Email</label>
+                        <label className="text-md text-gray-700">Name</label>
                         <input
-                            type="email"
-                            name="email"
-                            value={email}
+                            type="text"
+                            name="name"
+                            value={name}
                             onChange={handleChange}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
                         />
@@ -81,11 +79,11 @@ const Register: React.FC = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="text-md text-gray-700">Name</label>
+                        <label className="text-md text-gray-700">Email</label>
                         <input
-                            type="text"
-                            name="name"
-                            value={name}
+                            type="email"
+                            name="email"
+                            value={email}
                             onChange={handleChange}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
                         />
