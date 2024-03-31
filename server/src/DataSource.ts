@@ -1,17 +1,18 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import dotenv from 'dotenv';
-dotenv.config({ path: '../.env' });
+import User from "./models/User";
+// import dotenv from 'dotenv';
+// dotenv.config({ path: '../.env' });
 
 const AppDataSource = new DataSource({
     type: "postgres",
-    host: process.env.DB_HOST!,
-    port: parseInt(process.env.DB_PORT!),
-    username: process.env.DB_USER!,
-    password: process.env.DB_PASS!,
-    database: process.env.DB_NAME!,
-    entities: ["./models/**/*.ts"],
+    host: "localhost",
+    port: 5432,
+    username: "Anti Zee",
+    password: "999666",
+    database: "OpenLibrary ERN",
+    entities: [User],
     synchronize: true,
-    logging: false
-})
-AppDataSource.initialize()
+    logging: true
+});
+export default AppDataSource;

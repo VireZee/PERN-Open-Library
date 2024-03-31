@@ -1,22 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
+@Entity("User")
 export default class User {
     @PrimaryGeneratedColumn({ type: "bigint" })
-    id!: number;
-
+    id: number;
     @Column({ type: "bytea", nullable: true })
-    photo?: Buffer;
-
+    photo: Buffer;
     @Column({ length: 30 })
-    name!: string;
-
+    name: string;
     @Column({ length: 10 })
-    username!: string;
-
+    username: string;
     @Column()
-    email!: string;
-
+    email: string;
     @Column()
-    pass!: string;
+    pass: string;
 }
