@@ -14,4 +14,6 @@ export default class User {
     email: string;
     @Column()
     pass: string;
+    @Column({ type: "timestamp with time zone" })
+    created: Date;
 }

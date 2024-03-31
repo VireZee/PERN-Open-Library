@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import axios from 'axios';
 
 interface State {
@@ -50,8 +50,10 @@ const Register: React.FC = () => {
         dispatch({ type: 'SET_REPASS', payload: e });
         dispatch({ type: 'SET_MATCH', payload: e === pass });
     };
-    const submit = async () => {
-        await axios.post('http://localhost:3001/api/register', { ...state, show: undefined });
+    const submit = async (e: FormEvent) => {
+        e.preventDefault();
+            await axios.post('http://localhost:3001/api/register', { ...state, match: undefined, show: undefined });
+        
     };
     return (
         <div className="bg-black flex justify-center items-center h-screen">
@@ -130,7 +132,7 @@ const Register: React.FC = () => {
                                 onChange={e => handleRetype(e.target.value)}
                                 className={`mt-1 p-2 border ${match ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
-                            {!match && <p className="text-red-500 text-sm mt-1">Passwords do not match.</p>}
+                            {!match && <p className="text-red-500 text-sm mt-1">Passwords do not match!</p>}
                         </div>
                     )}
                     <div className="flex justify-center mb-4">
