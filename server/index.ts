@@ -1,13 +1,9 @@
-import dotenv from 'dotenv';
 import AppDataSource from './src/DataSource';
+import './src/configs/env';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-dotenv.config();
 
-AppDataSource.initialize().then(async () => {
-    console.log("Inserting a new user into the database...")
-}).catch(error => console.log(error))
-
+AppDataSource.initialize();
 const app = express();
 app.use(cors())
 app.use(express.json());
