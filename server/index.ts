@@ -11,20 +11,25 @@ app.listen(process.env.PORT);
 
 app.post('/api/register', (req: Request, res: Response) => {
     const { name, uname, email, pass, rePass } = req.body;
+    const errs: Record<string, string> = {};
     if (!name) {
-        return res.status(400).json({ error: "Name can't be empty!" });
+        errs.name = "Name can't be empty!";
     }
     if (!uname) {
-        return res.status(400).json({ error: "Username can't be empty!" });
+        errs.uname = "Username can't be empty!";
     }
     if (!email) {
-        return res.status(400).json({ error: "Email can't be empty!" });
+        errs.email = "Email can't be empty!";
     }
     if (!pass) {
-        return res.status(400).json({ error: "Password can't be empty!" });
+        errs.pass = "Password can't be empty!";
     }
     if (pass !== rePass) {
-        return res.status(400).json({ error: "Passwords do not match!" });
+        errs.match = "Passwords do not match!";
     }
-    return res.status(200);
+    if (Object.keys(errs).length > 0) {
+        return res.status(422).json({ errs });
+    } else {
+        return res.status(200).json(req.body);
+    }
 });

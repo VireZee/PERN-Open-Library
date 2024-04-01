@@ -1,5 +1,5 @@
-import React, { FormEvent } from 'react';
-import axios from 'axios';
+import React from 'react';
+import axios, { AxiosError } from 'axios';
 
 interface State {
     email: string;
@@ -50,10 +50,15 @@ const Register: React.FC = () => {
         dispatch({ type: 'SET_REPASS', payload: e });
         dispatch({ type: 'SET_MATCH', payload: e === pass });
     };
-    const submit = async (e: FormEvent) => {
+    const submit = async (e: any) => {
         e.preventDefault();
-            await axios.post('http://localhost:3001/api/register', { ...state, match: undefined, show: undefined });
-        
+        try {
+            const res = await axios.post('http://localhost:3001/api/register', { ...state, match: undefined, show: undefined });
+            console.log(res.data);
+        } catch (err) {
+            const XR = err as AxiosError<any>;
+            console.log(XR.response!.data.errs);
+        }
     };
     return (
         <div className="bg-black flex justify-center items-center h-screen">
