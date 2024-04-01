@@ -116,7 +116,7 @@ const Home: React.FC<Props> = ({ search }) => {
         if (totalPages <= 9) {
             addPages(1, totalPages);
         } else {
-            if (search ||pg <= 6) {
+            if (search || pg <= 6) {
                 addPages(1, 7);
                 pages.push('...', totalPages);
             } else if (pg <= totalPages - 4) {
