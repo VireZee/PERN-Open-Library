@@ -53,7 +53,7 @@ const Register: React.FC = () => {
     const submit = async (e: any) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:3001/api/register', { ...state, match: undefined, show: undefined });
+            const res = await axios.post('http://localhost:3001/api/register', { ...state, match: undefined });
             console.log(res.data);
         } catch (err) {
             const XR = err as AxiosError<any>;

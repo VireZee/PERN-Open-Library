@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import Nav from './components/Navbar';
