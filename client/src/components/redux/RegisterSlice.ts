@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface State {
+    [key: string]: string | boolean;
     email: string;
     uname: string;
     name: string;
@@ -18,41 +19,23 @@ const initialState: State = {
     match: true,
     show: false
 }
-// const RegisterSlice = createSlice({
-//     name: 'register',
-//     initialState,
-//     reducers: {
-//         change: (state, action: PayloadAction<{ name: string, value: string }>) => {
-//             state[action.payload.name] = action.payload.value;
-//         },
-//         setRePass: (state, action: PayloadAction<string>) => {
-//             state.rePass = action.payload;
-//         },
-//         setMatch: (state, action: PayloadAction<boolean>) => {
-//             state.match = action.payload;
-//         },
-//         setShow: (state, action: PayloadAction<boolean>) => {
-//             state.show = action.payload;
-//         },
-//     }
-// });
-
 const RegisterSlice = createSlice({
     name: 'register',
     initialState,
     reducers: {
-        change: (state, action) => {
+        change: (state, action: PayloadAction<{ name: string, value: string }>) => {
             state[action.payload.name] = action.payload.value;
         },
-        setRePass: (state, action) => {
+        setRePass: (state, action: PayloadAction<string>) => {
             state.rePass = action.payload;
         },
-        setMatch: (state, action) => {
+        setMatch: (state, action: PayloadAction<boolean>) => {
             state.match = action.payload;
         },
-        setShow: (state, action) => {
+        setShow: (state, action: PayloadAction<boolean>) => {
             state.show = action.payload;
-        }
+        },
     }
 });
 export const { change, setRePass, setMatch, setShow } = RegisterSlice.actions;
+export default RegisterSlice.reducer;
