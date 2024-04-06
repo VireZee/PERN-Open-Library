@@ -1,59 +1,25 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { change, setRePass, setMatch, setShow } from '../redux/RegisterAction';
+import { RootState } from '../redux/Store';
 import axios, { AxiosError } from 'axios';
 
-interface State {
-    email: string;
-    uname: string;
-    name: string;
-    pass: string;
-    rePass: string;
-    match: boolean;
-    show: boolean;
-}
-type Action =
-    { type: 'CHANGE'; name: string; value: string }
-    | { type: 'SET_REPASS'; payload: string }
-    | { type: 'SET_MATCH'; payload: boolean }
-    | { type: 'SET_SHOW'; payload: boolean };
-const initialState: State = {
-    email: '',
-    uname: '',
-    name: '',
-    pass: '',
-    rePass: '',
-    match: true,
-    show: false
-}
-const reducer = (state: State, action: Action) => {
-    switch (action.type) {
-        case 'CHANGE':
-            return { ...state, [action.name]: action.value };
-        case 'SET_REPASS':
-            return { ...state, rePass: action.payload };
-        case 'SET_MATCH':
-            return { ...state, match: action.payload };
-        case 'SET_SHOW':
-            return { ...state, show: action.payload };
-        default:
-            return state;
-    }
-}
 const Register: React.FC = () => {
-    const [state, dispatch] = React.useReducer(reducer, initialState);
-    const { name, uname, email, pass, rePass, match, show } = state;
+    const dispatch = useDispatch();
+    const { name, uname, email, pass, rePass, match, show } = useSelector((state: RootState) => state.REG);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        dispatch({ type: 'CHANGE', name, value });
+        dispatch(change({ name, value }));
     };
-    const toggle = () => dispatch({ type: 'SET_SHOW', payload: !show });
+    const toggle = () => dispatch(setShow(!show));
     const handleRetype = (e: string) => {
-        dispatch({ type: 'SET_REPASS', payload: e });
-        dispatch({ type: 'SET_MATCH', payload: e === pass });
+        dispatch(setRePass(e));
+        dispatch(setMatch(e === pass));
     };
     const submit = async (e: any) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:3001/api/register', { ...state, match: undefined });
+            const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass, match: undefined, show });
             console.log(res.data);
         } catch (err) {
             const XR = err as AxiosError<any>;

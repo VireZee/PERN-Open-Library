@@ -2,25 +2,25 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface State {
     [key: string]: string | boolean;
-    email: string;
-    uname: string;
     name: string;
+    uname: string;
+    email: string;
     pass: string;
     rePass: string;
     match: boolean;
     show: boolean;
 }
 const initialState: State = {
-    email: '',
-    uname: '',
     name: '',
+    uname: '',
+    email: '',
     pass: '',
     rePass: '',
     match: true,
     show: false
 }
-const RegisterSlice = createSlice({
-    name: 'register',
+const RegisterAction = createSlice({
+    name: 'REG',
     initialState,
     reducers: {
         change: (state, action: PayloadAction<{ name: string, value: string }>) => {
@@ -37,5 +37,5 @@ const RegisterSlice = createSlice({
         },
     }
 });
-export const { change, setRePass, setMatch, setShow } = RegisterSlice.actions;
-export default RegisterSlice.reducer;
+export const { change, setRePass, setMatch, setShow } = RegisterAction.actions;
+export default RegisterAction.reducer;

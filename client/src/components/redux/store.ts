@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import RegSlc from './RegisterSlice';
+import Reg from './RegisterAction';
 
-export default configureStore({
+const Store = configureStore({
     reducer: {
-      register: RegSlc
+        REG: Reg
     },
-  })
+})
+export type RootState = ReturnType<typeof Store.getState>;
+export default Store;
