@@ -22,7 +22,7 @@ const Register: React.FC = () => {
             const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass, match: undefined, show });
             console.log(res.data);
         } catch (err) {
-            const XR = err as AxiosError<any>;
+            const XR = err as AxiosError<{ [key: string]: string }>;
             console.log(XR.response!.data.errs);
         }
     };

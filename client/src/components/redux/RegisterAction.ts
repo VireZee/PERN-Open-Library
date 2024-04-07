@@ -34,7 +34,7 @@ const RegisterAction = createSlice({
         },
         setShow: (state, action: PayloadAction<boolean>) => {
             state.show = action.payload;
-        },
+        }
     }
 });
 export const { change, setRePass, setMatch, setShow } = RegisterAction.actions;

@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setOnline, setLoad, setBooks, setCurrentPage, setTotalPages } from './redux/HomeAction';
+import { RootState } from './redux/Store';
 import axios, { AxiosResponse } from 'axios';
 import Load from './Load';
 import Net from './errors/Internet';
@@ -7,69 +10,28 @@ import NB from './errors/NoBooks';
 interface Props {
     search: string;
 }
-interface Books {
-    cover_i: number;
-    title: string;
-    author_name: string[];
-}
-interface State {
-    online: boolean;
-    load: boolean;
-    books: Books[];
-    currentPage: number;
-    totalPages: number;
-}
-type Action =
-    { type: 'SET_ONLINE'; payload: boolean }
-    | { type: 'SET_LOAD'; payload: boolean }
-    | { type: 'SET_BOOKS'; payload: Books[] }
-    | { type: 'SET_CURRENT_PAGE'; payload: number }
-    | { type: 'SET_TOTAL_PAGES'; payload: number };
 interface URLParams {
     title?: string;
     isbn?: string;
     page?: string;
 }
-const initialState: State = {
-    online: navigator.onLine,
-    load: true,
-    books: [],
-    currentPage: 1,
-    totalPages: 1,
-};
-const reducer = (state: State, action: Action) => {
-    switch (action.type) {
-        case 'SET_ONLINE':
-            return { ...state, online: action.payload };
-        case 'SET_LOAD':
-            return { ...state, load: action.payload };
-        case 'SET_BOOKS':
-            return { ...state, books: action.payload };
-        case 'SET_CURRENT_PAGE':
-            return { ...state, currentPage: action.payload };
-        case 'SET_TOTAL_PAGES':
-            return { ...state, totalPages: action.payload };
-        default:
-            return state;
-    }
-};
 const Home: React.FC<Props> = ({ search }) => {
-    const [state, dispatch] = React.useReducer(reducer, initialState);
-    const { online, load, books, currentPage, totalPages } = state;
+    const dispatch = useDispatch();
+    const { online, load, books, currentPage, totalPages } = useSelector((state: RootState) => state.HOME);
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search));
     const str = title || isbn;
     const pg = Number(page) || 1;
     React.useEffect(() => {
-        const handleOnline = () => dispatch({ type: 'SET_ONLINE', payload: navigator.onLine });
+        const handleOnline = () => dispatch(setOnline(navigator.onLine));
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOnline);
         (async () => {
             const booksData = (res: AxiosResponse) => {
                 if (res.data.numFound === 0) {
-                    dispatch({ type: 'SET_BOOKS', payload: [] });
+                    dispatch(setBooks([]));
                 } else {
-                    dispatch({ type: 'SET_BOOKS', payload: res.data.docs });
-                    dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(res.data.numFound / 100) });
+                    dispatch(setBooks(res.data.docs));
+                    dispatch(setTotalPages(Math.ceil(res.data.numFound / 100)));
                 }
             };
             const fetch = async () => {
@@ -77,28 +39,28 @@ const Home: React.FC<Props> = ({ search }) => {
                 const query = search ? search.split(' ').join('+') : 'harry+potter';
                 const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${currentPage}`);
                 booksData(response);
-                dispatch({ type: 'SET_LOAD', payload: false });
+                dispatch(setLoad(false));
             };
             switch (online) {
                 case true:
-                    dispatch({ type: 'SET_LOAD', payload: true });
+                    dispatch(setLoad(true));
                     if ((title === null || isbn === null) && page === null) {
                         await fetch();
                     } else {
                         if (search) {
-                            dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 });
+                            dispatch(setCurrentPage(1));
                             await fetch();
                         } else {
                             const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title';
                             const query = str ? str.split(' ').join('+') : 'harry+potter';
                             const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`);
                             booksData(response);
-                            dispatch({ type: 'SET_LOAD', payload: false });
+                            dispatch(setLoad(false));
                         }
                     }
                     break;
                 default:
-                    dispatch({ type: 'SET_LOAD', payload: false });
+                    dispatch(setLoad(false));
             }
         })();
         return () => {
@@ -144,7 +106,7 @@ const Home: React.FC<Props> = ({ search }) => {
                 case '...':
                     break;
                 default:
-                    dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
+                    dispatch(setCurrentPage(page));
                     break;
             }
         };

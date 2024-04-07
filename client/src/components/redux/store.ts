@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import Reg from './RegisterAction';
+import RA from './RegisterAction';
+import HA from './HomeAction';
 
 const Store = configureStore({
     reducer: {
-        REG: Reg
+        REG: RA,
+        HOME: HA
     },
 })
 export type RootState = ReturnType<typeof Store.getState>;
