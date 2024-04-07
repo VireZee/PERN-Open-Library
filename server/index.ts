@@ -1,5 +1,4 @@
 import AppDataSource from './src/DataSource';
-import './src/configs/env';
 import express from 'express';
 import cors from 'cors';
 import RegRt from './src/routes/Register';
