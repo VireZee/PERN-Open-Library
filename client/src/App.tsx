@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux'
 import store from './components/redux/Store'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -12,7 +12,7 @@ import Col from './components/Collection';
 import API from './components/API';
 
 const App: React.FC = () => {
-    const [search, setSearch] = useState<string>('');
+    const [search, setSearch] = React.useState<string>('');
     const searchHandler = (s: string) => setSearch(s);
     const navbar = ['/register', '/login'].includes(window.location.pathname);
     return (

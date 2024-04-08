@@ -1,30 +1,34 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { change, setRePass, setMatch, setShow } from '../redux/RegisterAction';
+import { change, setShow } from '../redux/RegisterAction';
 import { RootState } from '../redux/Store';
 import axios, { AxiosError } from 'axios';
 
+interface Errors {
+    name?: string;
+    uname?: string;
+    email?: string;
+    pass?: string;
+    match?: string;
+}
 const Register: React.FC = () => {
     const dispatch = useDispatch();
-    const { name, uname, email, pass, rePass, match, show } = useSelector((state: RootState) => state.REG);
+    const { name, uname, email, pass, rePass, show } = useSelector((state: RootState) => state.REG);
+    const [errors, setErrors] = React.useState<Errors>({});
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         dispatch(change({ name, value }));
     };
     const toggle = () => dispatch(setShow(!show));
-    const handleRetype = (e: string) => {
-        dispatch(setRePass(e));
-        dispatch(setMatch(e === pass));
-    };
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault()
-            const  res =await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, match: undefined, show });
+            const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
             // window.location.href = '/';
             console.log(res.data)
         } catch (err) {
-            const XR = err as AxiosError<{ [key: string]: string }>;
-            console.log(XR.response!.data.errs);
+            const XR = err as AxiosError<{ [key: string]: Errors }>;
+            setErrors(XR.response!.data.errs);
         }
     };
     return (
@@ -39,8 +43,9 @@ const Register: React.FC = () => {
                             name="name"
                             value={name}
                             onChange={handleChange}
-                            className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
+                            className={`mt-1 p-2 border ${!errors.name ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
+                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Username</label>
@@ -49,8 +54,9 @@ const Register: React.FC = () => {
                             name="uname"
                             value={uname}
                             onChange={handleChange}
-                            className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
+                            className={`mt-1 p-2 border ${!errors.uname ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
+                        {errors.uname && <p className="text-red-500 text-sm mt-1">{errors.uname}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Email</label>
@@ -59,8 +65,9 @@ const Register: React.FC = () => {
                             name="email"
                             value={email}
                             onChange={handleChange}
-                            className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
+                            className={`mt-1 p-2 border ${!errors.email ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
+                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Password</label>
@@ -70,7 +77,7 @@ const Register: React.FC = () => {
                                 name="pass"
                                 value={pass}
                                 onChange={handleChange}
-                                className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-black"
+                                className={`mt-1 p-2 border ${!errors.pass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
                             <button
                                 type="button"
@@ -93,18 +100,19 @@ const Register: React.FC = () => {
                                 )}
                             </button>
                         </div>
+                        {errors.pass && <p className="text-red-500 text-sm mt-1">{errors.pass}</p>}
                     </div>
                     {!show && (
                         <div className="mb-4">
                             <label className="text-md text-gray-700">Retype Password</label>
                             <input
                                 type="password"
-                                name="retype"
+                                name="rePass"
                                 value={rePass}
-                                onChange={e => handleRetype(e.target.value)}
-                                className={`mt-1 p-2 border ${match ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                                onChange={handleChange}
+                                className={`mt-1 p-2 border ${!errors.match ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
-                            {!match && <p className="text-red-500 text-sm mt-1">Passwords do not match!</p>}
+                            {errors.match && <p className="text-red-500 text-sm mt-1">{errors.match}</p>}
                         </div>
                     )}
                     <div className="flex justify-center mb-4">

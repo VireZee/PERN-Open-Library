@@ -7,7 +7,6 @@ interface State {
     email: string;
     pass: string;
     rePass: string;
-    match: boolean;
     show: boolean;
 }
 const initialState: State = {
@@ -16,7 +15,6 @@ const initialState: State = {
     email: '',
     pass: '',
     rePass: '',
-    match: true,
     show: false
 }
 const RegisterAction = createSlice({
@@ -26,16 +24,10 @@ const RegisterAction = createSlice({
         change: (state, action: PayloadAction<{ name: string, value: string }>) => {
             state[action.payload.name] = action.payload.value;
         },
-        setRePass: (state, action: PayloadAction<string>) => {
-            state.rePass = action.payload;
-        },
-        setMatch: (state, action: PayloadAction<boolean>) => {
-            state.match = action.payload;
-        },
         setShow: (state, action: PayloadAction<boolean>) => {
             state.show = action.payload;
         }
     }
 });
-export const { change, setRePass, setMatch, setShow } = RegisterAction.actions;
+export const { change, setShow } = RegisterAction.actions;
 export default RegisterAction.reducer;
