@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
 @Entity("User")
 export default class User {
@@ -8,12 +8,16 @@ export default class User {
     photo: Buffer;
     @Column({ length: 30 })
     name: string;
-    @Column({ length: 10 })
+    @Column({ length: 20 })
+    @Index({ unique: true })
     username: string;
     @Column()
+    @Index({ unique: true })
     email: string;
     @Column()
     pass: string;
-    @Column({ type: "timestamp with time zone" })
+    @Column({ type: "timestamptz" })
     created: Date;
+    @Column({ type: "timestamptz", nullable: true })
+    updated: Date;
 }

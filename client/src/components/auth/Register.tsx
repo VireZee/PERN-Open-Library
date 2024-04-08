@@ -22,12 +22,11 @@ const Register: React.FC = () => {
     const toggle = () => dispatch(setShow(!show));
     const submit = async (e: React.FormEvent) => {
         try {
-            e.preventDefault()
-            const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
+            e.preventDefault();
+            await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
             // window.location.href = '/';
-            console.log(res.data)
         } catch (err) {
-            const XR = err as AxiosError<{ [key: string]: Errors }>;
+            const XR = err as AxiosError<{ errs: Errors }>;
             setErrors(XR.response!.data.errs);
         }
     };
