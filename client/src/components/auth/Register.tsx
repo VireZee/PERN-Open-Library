@@ -25,7 +25,7 @@ const Register: React.FC = () => {
             e.preventDefault();
             const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
             localStorage.setItem('τ', res.data);
-            // window.location.replace('/');
+            window.location.replace('/');
         } catch (err) {
             const XR = err as AxiosError<{ errs: Errors }>;
             setErrors(XR.response!.data.errs);

@@ -1,7 +1,7 @@
 import AppDataSource from '../DataSource';
 import User from '../models/User';
 import { Request, Response } from 'express';
-import { valName, valUname, valEmail, genToken } from '../utils/Validation';
+import { valName, valUname, valEmail, Hash, genToken } from '../utils/Validation';
 
 const Register = async (req: Request, res: Response) => {
     const userRepo = AppDataSource.getRepository(User);
@@ -17,7 +17,7 @@ const Register = async (req: Request, res: Response) => {
     if (!show && pass !== rePass) errs.match = "Password do not match!";
     if (Object.keys(errs).length > 0) return res.status(422).json({ errs });
     const newUser = userRepo.create({
-        name, username: uname, email, pass, created: new Date()
+        name, username: uname, email, pass: await Hash(pass), created: new Date()
     });
     await userRepo.save(newUser);
     const t = genToken(uname);
