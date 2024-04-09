@@ -1,13 +1,13 @@
 import AppDataSource from '../DataSource';
 import User from '../models/User';
 import { Request, Response } from 'express';
-import { valName, valUname, valEmail } from '../utils/Validation';
+import { valName, valUname, valEmail, genToken } from '../utils/Validation';
 
 const Register = async (req: Request, res: Response) => {
     const userRepo = AppDataSource.getRepository(User);
     const { name, uname, email, pass, rePass, show } = req.body;
     const errs: Record<string, string> = {};
-    const nameErr = await valName(name);
+    const nameErr = valName(name);
     const unameErr = await valUname(uname);
     const emailErr = await valEmail(email);
     if (nameErr) errs.name = nameErr;
@@ -19,6 +19,8 @@ const Register = async (req: Request, res: Response) => {
     const newUser = userRepo.create({
         name, username: uname, email, pass, created: new Date()
     });
-    return await userRepo.save(newUser);
+    await userRepo.save(newUser);
+    const t = genToken(uname);
+    return res.status(200).json(t);
 }
 export default Register;

@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 @Entity("User")
 export default class User {
     @PrimaryGeneratedColumn({ type: "bigint" })
-    id: number;
+    user_id: number;
     @Column({ type: "bytea", nullable: true })
     photo: Buffer;
     @Column({ length: 30 })

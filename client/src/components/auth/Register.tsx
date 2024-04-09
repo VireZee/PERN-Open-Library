@@ -23,8 +23,9 @@ const Register: React.FC = () => {
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
-            await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
-            // window.location.href = '/';
+            const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
+            localStorage.setItem('τ', res.data);
+            // window.location.replace('/');
         } catch (err) {
             const XR = err as AxiosError<{ errs: Errors }>;
             setErrors(XR.response!.data.errs);

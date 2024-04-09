@@ -1,8 +1,9 @@
 import AppDataSource from '../DataSource';
 import User from '../models/User';
+import jwt from 'jsonwebtoken';
 
 const userRepo = AppDataSource.getRepository(User);
-const valName = async (name: string) => {
+const valName = (name: string) => {
     if (!name) {
         return "Name can't be empty!";
     } else if (name.length >= 30) {
@@ -32,4 +33,17 @@ const valEmail = async (email: string) => {
     }
     return;
 };
-export { valName, valUname, valEmail };
+const genToken = (username: string) => {
+    const genSecKey = () => {
+        const s = `0123456789!@#$%^&*()_+={}[]|?><,./;:\\'"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ`;
+        let rslt = '';
+        for (let i = 0; i < 1024; i++) {
+            const shfl = Math.floor(Math.random() * s.length);
+            rslt += s[shfl];
+        }
+        return rslt;
+    }
+    const t = jwt.sign({ username }, genSecKey(), { algorithm: 'HS512', expiresIn: '1m' });
+    return t;
+}
+export { valName, valUname, valEmail, genToken };
