@@ -9,4 +9,4 @@ app.use(cors())
 app.use(express.json());
 app.listen(process.env.PORT);
 
-app.use('/api/register', RegRt);
+app.use(RegRt);
