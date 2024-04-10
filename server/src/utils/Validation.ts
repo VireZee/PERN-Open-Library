@@ -4,13 +4,26 @@ import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 
 const userRepo = AppDataSource.getRepository(User);
+const defSvg = (name: string) => {
+    const initials = name.split(' ').map(w => w.charAt(0).toUpperCase()).slice(0, 5).join('');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+        <circle cx="256" cy="256" r="256" fill="#000"/>
+        <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-family="Times New Roman" font-size="128" fill="white">${initials}</text>
+    </svg>`;
+    return svg
+}
 const valName = (name: string) => {
     if (!name) {
         return "Name can't be empty!";
-    } else if (name.length >= 30) {
+    } else if (name.length >= 75) {
         return "Name is too long!";
     }
     return;
+}
+const frmtName = (name: string) => {
+    const nameParts = name.split(' ');
+    const cap = nameParts.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+    return name = cap.join(' ');
 }
 const valUname = async (uname: string) => {
     if (!uname) {
@@ -36,22 +49,31 @@ const valEmail = async (email: string) => {
 };
 const Hash = async (pass: string) => {
     const opt: argon2.Options = {
-        hashLength: 512,
+        hashLength: 4096,
         timeCost: 13,
         memoryCost: 1024 * 1024,
         parallelism: 13,
         type: 2,
         salt: Buffer.from(genSecKey(), 'utf-8')
     };
-    const hash = await argon2.hash(pass, opt);
-    return hash;
+    return await argon2.hash(pass, opt);
 }
 const genSecKey = () => {
-    const s = `0123456789!@#$%^&*()_+={}[]|?><,./;:\\'"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ`;
+    const ranges = [
+        { s: 0x0020, e: 0x007E },
+        { s: 0x00A1, e: 0x02FF },
+        { s: 0x0370, e: 0x052F }
+    ];
+    const str: string[] = [];
+    ranges.forEach(r => {
+        for (let i = r.s; i <= r.e; i++) {
+            str.push(String.fromCharCode(i));
+        }
+    });
     let rslt = '';
-    for (let i = 0; i < 1024; i++) {
-        const shfl = Math.floor(Math.random() * s.length);
-        rslt += s[shfl];
+    for (let i = 0; i < 2048; i++) {
+        const shfl = Math.floor(Math.random() * str.length);
+        rslt += str[shfl];
     }
     return rslt;
 }
@@ -59,4 +81,4 @@ const genToken = (username: string) => {
     const t = jwt.sign({ username }, genSecKey(), { algorithm: 'HS512', expiresIn: '1m' });
     return t;
 }
-export { valName, valUname, valEmail, Hash, genToken };
+export { defSvg, valName, frmtName, valUname, valEmail, Hash, genToken };

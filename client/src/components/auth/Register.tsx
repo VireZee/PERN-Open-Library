@@ -18,6 +18,7 @@ const Register: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         dispatch(change({ name, value }));
+        setErrors(e => ({ ...e, [name]: '' }));
     };
     const toggle = () => dispatch(setShow(!show));
     const submit = async (e: React.FormEvent) => {

@@ -4,9 +4,9 @@ import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 export default class User {
     @PrimaryGeneratedColumn({ type: "bigint" })
     user_id: number;
-    @Column({ type: "bytea", nullable: true })
+    @Column({ type: "bytea" })
     photo: Buffer;
-    @Column({ length: 30 })
+    @Column({ length: 75 })
     name: string;
     @Column({ length: 20 })
     @Index({ unique: true })
