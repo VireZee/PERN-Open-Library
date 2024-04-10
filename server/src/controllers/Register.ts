@@ -14,7 +14,7 @@ const Register = async (req: Request, res: Response) => {
     if (unameErr) errs.uname = unameErr;
     if (emailErr) errs.email = emailErr;
     if (!pass) errs.pass = "Password can't be empty!";
-    if (!show && pass !== rePass) errs.match = "Password do not match!";
+    if (!show && pass !== rePass) errs.rePass = "Password do not match!";
     if (Object.keys(errs).length > 0) return res.status(422).json({ errs });
     const newUser = userRepo.create({
         photo: Buffer.from(defSvg(name), 'utf-8'), name: frmtName(name), username: uname, email, pass: await Hash(pass), created: new Date()

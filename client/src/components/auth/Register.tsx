@@ -9,7 +9,7 @@ interface Errors {
     uname?: string;
     email?: string;
     pass?: string;
-    match?: string;
+    rePass?: string;
 }
 const Register: React.FC = () => {
     const dispatch = useDispatch();
@@ -111,9 +111,9 @@ const Register: React.FC = () => {
                                 name="rePass"
                                 value={rePass}
                                 onChange={handleChange}
-                                className={`mt-1 p-2 border ${!errors.match ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                                className={`mt-1 p-2 border ${!errors.rePass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
-                            {errors.match && <p className="text-red-500 text-sm mt-1">{errors.match}</p>}
+                            {errors.rePass && <p className="text-red-500 text-sm mt-1">{errors.rePass}</p>}
                         </div>
                     )}
                     <div className="flex justify-center mb-4">
