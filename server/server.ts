@@ -5,7 +5,7 @@ import RegRt from './src/routes/Register';
 
 AppDataSource.initialize();
 const app = express();
-app.use(cors())
+app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(express.json());
 app.listen(process.env.PORT);
 

@@ -24,9 +24,8 @@ const Register: React.FC = () => {
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
-            const res = await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
-            localStorage.setItem('τ', res.data);
-            window.location.replace('/');
+            await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
+            // window.location.replace('/');
         } catch (err) {
             const XR = err as AxiosError<{ errs: Errors }>;
             setErrors(XR.response!.data.errs);
@@ -122,7 +121,7 @@ const Register: React.FC = () => {
                     <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md">Register</button>
                 </form>
                 <div className="mt-4 text-sm text-gray-700 text-center">
-                    Already have an account? <a href="/login" className="font-medium text-black hover:text-black">Log in</a>
+                    Already have an account? <a href="/login" className="font-medium text-black hover:text-black">Log In</a>
                 </div>
             </div>
         </div>

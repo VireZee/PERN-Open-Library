@@ -17,10 +17,19 @@ const Register = async (req: Request, res: Response) => {
     if (!show && pass !== rePass) errs.rePass = "Password do not match!";
     if (Object.keys(errs).length > 0) return res.status(422).json({ errs });
     const newUser = userRepo.create({
-        photo: Buffer.from(defSvg(name), 'utf-8'), name: frmtName(name), username: uname, email, pass: await Hash(pass), created: new Date()
+        photo: Buffer.from(defSvg(name), 'utf-8'),
+        name: frmtName(name),
+        username: uname, email,
+        pass: await Hash(pass),
+        created: new Date()
     });
     await userRepo.save(newUser);
-    const t = genToken(uname);
+    const t = genToken(name, uname, email);
+    res.cookie('T', t, {
+        httpOnly: true,
+        // secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30
+    });
     return res.status(200).json(t);
 }
 export default Register;

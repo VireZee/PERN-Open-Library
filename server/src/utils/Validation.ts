@@ -10,7 +10,7 @@ const defSvg = (name: string) => {
         <circle cx="256" cy="256" r="256" fill="#000"/>
         <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-family="Times New Roman" font-size="128" fill="white">${initials}</text>
     </svg>`;
-    return svg
+    return svg;
 }
 const valName = (name: string) => {
     if (!name) {
@@ -48,6 +48,25 @@ const valEmail = async (email: string) => {
     return;
 };
 const Hash = async (pass: string) => {
+    const genSecKey = () => {
+        const ranges = [
+            { s: 0x0020, e: 0x007E },
+            { s: 0x00A1, e: 0x02FF },
+            { s: 0x0370, e: 0x052F }
+        ];
+        const str: string[] = [];
+        ranges.forEach(r => {
+            for (let i = r.s; i <= r.e; i++) {
+                str.push(String.fromCharCode(i));
+            }
+        });
+        let rslt = '';
+        for (let i = 0; i < 2048; i++) {
+            const shfl = Math.floor(Math.random() * str.length);
+            rslt += str[shfl];
+        }
+        return rslt;
+    }
     const opt: argon2.Options = {
         hashLength: 4096,
         timeCost: 13,
@@ -58,27 +77,8 @@ const Hash = async (pass: string) => {
     };
     return await argon2.hash(pass, opt);
 }
-const genSecKey = () => {
-    const ranges = [
-        { s: 0x0020, e: 0x007E },
-        { s: 0x00A1, e: 0x02FF },
-        { s: 0x0370, e: 0x052F }
-    ];
-    const str: string[] = [];
-    ranges.forEach(r => {
-        for (let i = r.s; i <= r.e; i++) {
-            str.push(String.fromCharCode(i));
-        }
-    });
-    let rslt = '';
-    for (let i = 0; i < 2048; i++) {
-        const shfl = Math.floor(Math.random() * str.length);
-        rslt += str[shfl];
-    }
-    return rslt;
-}
-const genToken = (username: string) => {
-    const t = jwt.sign({ username }, genSecKey(), { algorithm: 'HS512', expiresIn: '1m' });
+const genToken = (name: string, uname: string, email: string) => {
+    const t = jwt.sign({ name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '1m' });
     return t;
 }
 export { defSvg, valName, frmtName, valUname, valEmail, Hash, genToken };
