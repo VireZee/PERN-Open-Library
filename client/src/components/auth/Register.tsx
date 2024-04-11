@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { change, setShow } from '../redux/RegisterAction';
 import { RootState } from '../redux/Store';
 import axios, { AxiosError } from 'axios';
+// import Cookies from 'js-cookie';
 
 interface Errors {
     name?: string;
@@ -24,8 +25,15 @@ const Register: React.FC = () => {
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
-            await axios.post('http://localhost:3001/api/register', { name, uname, email, pass, rePass: show ? undefined : rePass, show });
-            // window.location.replace('/');
+            const res = await axios.post('http://localhost:3001/API/register', {
+                name,
+                uname,
+                email,
+                pass,
+                rePass: show ? undefined : rePass,
+                show
+            }, { withCredentials: true });
+            console.log(res);
         } catch (err) {
             const XR = err as AxiosError<{ errs: Errors }>;
             setErrors(XR.response!.data.errs);

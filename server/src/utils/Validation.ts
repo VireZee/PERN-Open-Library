@@ -37,6 +37,9 @@ const valUname = async (uname: string) => {
     }
     return;
 };
+const frmtUname = (uname: string) => {
+    return uname.toLowerCase();
+}
 const valEmail = async (email: string) => {
     if (!email) {
         return "Email can't be empty!";
@@ -78,7 +81,7 @@ const Hash = async (pass: string) => {
     return await argon2.hash(pass, opt);
 }
 const genToken = (name: string, uname: string, email: string) => {
-    const t = jwt.sign({ name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '1m' });
+    const t = jwt.sign({ name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' });
     return t;
 }
-export { defSvg, valName, frmtName, valUname, valEmail, Hash, genToken };
+export { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken };

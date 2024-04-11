@@ -1,7 +1,7 @@
 import AppDataSource from '../DataSource';
 import User from '../models/User';
 import { Request, Response } from 'express';
-import { defSvg, valName, frmtName, valUname, valEmail, Hash, genToken } from '../utils/Validation';
+import { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken } from '../utils/Validation';
 
 const Register = async (req: Request, res: Response) => {
     const userRepo = AppDataSource.getRepository(User);
@@ -19,17 +19,18 @@ const Register = async (req: Request, res: Response) => {
     const newUser = userRepo.create({
         photo: Buffer.from(defSvg(name), 'utf-8'),
         name: frmtName(name),
-        username: uname, email,
+        username: frmtUname(uname),
+        email,
         pass: await Hash(pass),
         created: new Date()
     });
     await userRepo.save(newUser);
     const t = genToken(name, uname, email);
-    res.cookie('T', t, {
+    res.cookie('3C4', t, {
         httpOnly: true,
         // secure: true,
         maxAge: 1000 * 60 * 60 * 24 * 30
     });
-    return res.status(200).json(t);
+    return res.status(200).json();
 }
 export default Register;
