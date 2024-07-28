@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const API: React.FC = () => {
     return (
@@ -7,4 +7,4 @@ const API: React.FC = () => {
         </div>
     )
 }
-export default API;
+export default API

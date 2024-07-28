@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const ForgotPassword: React.FC = () => {
     return (
@@ -7,4 +7,4 @@ const ForgotPassword: React.FC = () => {
         </div>
     )
 }
-export default ForgotPassword;
+export default ForgotPassword

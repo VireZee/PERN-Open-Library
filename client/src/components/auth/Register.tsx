@@ -1,44 +1,39 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { change, setShow } from '../redux/RegisterAction';
-import { RootState } from '../redux/Store';
-import axios, { AxiosError } from 'axios';
-// import Cookies from 'js-cookie';
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { change, setShow } from '../redux/RegisterAction'
+import { RootState } from '../redux/Store'
+import axios, { AxiosError } from 'axios'
 
 interface Errors {
-    name?: string;
-    uname?: string;
-    email?: string;
-    pass?: string;
-    rePass?: string;
+    name?: string
+    uname?: string
+    email?: string
+    pass?: string
+    rePass?: string
 }
 const Register: React.FC = () => {
-    const dispatch = useDispatch();
-    const { name, uname, email, pass, rePass, show } = useSelector((state: RootState) => state.REG);
-    const [errors, setErrors] = React.useState<Errors>({});
+    const dispatch = useDispatch()
+    const regState = useSelector((state: RootState) => state.REG)
+    const [errors, setErrors] = React.useState<Errors>({})
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        dispatch(change({ name, value }));
-        setErrors(e => ({ ...e, [name]: '' }));
-    };
-    const toggle = () => dispatch(setShow(!show));
+        const { name, value } = e.target
+        dispatch(change({ name, value }))
+        setErrors(e => ({ ...e, [name]: '' }))
+    }
+    const toggle = () => dispatch(setShow(!regState.show))
     const submit = async (e: React.FormEvent) => {
         try {
-            e.preventDefault();
+            e.preventDefault()
             const res = await axios.post('http://localhost:3001/API/register', {
-                name,
-                uname,
-                email,
-                pass,
-                rePass: show ? undefined : rePass,
-                show
-            }, { withCredentials: true });
-            console.log(res);
+                ...regState,
+                rePass: regState.show ? undefined : regState.rePass
+            })
+            console.log(res)
         } catch (err) {
-            const XR = err as AxiosError<{ errs: Errors }>;
-            setErrors(XR.response!.data.errs);
+            const XR = err as AxiosError<{ errs: Errors }>
+            setErrors(XR.response!.data.errs)
         }
-    };
+    }
     return (
         <div className="bg-black flex justify-center items-center h-screen">
             <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
@@ -49,7 +44,7 @@ const Register: React.FC = () => {
                         <input
                             type="text"
                             name="name"
-                            value={name}
+                            value={regState.name}
                             onChange={handleChange}
                             className={`mt-1 p-2 border ${!errors.name ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
@@ -60,7 +55,7 @@ const Register: React.FC = () => {
                         <input
                             type="text"
                             name="uname"
-                            value={uname}
+                            value={regState.uname}
                             onChange={handleChange}
                             className={`mt-1 p-2 border ${!errors.uname ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
@@ -71,7 +66,7 @@ const Register: React.FC = () => {
                         <input
                             type="email"
                             name="email"
-                            value={email}
+                            value={regState.email}
                             onChange={handleChange}
                             className={`mt-1 p-2 border ${!errors.email ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
@@ -81,9 +76,9 @@ const Register: React.FC = () => {
                         <label className="text-md text-gray-700">Password</label>
                         <div className="relative">
                             <input
-                                type={show ? "text" : "password"}
+                                type={regState.show ? "text" : "password"}
                                 name="pass"
-                                value={pass}
+                                value={regState.pass}
                                 onChange={handleChange}
                                 className={`mt-1 p-2 border ${!errors.pass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
@@ -92,7 +87,7 @@ const Register: React.FC = () => {
                                 onClick={toggle}
                                 className="absolute inset-y-0 right-0 flex items-center px-3"
                             >
-                                {show ? (
+                                {regState.show ? (
                                     <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2 2L22 22" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         <path d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -110,13 +105,13 @@ const Register: React.FC = () => {
                         </div>
                         {errors.pass && <p className="text-red-500 text-sm mt-1">{errors.pass}</p>}
                     </div>
-                    {!show && (
+                    {!regState.show && (
                         <div className="mb-4">
                             <label className="text-md text-gray-700">Retype Password</label>
                             <input
                                 type="password"
                                 name="rePass"
-                                value={rePass}
+                                value={regState.rePass}
                                 onChange={handleChange}
                                 className={`mt-1 p-2 border ${!errors.rePass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
@@ -135,4 +130,4 @@ const Register: React.FC = () => {
         </div>
     )
 }
-export default Register;
+export default Register

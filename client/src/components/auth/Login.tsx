@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Login: React.FC = () => {
     return (
@@ -7,4 +7,4 @@ const Login: React.FC = () => {
         </div>
     )
 }
-export default Login;
+export default Login

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Internet: React.FC = () => {
     return (
@@ -7,4 +7,4 @@ const Internet: React.FC = () => {
         </div>
     )
 }
-export default Internet;
+export default Internet

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Collection: React.FC = () => {
     return (
@@ -7,4 +7,4 @@ const Collection: React.FC = () => {
         </div>
     )
 }
-export default Collection;
+export default Collection

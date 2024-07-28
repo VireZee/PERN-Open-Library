@@ -1,5 +1,4 @@
-import React from 'react';
-import '../styles/Load.scss';
+import React from 'react'
 
 const Load: React.FC = () => {
     return (
@@ -8,4 +7,4 @@ const Load: React.FC = () => {
         </div>
     )
 }
-export default Load;
+export default Load

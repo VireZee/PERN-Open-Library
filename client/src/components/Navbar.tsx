@@ -1,20 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import _debounce from 'lodash/debounce';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import _debounce from 'lodash/debounce'
 
 interface Props {
-    onSearch: (v: string) => void;
-    isAuth: boolean;
+    onSearch: (v: string) => void
+    isAuth: boolean
 }
 interface URLParams {
-    title?: string;
-    isbn?: string;
+    title?: string
+    isbn?: string
 }
 const Navbar: React.FC<Props> = ({ onSearch, isAuth }) => {
-    const [active, setActive] = React.useState<string>('home');
-    const debSearch = _debounce((e: string) => onSearch(e), 750);
-    const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search));
-    const str = title || isbn;
+    const [active, setActive] = React.useState<string>('home')
+    const debSearch = _debounce((e: string) => onSearch(e), 750)
+    const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
+    const str = title || isbn
     return (
         <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-black">
             <div className="text-white">
@@ -41,6 +41,6 @@ const Navbar: React.FC<Props> = ({ onSearch, isAuth }) => {
                 )}
             </div>
         </nav>
-    );
-};
-export default Navbar;
+    )
+}
+export default Navbar
