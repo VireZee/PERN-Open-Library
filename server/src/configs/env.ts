@@ -1,2 +1,2 @@
-import dotenv from 'dotenv';
-dotenv.config({path: 'src/configs/.env'});
+import dotenv from 'dotenv'
+dotenv.config({path: 'src/configs/.env'})

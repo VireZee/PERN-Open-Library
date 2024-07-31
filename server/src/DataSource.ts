@@ -1,5 +1,5 @@
-import { DataSource } from 'typeorm';
-import './configs/env';
+import { DataSource } from 'typeorm'
+import './configs/env'
 
 const AppDataSource = new DataSource({
     type: "postgres",
@@ -10,5 +10,5 @@ const AppDataSource = new DataSource({
     database: process.env.DB_NAME!,
     entities: ["src/models/*.ts"],
     synchronize: true
-});
-export default AppDataSource;
+})
+export default AppDataSource

@@ -1,23 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
 
 @Entity("User")
 export default class User {
     @PrimaryGeneratedColumn({ type: "bigint" })
-    user_id: number;
+    user_id: number
     @Column({ type: "bytea" })
-    photo: Buffer;
+    photo: Buffer
     @Column({ length: 75 })
-    name: string;
+    name: string
     @Column({ length: 20 })
     @Index({ unique: true })
-    username: string;
+    username: string
     @Column()
     @Index({ unique: true })
-    email: string;
+    email: string
     @Column()
-    pass: string;
+    pass: string
     @Column({ type: "timestamptz" })
-    created: Date;
+    created: Date
     @Column({ type: "timestamptz", nullable: true })
-    updated: Date;
+    updated: Date
 }
