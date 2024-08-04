@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: string | boolean
+    [key: string]: string | boolean | Errors
 }
 const initialState: State = {
     name: '',
@@ -9,7 +9,15 @@ const initialState: State = {
     email: '',
     pass: '',
     rePass: '',
-    show: false
+    show: false,
+    errors: {}
+}
+export interface Errors {
+    name?: string
+    uname?: string
+    email?: string
+    pass?: string
+    rePass?: string
 }
 const RegisterAction = createSlice({
     name: 'REG',
@@ -20,8 +28,11 @@ const RegisterAction = createSlice({
         },
         setShow: (state, action: PayloadAction<boolean>) => {
             state.show = action.payload
+        },
+        setErrors: (state, action: PayloadAction<Errors>) => {
+            state.errors = action.payload
         }
     }
 })
-export const { change, setShow } = RegisterAction.actions
+export const { change, setShow, setErrors } = RegisterAction.actions
 export default RegisterAction.reducer

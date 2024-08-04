@@ -15,13 +15,13 @@ const App: React.FC = () => {
     const [search, setSearch] = React.useState<string>('')
     // const [isAuth, setIsAuth] = React.useState<boolean>(false)
     const searchHandler = (s: string) => setSearch(s)
-    const navbar = ['/register', '/login'].includes(window.location.pathname)
+    const log = ['/register', '/login'].includes(window.location.pathname)
     return (
         <Provider store={store}>
             <BrowserRouter>
                 <header className="fixed w-screen">
-                    {!navbar && <Nav onSearch={searchHandler} isAuth={false} />}
-                    {navbar && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
+                    {!log && <Nav onSearch={searchHandler} isAuth={false} />}
+                    {log && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
                 </header>
                 <main>
                     <Routes>

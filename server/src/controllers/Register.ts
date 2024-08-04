@@ -26,11 +26,13 @@ const Register = async (req: Request, res: Response) => {
             created: new Date()
         })
         await userRepo.save(newUser)
-        const t = genToken(name, uname, email)
-        res.cookie('3C4', t, {
+        const t = genToken(newUser.user_id, name, uname, email)
+        res.cookie('!', t, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
-            // secure: true,
-            maxAge: 1000 * 60 * 60 * 24 * 30
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: "strict",
+            priority: "high"
         })
         return res.status(200).json()
     }

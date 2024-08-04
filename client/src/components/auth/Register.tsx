@@ -1,37 +1,29 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { change, setShow } from '../redux/RegisterAction'
+import { change, setShow, setErrors, Errors } from '../redux/RegisterAction'
 import { RootState } from '../redux/Store'
 import axios, { AxiosError } from 'axios'
 
-interface Errors {
-    name?: string
-    uname?: string
-    email?: string
-    pass?: string
-    rePass?: string
-}
 const Register: React.FC = () => {
     const dispatch = useDispatch()
     const regState = useSelector((state: RootState) => state.REG)
-    const [errors, setErrors] = React.useState<Errors>({})
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))
-        setErrors(e => ({ ...e, [name]: '' }))
+        dispatch(setErrors(({ ...regState.errors, [name]: '' })))
     }
     const toggle = () => dispatch(setShow(!regState.show))
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault()
-            const res = await axios.post('http://localhost:3001/API/register', {
+            await axios.post('http://localhost:3001/API/register', {
                 ...regState,
                 rePass: regState.show ? undefined : regState.rePass
-            })
-            console.log(res)
+            }, { withCredentials: true })
+            location.href = '/'
         } catch (err) {
             const XR = err as AxiosError<{ errs: Errors }>
-            setErrors(XR.response!.data.errs)
+            dispatch(setErrors(XR.response!.data.errs))
         }
     }
     return (
@@ -46,9 +38,9 @@ const Register: React.FC = () => {
                             name="name"
                             value={regState.name}
                             onChange={handleChange}
-                            className={`mt-1 p-2 border ${!errors.name ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                            className={`mt-1 p-2 border ${!regState.errors.name ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
-                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                        {regState.errors.name && <p className="text-red-500 text-sm mt-1">{regState.errors.name}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Username</label>
@@ -57,9 +49,9 @@ const Register: React.FC = () => {
                             name="uname"
                             value={regState.uname}
                             onChange={handleChange}
-                            className={`mt-1 p-2 border ${!errors.uname ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                            className={`mt-1 p-2 border ${!regState.errors.uname ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
-                        {errors.uname && <p className="text-red-500 text-sm mt-1">{errors.uname}</p>}
+                        {regState.errors.uname && <p className="text-red-500 text-sm mt-1">{regState.errors.uname}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Email</label>
@@ -68,9 +60,9 @@ const Register: React.FC = () => {
                             name="email"
                             value={regState.email}
                             onChange={handleChange}
-                            className={`mt-1 p-2 border ${!errors.email ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                            className={`mt-1 p-2 border ${!regState.errors.email ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                         />
-                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                        {regState.errors.email && <p className="text-red-500 text-sm mt-1">{regState.errors.email}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-md text-gray-700">Password</label>
@@ -80,7 +72,7 @@ const Register: React.FC = () => {
                                 name="pass"
                                 value={regState.pass}
                                 onChange={handleChange}
-                                className={`mt-1 p-2 border ${!errors.pass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                                className={`mt-1 p-2 border ${!regState.errors.pass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
                             <button
                                 type="button"
@@ -103,7 +95,7 @@ const Register: React.FC = () => {
                                 )}
                             </button>
                         </div>
-                        {errors.pass && <p className="text-red-500 text-sm mt-1">{errors.pass}</p>}
+                        {regState.errors.pass && <p className="text-red-500 text-sm mt-1">{regState.errors.pass}</p>}
                     </div>
                     {!regState.show && (
                         <div className="mb-4">
@@ -113,9 +105,9 @@ const Register: React.FC = () => {
                                 name="rePass"
                                 value={regState.rePass}
                                 onChange={handleChange}
-                                className={`mt-1 p-2 border ${!errors.rePass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
+                                className={`mt-1 p-2 border ${!regState.errors.rePass ? 'border-gray-300' : 'border-red-500'} rounded-md w-full focus:outline-none focus:border-black`}
                             />
-                            {errors.rePass && <p className="text-red-500 text-sm mt-1">{errors.rePass}</p>}
+                            {regState.errors.rePass && <p className="text-red-500 text-sm mt-1">{regState.errors.rePass}</p>}
                         </div>
                     )}
                     <div className="flex justify-center mb-4">

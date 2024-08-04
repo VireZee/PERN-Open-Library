@@ -32,7 +32,7 @@ const valUname = async (uname: string) => {
         return "Username can only contain Latin Alphabets, Numbers, and Underscores!"
     } else if (uname.length >= 20) {
         return "Username is too long!"
-    } else if (await userRepo.findOne({ where: { username: uname } })) {
+    } else if (await userRepo.findOne({ where: { username: frmtUname(uname) } })) {
         return "Username is unavailable!"
     }
     return
@@ -80,8 +80,8 @@ const Hash = async (pass: string) => {
     }
     return await argon2.hash(pass, opt)
 }
-const genToken = (name: string, uname: string, email: string) => {
-    const t = jwt.sign({ name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' })
+const genToken = (id: number, name: string, uname: string, email: string) => {
+    const t = jwt.sign({ id, name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' })
     return t
 }
 export { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken }
