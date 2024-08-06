@@ -81,7 +81,9 @@ const Hash = async (pass: string) => {
     return await argon2.hash(pass, opt)
 }
 const genToken = (id: number, name: string, uname: string, email: string) => {
-    const t = jwt.sign({ id, name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' })
-    return t
+    return jwt.sign({ id, name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' })
 }
-export { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken }
+const verToken = (t: string) => {
+    return jwt.verify(t, process.env.SECRET_KEY!) as jwt.JwtPayload
+}
+export { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken, verToken }

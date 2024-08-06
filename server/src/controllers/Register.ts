@@ -17,28 +17,26 @@ const Register = async (req: Request, res: Response) => {
         if (!pass) errs.pass = "Password can't be empty!"
         if (!show && pass !== rePass) errs.rePass = "Password do not match!"
         if (Object.keys(errs).length > 0) return res.status(422).json({ errs })
-        else {
-            const newUser = userRepo.create({
-                photo: Buffer.from(defSvg(name), 'utf-8'),
-                name: frmtName(name),
-                username: frmtUname(uname),
-                email,
-                pass: await Hash(pass),
-                created: new Date()
-            })
-            await userRepo.save(newUser)
-            const t = genToken(newUser.user_id, newUser.name, newUser.username, newUser.email)
-            res.cookie('!', t, {
-                maxAge: 1000 * 60 * 60 * 24 * 30,
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: "strict",
-                priority: "high"
-            })
-            return res.status(200).json()
-        }
-    } catch (err) {
-        return res.status(500).json()
+        const newUser = userRepo.create({
+            photo: Buffer.from(defSvg(name), 'utf-8'),
+            name: frmtName(name),
+            username: frmtUname(uname),
+            email,
+            pass: await Hash(pass),
+            created: new Date()
+        })
+        await userRepo.save(newUser)
+        const t = genToken(newUser.user_id, newUser.name, newUser.username, newUser.email)
+        res.cookie('!', t, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: "strict",
+            priority: "high"
+        })
+        return res.status(200)
+    } catch {
+        return res.status(500)
     }
 }
 export default Register
