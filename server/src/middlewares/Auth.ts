@@ -4,8 +4,9 @@ import { Request, Response } from 'express'
 import { verToken } from '../utils/Validation'
 
 const Auth = async (req: Request, res: Response) => {
-    const t = req.cookies['!']
-    if (!t) return res.status(401)
+    const t = req.cookies
+    console.log(req)
+    if (!t) return res.status(401).json()
     try {
         const decoded = verToken(t)
         const userRepo = AppDataSource.getRepository(User)
@@ -17,10 +18,10 @@ const Auth = async (req: Request, res: Response) => {
                 email: decoded.email
             }
         })
-        if (!user) return res.status(401)
+        if (!user) return res.status(401).json()
         return res.status(200).json({ photo: user.photo, name: user.name })
     } catch {
-        return res.status(401)
+        return res.status(401).json()
     }
 }
 export default Auth

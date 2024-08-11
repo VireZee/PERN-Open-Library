@@ -34,9 +34,9 @@ const Register = async (req: Request, res: Response) => {
             sameSite: "strict",
             priority: "high"
         })
-        return res.status(200)
+        return res.status(200).json()
     } catch {
-        return res.status(500)
+        return res.status(500).json()
     }
 }
 export default Register
