@@ -4,8 +4,7 @@ import { Request, Response } from 'express'
 import { verToken } from '../utils/Validation'
 
 const Auth = async (req: Request, res: Response) => {
-    const t = req.cookies
-    console.log(req)
+    const t = req.cookies['!']
     if (!t) return res.status(401).json()
     try {
         const decoded = verToken(t)

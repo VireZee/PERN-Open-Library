@@ -12,8 +12,12 @@ const HomeAction = createSlice({
     name: 'APP',
     initialState,
     reducers: {
-        setSearch: () => { },
-        setAuth: () => { }
+        setSearch: (state, action: PayloadAction<string>) => {
+            state.search = action.payload
+        },
+        setAuth: (state, action: PayloadAction<boolean>) => {
+            state.auth = action.payload
+        }
     }
 })
 export const { setSearch, setAuth } = HomeAction.actions
