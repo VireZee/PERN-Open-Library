@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setSearch, setAuth } from './components/redux/AppAction'
+import { setSearch, setAuth, setUser } from './components/redux/AppAction'
 import { RootState } from './components/redux/Store'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import axios from 'axios'
@@ -17,19 +17,21 @@ const App: React.FC = () => {
     const dispatch = useDispatch()
     const appState = useSelector((state: RootState) => state.APP)
     const searchHandler = (s: string) => dispatch(setSearch(s))
-    const authNav = ['/register', '/login'].includes(window.location.pathname);
-    (async () => {
-        try {
-            const res = await axios.get('http://localhost:3001/API/auth', { withCredentials: true })
-            dispatch(setAuth(true))
-            console.log(res)
-        } catch {
-        }
-    })()
+    const authNav = ['/register', '/login'].includes(window.location.pathname)
+    React.useEffect(() => {
+        (async () => {
+            try {
+                const res = await axios.get('http://localhost:3001/API/auth', { withCredentials: true })
+                dispatch(setAuth(true))
+                dispatch(setUser({ name: res.data.name, photo: res.data.photo }))
+            } catch {
+            }
+        })()
+    }, [])
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
-                {!authNav && <Nav onSearch={searchHandler} isAuth={appState.auth} />}
+                {!authNav && <Nav onSearch={searchHandler} isAuth={appState.auth} isUser={appState.user} />}
                 {authNav && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
             </header>
             <main>

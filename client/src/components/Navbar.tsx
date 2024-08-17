@@ -5,12 +5,16 @@ import _debounce from 'lodash/debounce'
 interface Props {
     onSearch: (v: string) => void
     isAuth: boolean
+    isUser: {
+        name: string
+        photo: string
+    } | null
 }
 interface URLParams {
     title?: string
     isbn?: string
 }
-const Navbar: React.FC<Props> = ({ onSearch, isAuth }) => {
+const Navbar: React.FC<Props> = ({ onSearch, isAuth, isUser }) => {
     const [active, setActive] = React.useState<string>('home')
     const debSearch = _debounce((e: string) => onSearch(e), 750)
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
@@ -30,9 +34,12 @@ const Navbar: React.FC<Props> = ({ onSearch, isAuth }) => {
             </div>
             <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onChange={e => debSearch(e.target.value)} />
             <div className="text-white">
-                {isAuth ? (
-                    <a href="logout" className="hover:text-gray-500 mr-4">Log Out</a>
-
+                {isAuth && isUser ? (
+                    <>
+                        <img src={`data:image/svg+xml;base64,${isUser.photo}`} alt="Photo" className="rounded-full w-8 h-8 mr-2" />
+                        <span className="mr-4">{isUser.name}</span>
+                        <a href="logout" className="hover:text-gray-500">Log Out</a>
+                    </>
                 ) : (
                     <>
                         <a href="register" className="hover:text-gray-500 mr-4">Register</a>

@@ -3,12 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface State {
     search: string
     auth: boolean
+    user: {
+        name: string
+        photo: string
+    } | null
 }
 const initialState: State = {
     search: '',
-    auth: false
+    auth: false,
+    user: null
 }
-const HomeAction = createSlice({
+const AppAction = createSlice({
     name: 'APP',
     initialState,
     reducers: {
@@ -17,8 +22,11 @@ const HomeAction = createSlice({
         },
         setAuth: (state, action: PayloadAction<boolean>) => {
             state.auth = action.payload
+        },
+        setUser: (state, action: PayloadAction<{ name: string, photo: string } | null>) => {
+            state.user = action.payload
         }
     }
 })
-export const { setSearch, setAuth } = HomeAction.actions
-export default HomeAction.reducer
+export const { setSearch, setAuth, setUser } = AppAction.actions
+export default AppAction.reducer

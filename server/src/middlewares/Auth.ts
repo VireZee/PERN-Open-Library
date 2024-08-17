@@ -18,7 +18,7 @@ const Auth = async (req: Request, res: Response) => {
             }
         })
         if (!user) return res.status(401).json()
-        return res.status(200).json({ photo: user.photo, name: user.name })
+        return res.status(200).json({ photo: user.photo, name: user.name, uname: user.username, email: user.email })
     } catch {
         return res.status(401).json()
     }
