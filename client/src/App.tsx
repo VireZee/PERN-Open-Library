@@ -38,12 +38,14 @@ const App: React.FC = () => {
             </header>
             <main>
                 <Routes>
-                    <Route path="*" element={<Home search={appState.search} />} />
-                    <Route path="collection" element={appState.user ? <Col /> : <Navigate to='/register' />} />
-                    <Route path="API" element={appState.user ? <API /> : <Navigate to='/register' />} />
-                    <Route path="register" element={!appState.user ? <Reg /> : <Navigate to='/' />} />
-                    <Route path="login" element={!appState.user ? <Log /> : <Navigate to='/' />} />
-                    <Route path="fp" element={!appState.user ? <FP /> : <Navigate to='/' />} />
+                    <Route path='/' element={<Home search={appState.search} />} />
+                    <Route path='s' element={<Home search={appState.search} />} />
+                    <Route path='collection' element={appState.user ? <Col /> : <Navigate to='/login' />} />
+                    <Route path='API' element={appState.user ? <API /> : <Navigate to='/login' />} />
+                    <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />
+                    <Route path='login' element={!appState.user ? <Log /> : <Navigate to='/' />} />
+                    <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} />
+                    <Route path='*' element={<NF />} />
                 </Routes>
             </main>
         </BrowserRouter>
