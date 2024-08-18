@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setSearch, setAuth, setUser } from './components/redux/AppAction'
+import { setSearch, setUser } from './components/redux/AppAction'
 import { RootState } from './components/redux/Store'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import axios from 'axios'
 import './styles/App.scss'
 import Nav from './components/Navbar'
@@ -12,6 +12,7 @@ import Log from './components/auth/Login'
 import FP from './components/auth/ForgotPassword'
 import Col from './components/Collection'
 import API from './components/API'
+import NF from './components/errors/NotFound'
 
 const App: React.FC = () => {
     const dispatch = useDispatch()
@@ -22,26 +23,27 @@ const App: React.FC = () => {
         (async () => {
             try {
                 const res = await axios.get('http://localhost:3001/API/auth', { withCredentials: true })
-                dispatch(setAuth(true))
-                dispatch(setUser({ name: res.data.name, photo: res.data.photo }))
+                const photo = Buffer.from(res.data.photo.data).toString('base64')
+                dispatch(setUser({ name: res.data.name, photo }))
             } catch {
+                dispatch(setUser(null))
             }
         })()
-    }, [])
+    }, [appState.user])
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
-                {!authNav && <Nav onSearch={searchHandler} isAuth={appState.auth} isUser={appState.user} />}
+                {!authNav && <Nav onSearch={searchHandler} isUser={appState.user} />}
                 {authNav && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
             </header>
             <main>
                 <Routes>
                     <Route path="*" element={<Home search={appState.search} />} />
-                    <Route path="collection" element={<Col />} />
-                    <Route path="API" element={<API />} />
-                    <Route path="register" element={<Reg />} />
-                    <Route path="login" element={<Log />} />
-                    <Route path="fp" element={<FP />} />
+                    <Route path="collection" element={appState.user ? <Col /> : <Navigate to='/register' />} />
+                    <Route path="API" element={appState.user ? <API /> : <Navigate to='/register' />} />
+                    <Route path="register" element={!appState.user ? <Reg /> : <Navigate to='/' />} />
+                    <Route path="login" element={!appState.user ? <Log /> : <Navigate to='/' />} />
+                    <Route path="fp" element={!appState.user ? <FP /> : <Navigate to='/' />} />
                 </Routes>
             </main>
         </BrowserRouter>

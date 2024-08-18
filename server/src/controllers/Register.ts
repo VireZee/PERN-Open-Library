@@ -18,7 +18,7 @@ const Register = async (req: Request, res: Response) => {
         if (!show && pass !== rePass) errs.rePass = "Password do not match!"
         if (Object.keys(errs).length > 0) return res.status(422).json({ errs })
         const newUser = userRepo.create({
-            photo: Buffer.from(defSvg(name), 'utf-8'),
+            photo: Buffer.from(defSvg(name), 'base64'),
             name: frmtName(name),
             username: frmtUname(uname),
             email,

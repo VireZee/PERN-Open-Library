@@ -4,7 +4,6 @@ import _debounce from 'lodash/debounce'
 
 interface Props {
     onSearch: (v: string) => void
-    isAuth: boolean
     isUser: {
         name: string
         photo: string
@@ -14,15 +13,28 @@ interface URLParams {
     title?: string
     isbn?: string
 }
-const Navbar: React.FC<Props> = ({ onSearch, isAuth, isUser }) => {
+const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
     const [active, setActive] = React.useState<string>('home')
-    const debSearch = _debounce((e: string) => onSearch(e), 750)
+    const debSearch = _debounce((e: string) => onSearch(e), 500)
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
+    const imgFormat = (base64String: string) => {
+        const hexString = Buffer.from(base64String, 'base64').toString('hex').toUpperCase()
+        if (Buffer.from(base64String, 'base64').toString('utf-8').trim().startsWith('<svg')) {
+            return 'svg+xml';
+        } else if (hexString.startsWith('FFD8FF')) {
+            return 'jpeg';
+        } else if (hexString.startsWith('89504E470D0A1A0A')) {
+            return 'png';
+        } else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) {
+            return 'gif';
+        }
+        return
+    }
     return (
-        <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-black">
+        <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-[#282828]">
             <div className="text-white">
-                {isAuth ? (
+                {isUser ? (
                     <>
                         <Link to="" className={`${active === 'home' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => setActive('home')}>Home</Link>
                         <Link to="collection" className={`${active === 'col' ? 'text-gray-500' : 'hover:text-gray-500'} mr-4`} onClick={() => setActive('col')}>Collection</Link>
@@ -33,12 +45,11 @@ const Navbar: React.FC<Props> = ({ onSearch, isAuth, isUser }) => {
                 )}
             </div>
             <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onChange={e => debSearch(e.target.value)} />
-            <div className="text-white">
-                {isAuth && isUser ? (
+            <div className="text-white flex items-center">
+                {isUser ? (
                     <>
-                        <img src={`data:image/svg+xml;base64,${isUser.photo}`} alt="Photo" className="rounded-full w-8 h-8 mr-2" />
                         <span className="mr-4">{isUser.name}</span>
-                        <a href="logout" className="hover:text-gray-500">Log Out</a>
+                        <img src={`data:image/${imgFormat(isUser.photo)};base64,${isUser.photo}`} alt="Image" className="rounded-full w-12 h-12" />
                     </>
                 ) : (
                     <>
