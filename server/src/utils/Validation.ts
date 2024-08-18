@@ -10,7 +10,7 @@ const defSvg = (name: string) => {
         <circle cx="256" cy="256" r="256" fill="#000"/>
         <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-family="Times New Roman" font-size="128" fill="white">${initials}</text>
     </svg>`
-    return svg
+    return Buffer.from(svg).toString('base64')
 }
 const valName = (name: string) => {
     if (!name) {
