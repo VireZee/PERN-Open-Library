@@ -78,7 +78,7 @@ const Hash = async (pass: string) => {
         type: 2,
         salt: Buffer.from(genSecKey(), 'utf-8')
     }
-    return await argon2.hash(pass, opt)
+    return await argon2.hash(pass + process.env.PEPPER, opt)
 }
 const genToken = (id: number, name: string, uname: string, email: string) => {
     return jwt.sign({ id, name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' })

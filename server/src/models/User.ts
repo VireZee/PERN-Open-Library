@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany } from 'typeorm'
+import Book from './Book'
 
 @Entity("User")
 export default class User {
@@ -16,6 +17,8 @@ export default class User {
     email: string
     @Column()
     pass: string
+    @OneToMany(() => Book, book => book.user)
+    books: Book[]
     @Column({ type: "timestamptz" })
     created: Date
     @Column({ type: "timestamptz", nullable: true })
