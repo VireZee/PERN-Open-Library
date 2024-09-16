@@ -9,6 +9,6 @@ const AppDataSource = new DataSource({
     password: process.env.DB_PASS!,
     database: process.env.DB_NAME!,
     entities: ["src/models/*.ts"],
-    synchronize: true
+    synchronize: process.env.NODE_ENV === 'development'
 })
 export default AppDataSource
