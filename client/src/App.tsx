@@ -24,7 +24,7 @@ const App: React.FC = () => {
             try {
                 const res = await axios.get('http://localhost:3001/API/auth', { withCredentials: true })
                 const photo = Buffer.from(res.data.photo.data).toString('base64')
-                dispatch(setUser({ name: res.data.name, photo }))
+                dispatch(setUser({ user_id: res.data.user_id, photo, name: res.data.name, uname: res.data.uname, email: res.data.email }))
             } catch {
                 dispatch(setUser(null))
             }
@@ -38,8 +38,8 @@ const App: React.FC = () => {
             </header>
             <main>
                 <Routes>
-                    <Route path='/' element={<Home search={appState.search} />} />
-                    <Route path='s' element={<Home search={appState.search} />} />
+                    <Route path='/' element={<Home search={appState.search} isUser={appState.user} />} />
+                    <Route path='s' element={<Home search={appState.search} isUser={appState.user} />} />
                     <Route path='collection' element={appState.user ? <Col /> : <Navigate to='/login' />} />
                     <Route path='API' element={appState.user ? <API /> : <Navigate to='/login' />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />

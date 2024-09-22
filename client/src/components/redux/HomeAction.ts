@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    online: boolean
-    load: boolean
+    [key: string]: boolean | Books[] | number
     books: Books[]
-    currentPage: number
-    totalPages: number
 }
 const initialState: State = {
     online: navigator.onLine,

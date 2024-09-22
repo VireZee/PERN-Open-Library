@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    search: string
-    user: {
-        name: string
-        photo: string
-    } | null
+    [key: string]: string | UserData | null
 }
 const initialState: State = {
     search: '',
     user: null
+}
+interface UserData {
+    user_id: number
+    photo: string
+    name: string
+    uname: string
+    email: string
 }
 const AppAction = createSlice({
     name: 'APP',
@@ -18,7 +21,7 @@ const AppAction = createSlice({
         setSearch: (state, action: PayloadAction<string>) => {
             state.search = action.payload
         },
-        setUser: (state, action: PayloadAction<{ name: string, photo: string } | null>) => {
+        setUser: (state, action: PayloadAction<UserData | null>) => {
             state.user = action.payload
         }
     }

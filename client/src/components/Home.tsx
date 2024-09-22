@@ -8,19 +8,29 @@ import Net from './errors/Internet'
 import NB from './errors/NoBooks'
 
 interface Props {
-    search: string
+    search: string,
+    isUser: {
+        user_id: number
+    } | null
 }
 interface URLParams {
     title?: string
     isbn?: string
     page?: string
 }
-const Home: React.FC<Props> = ({ search }) => {
+const Home: React.FC<Props> = ({ search, isUser }) => {
     const dispatch = useDispatch()
     const homeState = useSelector((state: RootState) => state.HOME)
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
+    const addToCollection = (cover_i: number) => {
+        if (isUser!.user_id) {
+            // stay tuned
+        } else if (!isUser) {
+            location.href = '/login'
+        }
+    }
     React.useEffect(() => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
@@ -148,7 +158,7 @@ const Home: React.FC<Props> = ({ search }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" />
+                                                        <input type="checkbox" onChange={() => addToCollection(book.cover_i)}/>
                                                         <span>Add to Collection</span>
                                                     </label>
 
