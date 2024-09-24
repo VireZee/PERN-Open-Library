@@ -22,7 +22,7 @@ const Register: React.FC = () => {
             }, { withCredentials: true })
             location.href = '/'
         } catch (err) {
-            const XR = err as AxiosError<{ errs: Errors, error?: string }>
+            const XR = err as AxiosError<{ errs: Errors }>
             if (XR.response!.data.errs) {
                 dispatch(setErrors(XR.response!.data.errs))
             } else {

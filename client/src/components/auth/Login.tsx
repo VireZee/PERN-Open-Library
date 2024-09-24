@@ -19,7 +19,7 @@ const Login: React.FC = () => {
             await axios.post('http://localhost:3001/API/login', logState, { withCredentials: true })
             location.href = '/'
         } catch (err) {
-            const XR = err as AxiosError<{ error?: string }>
+            const XR = err as AxiosError<{ error: string }>
             if (XR.response!.data.error) {
                 dispatch(setError(XR.response!.data.error))
             } else {

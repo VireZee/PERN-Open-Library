@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/HomeAction'
 import { RootState } from './redux/Store'
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
 import Net from './errors/Internet'
 import NB from './errors/NoBooks'
@@ -24,11 +24,19 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
-    const addToCollection = (cover_i: number) => {
-        if (isUser!.user_id) {
-            // stay tuned
-        } else if (!isUser) {
+    const addToCollection = async (isbn: string) => {
+        if (!isUser) {
             location.href = '/login'
+        } else if (isUser.user_id) {
+            try {
+                await axios.post('http://localhost:3001/API/collection', {
+                    user_id: isUser.user_id,
+                    isbn
+                }, { withCredentials: true })
+            } catch (err) {
+                const XR = err as AxiosError
+                alert(XR.response!.statusText)
+            }
         }
     }
     React.useEffect(() => {
@@ -149,7 +157,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                             ) : (
                                 <>
                                     <div className="mt-16 grid grid-cols-3">
-                                        {homeState.books.map((book: Books, idx: number) => (
+                                        {homeState.books.map((idx: number, book: Books) => (
                                             <div key={idx} className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
                                                 <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
                                                     alt={book.title}
@@ -158,7 +166,11 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" onChange={() => addToCollection(book.cover_i)}/>
+                                                        <input type="checkbox" onChange={() => {
+                                                            const isbn13 = book.isbn.find(isbn => isbn.length === 13)
+                                                            const isbn = isbn13 || book.isbn[0]
+                                                            addToCollection(isbn)
+                                                        }} />
                                                         <span>Add to Collection</span>
                                                     </label>
 

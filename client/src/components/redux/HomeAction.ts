@@ -13,6 +13,7 @@ const initialState: State = {
 }
 export interface Books {
     cover_i: number
+    isbn: string[]
     title: string
     author_name: string[]
 }
