@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm'
 import User from './User'
 
-@Entity('Book')
+@Entity('book')
 export default class Book {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     book_id: number
@@ -11,6 +11,21 @@ export default class Book {
     title: string
     @Column({ nullable: true })
     author: string
-    @ManyToOne(() => User, user => user.books)
-    user: User
+    @Column({ unique: true })
+    isbn: string
+    @ManyToMany(() => User)
+    @JoinTable({
+        name: 'user_books',
+        joinColumn: {
+            name: 'book_id',
+            referencedColumnName: 'book_id'
+        },
+        inverseJoinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'user_id'
+        }
+    })
+    users: User[]
+    @Column({ type: "timestamptz" })
+    created: Date
 }

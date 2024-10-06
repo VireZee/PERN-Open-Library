@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany } from 'typeorm'
-import Book from './Book'
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm'
 
-@Entity("User")
+@Entity("user")
 export default class User {
     @PrimaryGeneratedColumn({ type: "bigint" })
     user_id: number
@@ -17,8 +16,8 @@ export default class User {
     email: string
     @Column()
     pass: string
-    @OneToMany(() => Book, book => book.user)
-    books: Book[]
+    @Column()
+    api_key: string
     @Column({ type: "timestamptz" })
     created: Date
     @Column({ type: "timestamptz", nullable: true })
