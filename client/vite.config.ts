@@ -6,5 +6,12 @@ export default defineConfig({
     plugins: [react(), nodePolyfills()],
     server: {
         port: 3000
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler'
+            }
+        }
     }
 })

@@ -24,13 +24,16 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
-    const addToCollection = async (isbn: string) => {
+    const addToCollection = async (cover: number, title: string, author: string, isbn: string) => {
         if (!isUser) {
             location.href = '/login'
         } else if (isUser.user_id) {
             try {
                 await axios.post('http://localhost:3001/API/collection', {
                     user_id: isUser.user_id,
+                    cover,
+                    title,
+                    author,
                     isbn
                 }, { withCredentials: true })
             } catch (err) {
@@ -157,7 +160,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                             ) : (
                                 <>
                                     <div className="mt-16 grid grid-cols-3">
-                                        {homeState.books.map((idx: number, book: Books) => (
+                                        {homeState.books.map((book: Books, idx: number) => (
                                             <div key={idx} className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
                                                 <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
                                                     alt={book.title}
@@ -169,7 +172,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                         <input type="checkbox" onChange={() => {
                                                             const isbn13 = book.isbn.find(isbn => isbn.length === 13)
                                                             const isbn = isbn13 || book.isbn[0]
-                                                            addToCollection(isbn)
+                                                            addToCollection(book.cover_i, book.title, book.author_name ? book.author_name.join(', ') : 'Unknown', isbn)
                                                         }} />
                                                         <span>Add to Collection</span>
                                                     </label>
