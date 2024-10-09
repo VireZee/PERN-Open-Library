@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm'
-import User from './User'
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @Entity('book')
 export default class Book {
@@ -13,19 +12,8 @@ export default class Book {
     author: string
     @Column({ unique: true })
     isbn: string
-    @ManyToMany(() => User)
-    @JoinTable({
-        name: 'user_books',
-        joinColumn: {
-            name: 'book_id',
-            referencedColumnName: 'book_id'
-        },
-        inverseJoinColumn: {
-            name: 'user_id',
-            referencedColumnName: 'user_id'
-        }
-    })
-    users: User[]
+    @Column()
+    user_id: number
     @Column({ type: "timestamptz" })
     created: Date
 }
