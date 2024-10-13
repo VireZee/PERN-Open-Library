@@ -16,7 +16,7 @@ const Collection = async (req: Request, res: Response) => {
             }
         })
         if (bookCollection) {
-
+            await colRepo.delete(bookCollection)
         } else {
             const newCollection = colRepo.create({
                 user_id,

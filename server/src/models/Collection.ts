@@ -4,7 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 export default class Book {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     collection_id: number
-    @Column()
+    @Column({ type: "bigint" })
     user_id: number
     @Column({ unique: true })
     isbn: string
