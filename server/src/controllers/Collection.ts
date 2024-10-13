@@ -1,12 +1,12 @@
 import AppDataSource from '../DataSource'
-import Book from '../models/Book'
+import Col from '../models/Collection'
 import { Request, Response } from 'express'
 
-const AddBookToCollection = async (req: Request, res: Response) => {
+const Collection = async (req: Request, res: Response) => {
     try {
-        const bookRepo = AppDataSource.getRepository(Book)
+        const colRepo = AppDataSource.getRepository(Col)
         const { user_id, cover, title, author, isbn } = req.body
-        const bookCollection = await bookRepo.findOne({
+        const bookCollection = await colRepo.findOne({
             where: {
                 user_id,
                 cover_i: cover,
@@ -18,7 +18,7 @@ const AddBookToCollection = async (req: Request, res: Response) => {
         if (bookCollection) {
 
         } else {
-            const newCollection = bookRepo.create({
+            const newCollection = colRepo.create({
                 user_id,
                 cover_i: cover,
                 title,
@@ -26,11 +26,11 @@ const AddBookToCollection = async (req: Request, res: Response) => {
                 isbn,
                 created: new Date()
             })
-            await bookRepo.save(newCollection)
+            await colRepo.save(newCollection)
         }
         return res.status(200).json()
     } catch {
         return res.status(500).json()
     }
 }
-export default AddBookToCollection
+export default Collection
