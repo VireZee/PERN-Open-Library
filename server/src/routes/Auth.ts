@@ -2,7 +2,7 @@ import express from 'express'
 import RegCon from '../controllers/Register'
 import LogCon from '../controllers/Login'
 import AuthMid from '../middlewares/Auth'
-import AddCon from '../middlewares/Auth'
+import AddCon from '../controllers/Collection'
 
 const router = express.Router()
 router.post('/API/register', RegCon)

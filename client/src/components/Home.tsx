@@ -29,7 +29,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
             location.href = '/login'
         } else if (isUser.user_id) {
             try {
-                await axios.post('http://localhost:3001/API/collection', {
+                await axios.post('http://localhost:3001/API/add', {
                     user_id: isUser.user_id,
                     cover,
                     title,
@@ -169,14 +169,13 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" onChange={() => {
+                                                        <input type="checkbox" checked={false} onChange={() => {
                                                             const isbn13 = book.isbn.find(isbn => isbn.length === 13)
                                                             const isbn = isbn13 || book.isbn[0]
                                                             addToCollection(book.cover_i, book.title, book.author_name ? book.author_name.join(', ') : 'Unknown', isbn)
                                                         }} />
                                                         <span>Add to Collection</span>
                                                     </label>
-
                                                 </div>
                                             </div>
                                         ))}
