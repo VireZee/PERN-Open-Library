@@ -16,7 +16,7 @@ export default class User {
     email: string
     @Column()
     pass: string
-    @Column()
+    @Column({ nullable: true })
     api_key: string
     @Column({ type: "timestamptz" })
     created: Date
