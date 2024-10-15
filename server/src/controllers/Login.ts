@@ -14,18 +14,20 @@ const Login = async (req: Request, res: Response) => {
             ],
         })
         const isPasswordValid = await verHash(pass, user!.pass)
-        if (!user || !isPasswordValid) return res.status(401).json({ error: 'Invalid login credentials!' })
-        const t = genToken(user.user_id, user.name, user.username, user.email)
-        res.cookie('!', t, {
-            maxAge: 1000 * 60 * 60 * 24 * 30,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: "strict",
-            priority: "high"
-        })
-        return res.status(200).json()
+        if (!user || !isPasswordValid) res.status(401).json({ error: 'Invalid login credentials!' })
+        else {
+            const t = genToken(user.user_id, user.name, user.username, user.email)
+            res.cookie('!', t, {
+                maxAge: 1000 * 60 * 60 * 24 * 30,
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: "strict",
+                priority: "high"
+            })
+            res.status(200).json()
+        }
     } catch {
-        return res.status(500).json()
+        res.status(500).json()
     }
 }
 export default Login

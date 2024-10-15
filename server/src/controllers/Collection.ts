@@ -28,9 +28,9 @@ const Collection = async (req: Request, res: Response) => {
             })
             await colRepo.save(newCollection)
         }
-        return res.status(200).json()
+        res.status(200).json()
     } catch {
-        return res.status(500).json()
+        res.status(500).json()
     }
 }
 export default Collection
