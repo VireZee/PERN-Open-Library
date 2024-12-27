@@ -38,8 +38,8 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
     }
     const handleSignOut = async () => {
         try {
-            await axios.delete('http://localhost:3001/API/signout')
-            // location.href = '/'
+            await axios.delete('http://localhost:3001/API/signout', { withCredentials: true })
+            location.href = '/'
         } catch (err) {
             const XR = err as AxiosError
             alert(XR.response!.statusText)
