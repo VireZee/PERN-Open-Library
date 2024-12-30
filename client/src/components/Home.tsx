@@ -179,11 +179,9 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" checked={homeState.status[book.isbn[0]] || false} onChange={() => {
-                                                            const isbn13 = book.isbn.find(isbn => isbn.length === 13)
-                                                            const isbn = isbn13 || book.isbn[0]
-                                                            addToCollection(isbn)
-                                                        }} />
+                                                        <input type="checkbox" checked={homeState.status[book.isbn[0]] || false} onChange={() =>
+                                                            addToCollection(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
+                                                        } />
                                                         <span>Add to Collection</span>
                                                     </label>
                                                 </div>
