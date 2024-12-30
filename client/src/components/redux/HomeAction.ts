@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: boolean | Books[] | number
+    [key: string]: boolean | Books[] | number | Record<string, boolean>
     books: Books[]
+    status: Record<string, boolean>
 }
 const initialState: State = {
     online: navigator.onLine,
@@ -10,7 +11,7 @@ const initialState: State = {
     books: [],
     currentPage: 1,
     totalPages: 1,
-    status: false
+    status: {}
 }
 export interface Books {
     cover_i: number
@@ -22,23 +23,23 @@ const HomeAction = createSlice({
     name: 'HOME',
     initialState,
     reducers: {
-        setOnline: (state, action: PayloadAction<boolean>) => {
-            state.online = action.payload
+        setOnline: (state, { payload }: PayloadAction<boolean>) => {
+            state.online = payload
         },
-        setLoad: (state, action: PayloadAction<boolean>) => {
-            state.load = action.payload
+        setLoad: (state, { payload }: PayloadAction<boolean>) => {
+            state.load = payload
         },
-        setBooks: (state, action: PayloadAction<Books[]>) => {
-            state.books = action.payload
+        setBooks: (state, { payload }: PayloadAction<Books[]>) => {
+            state.books = payload
         },
-        setCurrentPage: (state, action: PayloadAction<number>) => {
-            state.currentPage = action.payload
+        setCurrentPage: (state, { payload }: PayloadAction<number>) => {
+            state.currentPage = payload
         },
-        setTotalPages: (state, action: PayloadAction<number>) => {
-            state.totalPages = action.payload
+        setTotalPages: (state, { payload }: PayloadAction<number>) => {
+            state.totalPages = payload
         },
-        setStatus: (state, action: PayloadAction<boolean>) => {
-            state.status = action.payload
+        setStatus: (state, { payload: { isbn, status } }: PayloadAction<{ isbn: string, status: boolean }>) => {
+            state.status[isbn] = status
         }
     }
 })

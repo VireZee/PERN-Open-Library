@@ -13,14 +13,14 @@ const LoginAction = createSlice({
     name: 'LOG',
     initialState,
     reducers: {
-        change: (state, action: PayloadAction<{ name: keyof State, value: string }>) => {
-            state[action.payload.name] = action.payload.value
+        change: (state, { payload: { name, value } }: PayloadAction<{ name: keyof State, value: string }>) => {
+            state[name] = value
         },
-        setShow: (state, action: PayloadAction<boolean>) => {
-            state.show = action.payload
+        setShow: (state, { payload }: PayloadAction<boolean>) => {
+            state.show = payload
         },
-        setError: (state, action: PayloadAction<string>) => {
-            state.error = action.payload
+        setError: (state, { payload }: PayloadAction<string>) => {
+            state.error = payload
         }
     }
 })

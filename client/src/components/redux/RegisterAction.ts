@@ -23,14 +23,14 @@ const RegisterAction = createSlice({
     name: 'REG',
     initialState,
     reducers: {
-        change: (state, action: PayloadAction<{ name: keyof State, value: string }>) => {
-            state[action.payload.name] = action.payload.value
+        change: (state, { payload: { name, value } }: PayloadAction<{ name: keyof State, value: string }>) => {
+            state[name] = value
         },
-        setShow: (state, action: PayloadAction<boolean>) => {
-            state.show = action.payload
+        setShow: (state, { payload }: PayloadAction<boolean>) => {
+            state.show = payload
         },
-        setErrors: (state, action: PayloadAction<Errors>) => {
-            state.errors = action.payload
+        setErrors: (state, { payload }: PayloadAction<Errors>) => {
+            state.errors = payload
         }
     }
 })

@@ -24,22 +24,6 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
-    const addToCollection = async (isbn: string) => {
-        if (!isUser) {
-            location.href = '/login'
-        } else if (isUser.user_id) {
-            try {
-                await axios.post('http://localhost:3001/API/add', {
-                    user_id: isUser.user_id,
-                    isbn
-                }, { withCredentials: true })
-                fetchStatus(isbn)
-            } catch (err) {
-                const XR = err as AxiosError
-                alert(XR.response!.statusText)
-            }
-        }
-    }
     const fetchStatus = async (isbn: string) => {
         if (!isUser) {
             return
@@ -56,11 +40,34 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
             }
         }
     }
+    const addToCollection = async (isbn: string) => {
+        if (!isUser) {
+            location.href = '/login'
+        } else if (isUser.user_id) {
+            try {
+                await axios.post('http://localhost:3001/API/add', {
+                    user_id: isUser.user_id,
+                    isbn
+                }, { withCredentials: true })
+                fetchStatus(isbn)
+            } catch (err) {
+                const XR = err as AxiosError
+                alert(XR.response!.statusText)
+            }
+        }
+    }
     React.useEffect(() => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline);
         (async () => {
+            const fetchBooks = async () => {
+                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'
+                const query = search ? search.split(' ').join('+') : 'harry+potter'
+                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
+                booksData(response)
+                dispatch(setLoad(false))
+            }
             const booksData = (res: AxiosResponse) => {
                 if (res.data.numFound === 0) {
                     dispatch(setBooks([]))
@@ -68,13 +75,6 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                     dispatch(setBooks(res.data.docs))
                     dispatch(setTotalPages(Math.ceil(res.data.numFound / 100)))
                 }
-            }
-            const fetchBooks = async () => {
-                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'
-                const query = search ? search.split(' ').join('+') : 'harry+potter'
-                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
-                booksData(response)
-                dispatch(setLoad(false))
             }
             if (homeState.online) {
                 dispatch(setLoad(true))
@@ -179,7 +179,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" checked={homeState.status} onChange={() => {
+                                                        <input type="checkbox" checked={homeState.status[book.isbn[0]] || false} onChange={() => {
                                                             const isbn13 = book.isbn.find(isbn => isbn.length === 13)
                                                             const isbn = isbn13 || book.isbn[0]
                                                             addToCollection(isbn)

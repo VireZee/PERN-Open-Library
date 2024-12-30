@@ -18,11 +18,11 @@ const AppAction = createSlice({
     name: 'APP',
     initialState,
     reducers: {
-        setSearch: (state, action: PayloadAction<string>) => {
-            state.search = action.payload
+        setSearch: (state, { payload }: PayloadAction<string>) => {
+            state.search = payload
         },
-        setUser: (state, action: PayloadAction<UserData | null>) => {
-            state.user = action.payload
+        setUser: (state, { payload }: PayloadAction<UserData | null>) => {
+            state.user = payload
         }
     }
 })
