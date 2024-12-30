@@ -9,7 +9,7 @@ import Nav from './components/Navbar'
 import Home from './components/Home'
 import Reg from './components/auth/Register'
 import Log from './components/auth/Login'
-import FP from './components/auth/ForgotPassword'
+// import FP from './components/auth/ForgotPassword'
 import Col from './components/Collection'
 import API from './components/API'
 import NF from './components/errors/NotFound'
@@ -44,7 +44,7 @@ const App: React.FC = () => {
                     <Route path='API' element={appState.user ? <API /> : <Navigate to='/login' />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />
                     <Route path='login' element={!appState.user ? <Log /> : <Navigate to='/' />} />
-                    <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} />
+                    {/* <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} /> */}
                     <Route path='*' element={<NF />} />
                 </Routes>
             </main>

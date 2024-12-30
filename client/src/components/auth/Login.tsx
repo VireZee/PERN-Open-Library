@@ -74,9 +74,9 @@ const Login: React.FC = () => {
                         </div>
                         {logState.error && <p className="text-red-500 text-sm mt-1">{logState.error}</p>}
                     </div>
-                    <div className="flex justify-center mb-4">
+                    {/* <div className="flex justify-center mb-4">
                         <a href="fp" className="font-medium text-black hover:text-black">Forgot your password?</a>
-                    </div>
+                    </div> */}
                     <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md">Login</button>
                 </form>
                 <div className="mt-4 text-sm text-gray-700 text-center">
