@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/HomeAction'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
@@ -24,21 +24,35 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
-    const addToCollection = async (cover: number, title: string, author: string, isbn: string) => {
+    const addToCollection = async (isbn: string) => {
         if (!isUser) {
             location.href = '/login'
         } else if (isUser.user_id) {
             try {
                 await axios.post('http://localhost:3001/API/add', {
                     user_id: isUser.user_id,
-                    cover,
-                    title,
-                    author,
                     isbn
                 }, { withCredentials: true })
+                fetchStatus(isbn)
             } catch (err) {
                 const XR = err as AxiosError
                 alert(XR.response!.statusText)
+            }
+        }
+    }
+    const fetchStatus = async (isbn: string) => {
+        if (!isUser) {
+            return
+        } else if (isUser.user_id) {
+            try {
+                const response = await axios.get(`http://localhost:3001/API/fetch`, {
+                    params: { user_id: isUser.user_id, isbn },
+                    withCredentials: true
+                })
+                dispatch(setStatus(response.data.status))
+            } catch (err) {
+                const XR = err as AxiosError
+                alert('Fetch Error: ' + XR.response!.statusText)
             }
         }
     }
@@ -55,33 +69,29 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                     dispatch(setTotalPages(Math.ceil(res.data.numFound / 100)))
                 }
             }
-            const fetch = async () => {
+            const fetchBooks = async () => {
                 const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'
                 const query = search ? search.split(' ').join('+') : 'harry+potter'
                 const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
                 booksData(response)
                 dispatch(setLoad(false))
             }
-            switch (homeState.online) {
-                case true:
-                    dispatch(setLoad(true))
-                    if ((title === null || isbn === null) && page === null) {
-                        await fetch()
+            if (homeState.online) {
+                dispatch(setLoad(true))
+                if ((title === null || isbn === null) && page === null) {
+                    await fetchBooks()
+                } else {
+                    if (search) {
+                        dispatch(setCurrentPage(1))
+                        await fetchBooks()
                     } else {
-                        if (search) {
-                            dispatch(setCurrentPage(1))
-                            await fetch()
-                        } else {
-                            const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
-                            const query = str ? str.split(' ').join('+') : 'harry+potter'
-                            const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
-                            booksData(response)
-                            dispatch(setLoad(false))
-                        }
+                        const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
+                        const query = str ? str.split(' ').join('+') : 'harry+potter'
+                        const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
+                        booksData(response)
+                        dispatch(setLoad(false))
                     }
-                    break
-                default:
-                    dispatch(setLoad(false))
+                }
             }
         })()
         return () => {
@@ -169,10 +179,10 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" checked={false} onChange={() => {
+                                                        <input type="checkbox" checked={homeState.status} onChange={() => {
                                                             const isbn13 = book.isbn.find(isbn => isbn.length === 13)
                                                             const isbn = isbn13 || book.isbn[0]
-                                                            addToCollection(book.cover_i, book.title, book.author_name ? book.author_name.join(', ') : 'Unknown', isbn)
+                                                            addToCollection(isbn)
                                                         }} />
                                                         <span>Add to Collection</span>
                                                     </label>

@@ -20,9 +20,13 @@ interface URLParams {
 const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
     const dispatch = useDispatch()
     const navState = useSelector((state: RootState) => state.NAV)
-    const debSearch = _debounce((e: string) => onSearch(e), 500)
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            onSearch(e.currentTarget.value)
+        }
+    }
     const imgFormat = (base64String: string) => {
         const hexString = Buffer.from(base64String, 'base64').toString('hex').toUpperCase()
         if (Buffer.from(base64String, 'base64').toString('utf-8').trim().startsWith('<svg')) {
@@ -58,7 +62,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
                     <Link to="" className='text-gray-500'>Home</Link>
                 )}
             </div>
-            <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onChange={e => debSearch(e.target.value)} />
+            <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onKeyDown={handleKeyDown} />
             <div className="text-white flex items-center">
                 {isUser ? (
                     <>

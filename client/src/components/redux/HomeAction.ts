@@ -6,10 +6,11 @@ interface State {
 }
 const initialState: State = {
     online: navigator.onLine,
-    load: true,
+    load: false,
     books: [],
     currentPage: 1,
-    totalPages: 1
+    totalPages: 1,
+    status: false
 }
 export interface Books {
     cover_i: number
@@ -35,8 +36,11 @@ const HomeAction = createSlice({
         },
         setTotalPages: (state, action: PayloadAction<number>) => {
             state.totalPages = action.payload
+        },
+        setStatus: (state, action: PayloadAction<boolean>) => {
+            state.status = action.payload
         }
     }
 })
-export const { setOnline, setLoad, setBooks, setCurrentPage, setTotalPages } = HomeAction.actions
+export const { setOnline, setLoad, setBooks, setCurrentPage, setTotalPages, setStatus } = HomeAction.actions
 export default HomeAction.reducer

@@ -9,11 +9,6 @@ export default class Book {
     @Column({ unique: true })
     isbn: string
     @Column({ nullable: true })
-    cover_i: number
-    @Column()
-    title: string
-    @Column({ nullable: true })
-    author: string
     @Column({ type: "timestamptz" })
     created: Date
 }
