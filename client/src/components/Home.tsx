@@ -49,7 +49,6 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                     user_id: isUser.user_id,
                     isbn
                 }, { withCredentials: true })
-                fetchStatus(isbn)
             } catch (err) {
                 const XR = err as AxiosError
                 alert(XR.response!.statusText)
@@ -179,9 +178,12 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author: {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
-                                                        <input type="checkbox" checked={homeState.status[book.isbn[0]] || false} onChange={() =>
-                                                            addToCollection(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
-                                                        } />
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={book.isbn ? homeState.status[book.isbn.find(isbn => isbn.length === 13) || book.isbn[0]] || false : false}
+                                                            onChange={() => { if (book.isbn) addToCollection(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0]) }}
+                                                            disabled={!book.isbn}
+                                                        />
                                                         <span>Add to Collection</span>
                                                     </label>
                                                 </div>
