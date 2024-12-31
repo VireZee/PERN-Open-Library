@@ -38,8 +38,8 @@ const HomeAction = createSlice({
         setTotalPages: (state, { payload }: PayloadAction<number>) => {
             state.totalPages = payload
         },
-        setStatus: (state, { payload: { isbn, status } }: PayloadAction<{ isbn: string, status: boolean }>) => {
-            state.status[isbn] = status
+        setStatus: (state, { payload: { isbn, added } }: PayloadAction<{ isbn: string, added: boolean }>) => {
+            state.status[isbn] = added
         }
     }
 })

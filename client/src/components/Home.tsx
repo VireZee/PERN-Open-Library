@@ -25,15 +25,13 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
     const str = title || isbn
     const pg = Number(page) || 1
     const fetchStatus = async (isbn: string) => {
-        if (!isUser) {
-            return
-        } else if (isUser.user_id) {
+        if (isUser && isUser.user_id) {
             try {
-                const response = await axios.get(`http://localhost:3001/API/fetch`, {
+                const res = await axios.get(`http://localhost:3001/API/fetch`, {
                     params: { user_id: isUser.user_id, isbn },
                     withCredentials: true
                 })
-                dispatch(setStatus(response.data.status))
+                dispatch(setStatus(res.data))
             } catch (err) {
                 const XR = err as AxiosError
                 alert('Fetch Error: ' + XR.response!.statusText)
@@ -49,6 +47,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                     user_id: isUser.user_id,
                     isbn
                 }, { withCredentials: true })
+                fetchStatus(isbn)
             } catch (err) {
                 const XR = err as AxiosError
                 alert(XR.response!.statusText)
@@ -63,8 +62,8 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
             const fetchBooks = async () => {
                 const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'
                 const query = search ? search.split(' ').join('+') : 'harry+potter'
-                const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
-                booksData(response)
+                const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
+                booksData(res)
                 dispatch(setLoad(false))
             }
             const booksData = (res: AxiosResponse) => {
@@ -92,12 +91,19 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                     }
                 }
             }
+            if (isUser && isUser.user_id) {
+                homeState.books.forEach((book: Books) => {
+                    if (book.isbn) {
+                        fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
+                    }
+                })
+            }
         })()
         return () => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
-    }, [homeState.online, search])
+    }, [homeState.online, homeState.book, search])
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {

@@ -13,7 +13,7 @@ const Fetch = async (req: Request, res: Response) => {
                 isbn
             }
         })
-        res.status(200).json({ status: bookCollection ? true : false })
+        res.status(200).json({ isbn, added: !!bookCollection })
     } catch {
         res.status(500).json()
     }
