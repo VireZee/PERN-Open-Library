@@ -24,12 +24,13 @@ const App: React.FC = () => {
             try {
                 const res = await axios.get('http://localhost:3001/API/auth', { withCredentials: true })
                 const photo = Buffer.from(res.data.photo.data).toString('base64')
-                dispatch(setUser({ user_id: res.data.user_id, photo, name: res.data.name, uname: res.data.uname, email: res.data.email }))
+                dispatch(setUser({ ...res.data, photo }))
             } catch {
                 dispatch(setUser(null))
             }
         })()
-    }, [appState.user])
+        console.log('App.tsx =>', appState.user)
+    }, [])
     return (
         <BrowserRouter>
             <header className="fixed w-screen">

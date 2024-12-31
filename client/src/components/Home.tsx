@@ -34,7 +34,7 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                 dispatch(setStatus(res.data))
             } catch (err) {
                 const XR = err as AxiosError
-                alert('Fetch Error: ' + XR.response!.statusText)
+                alert('Fetch Error: ' + XR)
             }
         }
     }
@@ -50,11 +50,12 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                 fetchStatus(isbn)
             } catch (err) {
                 const XR = err as AxiosError
-                alert(XR.response!.statusText)
+                alert(XR)
             }
         }
     }
     React.useEffect(() => {
+        console.log('Home.tsx =>', isUser)
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline);
@@ -76,28 +77,25 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
             }
             if (homeState.online) {
                 dispatch(setLoad(true))
-                if ((title === null || isbn === null) && page === null) {
+                if (search) {
+                    dispatch(setCurrentPage(1))
                     await fetchBooks()
                 } else {
-                    if (search) {
-                        dispatch(setCurrentPage(1))
-                        await fetchBooks()
-                    } else {
-                        const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
-                        const query = str ? str.split(' ').join('+') : 'harry+potter'
-                        const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
-                        booksData(response)
-                        dispatch(setLoad(false))
-                    }
+                    const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
+                    const query = str ? str.split(' ').join('+') : 'harry+potter'
+                    const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
+                    booksData(response)
+                    dispatch(setLoad(false))
                 }
+
             }
-            if (isUser && isUser.user_id) {
-                homeState.books.forEach((book: Books) => {
-                    if (book.isbn) {
-                        fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
-                    }
-                })
-            }
+            // if (isUser && isUser.user_id) {
+            //     homeState.books.forEach((book: Books) => {
+            //         if (book.isbn) {
+            //             fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
+            //         }
+            //     })
+            // }
         })()
         return () => {
             window.removeEventListener('online', handleOnline)
@@ -138,12 +136,10 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
             }
         }
         const handleClick = (page: any) => {
-            switch (page) {
-                case '...':
-                    break
-                default:
-                    dispatch(setCurrentPage(page))
-                    break
+            if (page === '...') {
+                return
+            } else {
+                dispatch(setCurrentPage(page))
             }
         }
         return (
