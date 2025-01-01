@@ -55,7 +55,6 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
         }
     }
     React.useEffect(() => {
-        console.log('Home.tsx =>', isUser)
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline);
@@ -79,29 +78,31 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                 dispatch(setLoad(true))
                 if (search) {
                     dispatch(setCurrentPage(1))
-                    await fetchBooks()
+                    fetchBooks()
                 } else {
                     const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
                     const query = str ? str.split(' ').join('+') : 'harry+potter'
-                    const response = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
-                    booksData(response)
+                    const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
+                    booksData(res)
                     dispatch(setLoad(false))
                 }
-
             }
-            // if (isUser && isUser.user_id) {
-            //     homeState.books.forEach((book: Books) => {
-            //         if (book.isbn) {
-            //             fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
-            //         }
-            //     })
-            // }
+            if (isUser && isUser.user_id) {
+                homeState.books.forEach((book: Books) => {
+                    if (book.isbn) {
+                        fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
+                    }
+                })
+            }
         })()
         return () => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
-    }, [homeState.online, homeState.book, search])
+    }, [homeState.online, search])
+    React.useEffect(() => {
+        console.log(homeState.books)
+    }, [homeState.books])
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {

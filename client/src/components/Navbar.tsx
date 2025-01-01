@@ -18,7 +18,6 @@ interface URLParams {
     isbn?: string
 }
 const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
-    console.log('Navbar.tsx =>', isUser)
     const dispatch = useDispatch()
     const navState = useSelector((state: RootState) => state.NAV)
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))

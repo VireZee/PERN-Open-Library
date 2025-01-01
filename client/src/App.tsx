@@ -29,8 +29,10 @@ const App: React.FC = () => {
                 dispatch(setUser(null))
             }
         })()
-        console.log('App.tsx =>', appState.user)
     }, [])
+    if (appState.user === null) {
+        return <div>Loading...</div>
+    }
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
