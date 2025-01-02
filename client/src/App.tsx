@@ -30,9 +30,6 @@ const App: React.FC = () => {
             }
         })()
     }, [])
-    if (appState.user === null) {
-        return <div>Loading...</div>
-    }
     return (
         <BrowserRouter>
             <header className="fixed w-screen">

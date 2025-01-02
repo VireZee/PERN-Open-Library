@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
 import { RootState } from './redux/Store'
@@ -54,14 +54,14 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
             }
         }
     }
-    React.useEffect(() => {
+    useEffect(() => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline);
         (async () => {
             const fetchBooks = async () => {
-                const type = /^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'
-                const query = search ? search.split(' ').join('+') : 'harry+potter'
+                const type = /^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title'
+                const query = search.split(' ').join('+')
                 const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
                 booksData(res)
                 dispatch(setLoad(false))
@@ -87,21 +87,20 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                     dispatch(setLoad(false))
                 }
             }
-            if (isUser && isUser.user_id) {
-                homeState.books.forEach((book: Books) => {
-                    if (book.isbn) {
-                        fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
-                    }
-                })
-            }
         })()
         return () => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
     }, [homeState.online, search])
-    React.useEffect(() => {
-        console.log(homeState.books)
+    useEffect(() => {
+        if (isUser && isUser.user_id) {
+            homeState.books.forEach((book: Books) => {
+                if (book.isbn) {
+                    fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
+                }
+            })
+        }
     }, [homeState.books])
     const pageNumbers = () => {
         const pages = []
