@@ -15,7 +15,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     const colState = useSelector((state: RootState) => state.COL)
     const pg = colState.currentPage
     const removeCollection = async (isbn: string) => {
-        if (isUser && isUser.user_id) {
+        if (isUser && isUser.user_id)
             try {
                 await axios.post('http://localhost:3001/API/remove', {
                     user_id: isUser.user_id,
@@ -25,7 +25,6 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 const XR = err as AxiosError
                 alert(XR)
             }
-        }
     }
     React.useEffect(() => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
@@ -41,7 +40,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                         t: query,
                         p: colState.currentPage
                     }
-                    const res = await axios.get('http://localhost:3001/API/collection/s', {
+                    const res = await axios.get('http://localhost:3001/API/collection', {
                         params: search ? params : { u: isUser.user_id, p: colState.currentPage },
                         withCredentials: true
                     })

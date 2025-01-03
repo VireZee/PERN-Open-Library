@@ -15,12 +15,12 @@ const AddRemove = async (req: Request, res: Response) => {
         if (bookCollection) {
             await colRepo.delete(bookCollection)
         } else {
-            const newCollection = colRepo.create({
+            const newBookCollection = colRepo.create({
                 user_id,
                 isbn,
                 created: new Date()
             })
-            await colRepo.save(newCollection)
+            await colRepo.save(newBookCollection)
         }
         res.status(200).json()
     } catch {

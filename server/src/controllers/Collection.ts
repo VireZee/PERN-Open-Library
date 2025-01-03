@@ -5,7 +5,11 @@ import { Request, Response } from 'express'
 const Collection = async (req: Request, res: Response) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
-        const { u, t, p } = req.query
+        const user_id = Number(req.query.u)
+        const totalCollection = await colRepo.count({
+            where: { user_id }
+        })
+        res.status(200).json({totalCollection})
     } catch {
         res.status(500).json()
     }
