@@ -27,10 +27,10 @@ const RegisterAction = createSlice({
             state[name] = value
         },
         setShow: (state, { payload }: PayloadAction<boolean>) => {
-            state.show = payload
+            state['show'] = payload
         },
         setErrors: (state, { payload }: PayloadAction<Errors>) => {
-            state.errors = payload
+            state['errors'] = payload
         }
     }
 })

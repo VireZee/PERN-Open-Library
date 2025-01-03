@@ -8,7 +8,6 @@ export default class Book {
     user_id: number
     @Column({ unique: true })
     isbn: string
-    @Column({ nullable: true })
     @Column({ type: "timestamptz" })
     created: Date
 }

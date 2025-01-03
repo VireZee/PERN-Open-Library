@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/BookAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
@@ -18,7 +18,7 @@ interface URLParams {
     isbn?: string
     page?: string
 }
-const Home: React.FC<Props> = ({ search, isUser }) => {
+const Home: React.FC<Props> = ({ isUser, search }) => {
     const dispatch = useDispatch()
     const homeState = useSelector((state: RootState) => state.HOME)
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
@@ -135,11 +135,9 @@ const Home: React.FC<Props> = ({ search, isUser }) => {
                 addPages(pg - 6, pg)
             }
         }
-        const handleClick = (page: any) => {
-            if (page === '...') {
-                return
-            } else {
-                dispatch(setCurrentPage(page))
+        const handleClick = (page: number) => {
+            if (typeof page === 'number') {
+                dispatch(setCurrentPage(page));
             }
         }
         return (

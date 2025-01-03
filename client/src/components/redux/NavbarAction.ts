@@ -12,10 +12,10 @@ const NavbarAction = createSlice({
     initialState,
     reducers: {
         setActive: (state, { payload }: PayloadAction<string>) => {
-            state.active = payload
+            state['active'] = payload
         },
         setIsDropdownOpen: (state, { payload }: PayloadAction<boolean>) => {
-            state.isDropdownOpen = payload
+            state['isDropdownOpen'] = payload
         }
     }
 })

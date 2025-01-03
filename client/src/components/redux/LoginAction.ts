@@ -17,10 +17,10 @@ const LoginAction = createSlice({
             state[name] = value
         },
         setShow: (state, { payload }: PayloadAction<boolean>) => {
-            state.show = payload
+            state['show'] = payload
         },
         setError: (state, { payload }: PayloadAction<string>) => {
-            state.error = payload
+            state['error'] = payload
         }
     }
 })

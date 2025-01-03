@@ -10,7 +10,7 @@ import Home from './components/Home'
 import Reg from './components/auth/Register'
 import Log from './components/auth/Login'
 // import FP from './components/auth/ForgotPassword'
-import Col from './components/Collection'
+// import Col from './components/Collection'
 import API from './components/API'
 import NF from './components/errors/NotFound'
 
@@ -33,14 +33,14 @@ const App: React.FC = () => {
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
-                {!authNav && <Nav onSearch={searchHandler} isUser={appState.user} />}
+                {!authNav && <Nav isUser={appState.user} onSearch={searchHandler} />}
                 {authNav && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
             </header>
             <main>
                 <Routes>
-                    <Route path='/' element={<Home search={appState.search} isUser={appState.user} />} />
-                    <Route path='s' element={<Home search={appState.search} isUser={appState.user} />} />
-                    <Route path='collection' element={appState.user ? <Col /> : <Navigate to='/login' />} />
+                    <Route path='/' element={<Home isUser={appState.user} search={appState.search} />} />
+                    <Route path='s' element={<Home isUser={appState.user} search={appState.search} />} />
+                    {/* <Route path='collection' element={appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} /> */}
                     <Route path='API' element={appState.user ? <API /> : <Navigate to='/login' />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />
                     <Route path='login' element={!appState.user ? <Log /> : <Navigate to='/' />} />

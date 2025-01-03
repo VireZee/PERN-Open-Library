@@ -1,17 +1,18 @@
 import { configureStore, Store } from '@reduxjs/toolkit'
-import NA from './NavbarAction'
 import AA from './AppAction'
+import NA from './NavbarAction'
 import RA from './RegisterAction'
 import LA from './LoginAction'
-import HA from './HomeAction'
+import BA from './BookAction'
 
 const ReduxStore: Store = configureStore({
     reducer: {
-        NAV: NA,
         APP: AA,
+        NAV: NA,
         REG: RA,
         LOG: LA,
-        HOME: HA
+        HOME: BA,
+        COL: BA
     }
 })
 export type RootState = ReturnType<typeof ReduxStore.getState>

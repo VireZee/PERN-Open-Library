@@ -20,23 +20,23 @@ export interface Books {
     author_name: string[]
 }
 const HomeAction = createSlice({
-    name: 'HOME',
+    name: 'BOOK',
     initialState,
     reducers: {
         setOnline: (state, { payload }: PayloadAction<boolean>) => {
-            state.online = payload
+            state['online'] = payload
         },
         setLoad: (state, { payload }: PayloadAction<boolean>) => {
-            state.load = payload
+            state['load'] = payload
         },
         setBooks: (state, { payload }: PayloadAction<Books[]>) => {
-            state.books = payload
+            state['books'] = payload
         },
         setCurrentPage: (state, { payload }: PayloadAction<number>) => {
-            state.currentPage = payload
+            state['currentPage'] = payload
         },
         setTotalPages: (state, { payload }: PayloadAction<number>) => {
-            state.totalPages = payload
+            state['totalPages'] = payload
         },
         setStatus: (state, { payload: { isbn, added } }: PayloadAction<{ isbn: string, added: boolean }>) => {
             state.status[isbn] = added

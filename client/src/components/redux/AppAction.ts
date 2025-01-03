@@ -19,10 +19,10 @@ const AppAction = createSlice({
     initialState,
     reducers: {
         setSearch: (state, { payload }: PayloadAction<string>) => {
-            state.search = payload
+            state['search'] = payload
         },
         setUser: (state, { payload }: PayloadAction<null | UserData>) => {
-            state.user = payload
+            state['user'] = payload
         }
     }
 })
