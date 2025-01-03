@@ -37,14 +37,15 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 alert('Fetch Error: ' + XR)
             }
     }
-    const addToCollection = async (isbn: string) => {
+    const addToCollection = async (isbn: string, title: string) => {
         if (!isUser) {
             location.href = '/login'
         } else if (isUser.user_id) {
             try {
                 await axios.post('http://localhost:3001/API/add', {
                     user_id: isUser.user_id,
-                    isbn
+                    isbn,
+                    title
                 }, { withCredentials: true })
                 fetchStatus(isbn)
             } catch (err) {
@@ -176,7 +177,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                         <input
                                                             type="checkbox"
                                                             checked={book.isbn ? homeState.status[book.isbn.find(isbn => isbn.length === 13) || book.isbn[0]] || false : false}
-                                                            onChange={() => { if (book.isbn) addToCollection(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0]) }}
+                                                            onChange={() => { if (book.isbn) addToCollection(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0], book.title) }}
                                                             disabled={!book.isbn}
                                                         />
                                                         <span>Add to Collection</span>

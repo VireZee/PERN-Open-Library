@@ -1,5 +1,5 @@
 {
-  "name": "library",
+  "name": "pern.openlibrary",
   "scripts": {
     "start": "nodemon server.ts"
   },

@@ -6,10 +6,15 @@ const Collection = async (req: Request, res: Response) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
         const user_id = Number(req.query.u)
-        const totalCollection = await colRepo.count({
-            where: { user_id }
+        const [bookCollection, totalCollection] = await colRepo.findAndCount({
+            where: { user_id },
+            select: ['isbn', 'title']
         })
-        res.status(200).json({totalCollection})
+        const collection = bookCollection.map(book => ({
+            isbn: book.isbn,
+            title: book.title,
+        }))
+        res.status(200).json({collection, totalCollection})
     } catch {
         res.status(500).json()
     }
