@@ -25,7 +25,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     const str = title || isbn
     const pg = Number(page) || 1
     const fetchStatus = async (isbn: string) => {
-        if (isUser && isUser.user_id) {
+        if (isUser && isUser.user_id)
             try {
                 const res = await axios.get(`http://localhost:3001/API/fetch`, {
                     params: { user_id: isUser.user_id, isbn },
@@ -36,7 +36,6 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 const XR = err as AxiosError
                 alert('Fetch Error: ' + XR)
             }
-        }
     }
     const addToCollection = async (isbn: string) => {
         if (!isUser) {
@@ -105,14 +104,11 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {
-            for (let i = s; i <= e; i++) {
-                pages.push(i)
-            }
+            for (let i = s; i <= e; i++) pages.push(i)
         }
         const { currentPage, totalPages } = homeState
-        if (totalPages <= 9) {
-            addPages(1, totalPages)
-        } else if (search || pg <= 6) {
+        if (totalPages <= 9) addPages(1, totalPages)
+        else if (search || pg <= 6) {
             addPages(1, 7)
             pages.push('...', totalPages)
         } else if (pg <= totalPages - 4) {
@@ -136,7 +132,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
         }
         const handleClick = (page: number) => {
             if (typeof page === 'number') {
-                dispatch(setCurrentPage(page));
+                dispatch(setCurrentPage(page))
             }
         }
         return (

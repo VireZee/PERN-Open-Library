@@ -32,20 +32,27 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline)
         const fetchCollection = async () => {
-            try {
-                dispatch(setLoad(true))
-                const query = search ? search.split(' ').join('+') : ''
-                const res = await axios.get(search
-                    ? `http://localhost:3001/API/collection/s?u=${isUser!.user_id}&t=${query}&p=${colState.currentPage}`
-                    : `http://localhost:3001/API/collection/s?u=${isUser!.user_id}&p=${colState.currentPage}`, { withCredentials: true })
-                collectionData(res)
-            } catch (err) {
-                const XR = err as AxiosError
-                alert('Fetch Error: ' + XR)
-            } finally {
-                dispatch(setLoad(false))
-            }
-        };
+            if (isUser && isUser.user_id)
+                try {
+                    dispatch(setLoad(true))
+                    const query = search ? search.split(' ').join('+') : ''
+                    const params = {
+                        u: isUser.user_id,
+                        t: query,
+                        p: colState.currentPage
+                    }
+                    const res = await axios.get('http://localhost:3001/API/collection/s', {
+                        params: search ? params : { u: isUser.user_id, p: colState.currentPage },
+                        withCredentials: true
+                    })
+                    collectionData(res)
+                } catch (err) {
+                    const XR = err as AxiosError
+                    alert('Fetch Error: ' + XR)
+                } finally {
+                    dispatch(setLoad(false))
+                }
+        }
         const collectionData = (res: AxiosResponse) => {
             if (res.data.numFound === 0) {
                 dispatch(setBooks([]))
@@ -65,14 +72,11 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {
-            for (let i = s; i <= e; i++) {
-                pages.push(i)
-            }
+            for (let i = s; i <= e; i++) pages.push(i)
         }
         const { currentPage, totalPages } = colState
-        if (totalPages <= 9) {
-            addPages(1, totalPages)
-        } else if (search || pg <= 6) {
+        if (totalPages <= 9) addPages(1, totalPages)
+        else if (search || pg <= 6) {
             addPages(1, 7)
             pages.push('...', totalPages)
         } else if (pg <= totalPages - 4) {
@@ -96,7 +100,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         }
         const handleClick = (page: number) => {
             if (typeof page === 'number') {
-                dispatch(setCurrentPage(page));
+                dispatch(setCurrentPage(page))
             }
         }
         return (

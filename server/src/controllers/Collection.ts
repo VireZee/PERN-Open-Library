@@ -5,24 +5,7 @@ import { Request, Response } from 'express'
 const Collection = async (req: Request, res: Response) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
-        const { user_id, isbn } = req.body
-        const bookCollection = await colRepo.findOne({
-            where: {
-                user_id,
-                isbn
-            }
-        })
-        if (bookCollection) {
-            await colRepo.delete(bookCollection)
-        } else {
-            const newCollection = colRepo.create({
-                user_id,
-                isbn,
-                created: new Date()
-            })
-            await colRepo.save(newCollection)
-        }
-        res.status(200).json()
+        const { u, t, p } = req.query
     } catch {
         res.status(500).json()
     }
