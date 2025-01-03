@@ -1,7 +1,7 @@
-import AppDataSource from '../DataSource'
-import User from '../models/User'
+import AppDataSource from '../../DataSource'
+import User from '../../models/User'
 import { Request, Response } from 'express'
-import { verHash, genToken } from '../utils/Validation'
+import { verHash, genToken } from '../../utils/Validation'
 
 const Login = async (req: Request, res: Response) => {
     try {

@@ -2,7 +2,7 @@ import AppDataSource from './src/DataSource'
 import express from 'express'
 import cors from 'cors'
 import cp from 'cookie-parser'
-import AuthRt from './src/routes/Auth'
+import AuthRt from './src/routes/Route'
 
 AppDataSource.initialize()
 const app = express()

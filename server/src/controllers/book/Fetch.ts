@@ -1,5 +1,5 @@
-import AppDataSource from '../DataSource'
-import Col from '../models/Collection'
+import AppDataSource from '../../DataSource'
+import Col from '../../models/Collection'
 import { Request, Response } from 'express'
 
 const Fetch = async (req: Request, res: Response) => {

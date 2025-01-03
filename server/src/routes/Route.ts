@@ -1,11 +1,11 @@
 import express from 'express'
-import RegCon from '../controllers/Register'
-import LogCon from '../controllers/Login'
+import RegCon from '../controllers/auth/Register'
+import LogCon from '../controllers/auth/Login'
 import AuthMid from '../middlewares/Auth'
-import AddRemCon from '../controllers/AddRemove'
-import FetCon from '../controllers/Fetch'
-import ColCon from '../controllers/Collection'
-import OutCon from '../controllers/SignOut'
+import AddRemCon from '../controllers/book/AddRemove'
+import FetCon from '../controllers/book/Fetch'
+import ColCon from '../controllers/book/Collection'
+import OutCon from '../controllers/auth/SignOut'
 
 const router = express.Router({
     caseSensitive: true,

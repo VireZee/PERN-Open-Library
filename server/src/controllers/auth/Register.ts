@@ -1,7 +1,7 @@
-import AppDataSource from '../DataSource'
-import User from '../models/User'
+import AppDataSource from '../../DataSource'
+import User from '../../models/User'
 import { Request, Response } from 'express'
-import { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken } from '../utils/Validation'
+import { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken } from '../../utils/Validation'
 
 const Register = async (req: Request, res: Response) => {
     try {
