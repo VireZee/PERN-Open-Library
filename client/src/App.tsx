@@ -10,7 +10,7 @@ import Home from './components/Home'
 import Reg from './components/auth/Register'
 import Log from './components/auth/Login'
 // import FP from './components/auth/ForgotPassword'
-// import Col from './components/Collection'
+import Col from './components/Collection'
 import API from './components/API'
 import NF from './components/errors/NotFound'
 
@@ -40,7 +40,7 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path='/' element={<Home isUser={appState.user} search={appState.search} />} />
                     <Route path='s' element={<Home isUser={appState.user} search={appState.search} />} />
-                    {/* <Route path='collection' element={appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} /> */}
+                    <Route path='collection' element={appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='API' element={appState.user ? <API /> : <Navigate to='/login' />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />
                     <Route path='login' element={!appState.user ? <Log /> : <Navigate to='/' />} />

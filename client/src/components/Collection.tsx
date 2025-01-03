@@ -12,7 +12,7 @@ interface Props {
 }
 const Collection: React.FC<Props> = ({ isUser, search }) => {
     const dispatch = useDispatch()
-    const colState = useSelector((state: RootState) => state.BOOK)
+    const colState = useSelector((state: RootState) => state.COL)
     const pg = colState.currentPage
     const removeCollection = async (isbn: string) => {
         if (isUser && isUser.user_id) {
@@ -69,37 +69,34 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 pages.push(i)
             }
         }
-        if (colState.totalPages <= 9) {
-            addPages(1, colState.totalPages)
+        const { currentPage, totalPages } = colState
+        if (totalPages <= 9) {
+            addPages(1, totalPages)
+        } else if (search || pg <= 6) {
+            addPages(1, 7)
+            pages.push('...', totalPages)
+        } else if (pg <= totalPages - 4) {
+            pages.push(1, '...')
+            addPages(pg - 3, pg + 1)
+            pages.push('...', totalPages)
+        } else if (pg <= totalPages - 3) {
+            pages.push(1, '...')
+            addPages(pg - 3, pg + 1)
+            pages.push(totalPages - 1, totalPages)
+        } else if (pg <= totalPages - 2) {
+            pages.push(1, '...')
+            addPages(pg - 4, pg + 1)
+            pages.push(totalPages)
+        } else if (pg <= totalPages - 1) {
+            pages.push(1, '...')
+            addPages(pg - 5, pg + 1)
         } else {
-            if (search || pg <= 6) {
-                addPages(1, 7)
-                pages.push('...', colState.totalPages)
-            } else if (pg <= colState.totalPages - 4) {
-                pages.push(1, '...')
-                addPages(pg - 3, pg + 1)
-                pages.push('...', colState.totalPages)
-            } else if (pg <= colState.totalPages - 3) {
-                pages.push(1, '...')
-                addPages(pg - 3, pg + 1)
-                pages.push(colState.totalPages - 1, colState.totalPages)
-            } else if (pg <= colState.totalPages - 2) {
-                pages.push(1, '...')
-                addPages(pg - 4, pg + 1)
-                pages.push(colState.totalPages)
-            } else if (pg <= colState.totalPages - 1) {
-                pages.push(1, '...')
-                addPages(pg - 5, pg + 1)
-            } else {
-                pages.push(1, '...')
-                addPages(pg - 6, pg)
-            }
+            pages.push(1, '...')
+            addPages(pg - 6, pg)
         }
-        const handleClick = (page: any) => {
-            if (page === '...') {
-                return
-            } else {
-                dispatch(setCurrentPage(page))
+        const handleClick = (page: number) => {
+            if (typeof page === 'number') {
+                dispatch(setCurrentPage(page));
             }
         }
         return (
@@ -110,7 +107,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === (search ? 1 : pg) ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        <a href={`s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : 'harry+potter'}&page=${colState.currentPage}`}>
+                        <a href={`collection/s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : ''}&page=${currentPage}`}>
                             {page}
                         </a>
                     </span>

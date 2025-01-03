@@ -109,31 +109,30 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 pages.push(i)
             }
         }
-        if (homeState.totalPages <= 9) {
-            addPages(1, homeState.totalPages)
+        const { currentPage, totalPages } = homeState
+        if (totalPages <= 9) {
+            addPages(1, totalPages)
+        } else if (search || pg <= 6) {
+            addPages(1, 7)
+            pages.push('...', totalPages)
+        } else if (pg <= totalPages - 4) {
+            pages.push(1, '...')
+            addPages(pg - 3, pg + 1)
+            pages.push('...', totalPages)
+        } else if (pg <= totalPages - 3) {
+            pages.push(1, '...')
+            addPages(pg - 3, pg + 1)
+            pages.push(totalPages - 1, totalPages)
+        } else if (pg <= totalPages - 2) {
+            pages.push(1, '...')
+            addPages(pg - 4, pg + 1)
+            pages.push(totalPages)
+        } else if (pg <= totalPages - 1) {
+            pages.push(1, '...')
+            addPages(pg - 5, pg + 1)
         } else {
-            if (search || pg <= 6) {
-                addPages(1, 7)
-                pages.push('...', homeState.totalPages)
-            } else if (pg <= homeState.totalPages - 4) {
-                pages.push(1, '...')
-                addPages(pg - 3, pg + 1)
-                pages.push('...', homeState.totalPages)
-            } else if (pg <= homeState.totalPages - 3) {
-                pages.push(1, '...')
-                addPages(pg - 3, pg + 1)
-                pages.push(homeState.totalPages - 1, homeState.totalPages)
-            } else if (pg <= homeState.totalPages - 2) {
-                pages.push(1, '...')
-                addPages(pg - 4, pg + 1)
-                pages.push(homeState.totalPages)
-            } else if (pg <= homeState.totalPages - 1) {
-                pages.push(1, '...')
-                addPages(pg - 5, pg + 1)
-            } else {
-                pages.push(1, '...')
-                addPages(pg - 6, pg)
-            }
+            pages.push(1, '...')
+            addPages(pg - 6, pg)
         }
         const handleClick = (page: number) => {
             if (typeof page === 'number') {
@@ -148,7 +147,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === (search ? 1 : pg) ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        <a href={`s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : 'harry+potter'}&page=${homeState.currentPage}`}>
+                        <a href={`s?${/^\d{10}(\d{3})?$/.test(search ?? '') ? 'isbn' : 'title'}=${search ? search.split(' ').join('+') : 'harry+potter'}&page=${currentPage}`}>
                             {page}
                         </a>
                     </span>
