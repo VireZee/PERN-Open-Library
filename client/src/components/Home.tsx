@@ -185,7 +185,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                         <input
                                                             type="checkbox"
                                                             checked={book.isbn ? homeState.status[getValidIsbn(book.isbn)] || false : false}
-                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, (book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0], book.title, Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown') }}
+                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, getValidIsbn(book.isbn), book.title, Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown') }}
                                                             disabled={!book.isbn}
                                                         />
                                                         <span>Add to Collection</span>
