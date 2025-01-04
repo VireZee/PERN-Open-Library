@@ -24,6 +24,12 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
+    const getValidIsbn = (isbn: string[] | string) => {
+        if (Array.isArray(isbn)) {
+            return isbn.find(isbn => isbn.length === 13) || isbn[0]
+        }
+        return isbn
+    }
     const fetchStatus = async (isbn: string) => {
         if (isUser && isUser.user_id)
             try {
@@ -99,7 +105,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
         if (isUser && isUser.user_id) {
             homeState.books.forEach((book: Books) => {
                 if (book.isbn) {
-                    fetchStatus((book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0])
+                    fetchStatus(getValidIsbn(book.isbn))
                 }
             })
         }
@@ -178,7 +184,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                     <label className="flex items-center space-x-2">
                                                         <input
                                                             type="checkbox"
-                                                            checked={book.isbn ? homeState.status[(book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0]] || false : false}
+                                                            checked={book.isbn ? homeState.status[getValidIsbn(book.isbn)] || false : false}
                                                             onChange={() => { if (book.isbn) addToCollection(book.cover_i, (book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0], book.title, Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown') }}
                                                             disabled={!book.isbn}
                                                         />
