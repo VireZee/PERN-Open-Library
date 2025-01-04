@@ -10,7 +10,7 @@ const Collection = async (req: Request, res: Response) => {
         const limit = 100
         const [bookCollection, totalCollection] = await colRepo.findAndCount({
             where: { user_id },
-            select: ['cover_i', 'isbn', 'title', 'author'],
+            select: ['cover_i', 'isbn', 'title', 'author_name'],
             skip: (page - 1) * limit,
             take: limit
         })
@@ -19,7 +19,7 @@ const Collection = async (req: Request, res: Response) => {
             cover_i: book.cover_i,
             isbn: book.isbn,
             title: book.title,
-            author: book.author
+            author_name: book.author_name
         }))
         res.status(200).json({found, collection, totalCollection})
     } catch {

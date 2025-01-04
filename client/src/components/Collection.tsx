@@ -141,7 +141,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                                                     className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
                                                 <div className="ml-4">
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
-                                                    <h2 className="text-sm mb-2">Author(s): {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
+                                                    <h2 className="text-sm mb-2">Author(s): {book.author_name}</h2>
                                                     <label className="flex items-center space-x-2">
                                                         <input
                                                             type="checkbox"

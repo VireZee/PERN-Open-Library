@@ -13,7 +13,7 @@ export default class Book {
     @Column()
     title: string
     @Column()
-    author: string
+    author_name: string
     @Column({ type: "timestamptz" })
     created: Date
 }

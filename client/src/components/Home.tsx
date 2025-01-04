@@ -37,7 +37,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 alert('Fetch Error: ' + XR)
             }
     }
-    const addToCollection = async (cover_i: string, isbn: string, title: string, author: string) => {
+    const addToCollection = async (cover_i: string, isbn: string, title: string, author_name: string) => {
         if (!isUser) {
             location.href = '/login'
         } else if (isUser.user_id) {
@@ -47,7 +47,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                     cover_i,
                     isbn,
                     title,
-                    author
+                    author_name
                 }, { withCredentials: true })
                 fetchStatus(isbn)
             } catch (err) {
