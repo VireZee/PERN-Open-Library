@@ -16,7 +16,7 @@ const Login: React.FC = () => {
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault()
-            await axios.post('http://localhost:3001/API/login', logState, { withCredentials: true })
+            await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/login`, logState, { withCredentials: true })
             location.href = '/'
         } catch (err) {
             const XR = err as AxiosError<{ error: string }>

@@ -22,7 +22,7 @@ const App: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get('http://localhost:3001/API/auth', { withCredentials: true })
+                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/auth`, { withCredentials: true })
                 const photo = Buffer.from(res.data.photo.data).toString('base64')
                 dispatch(setUser({ ...res.data, photo }))
             } catch {

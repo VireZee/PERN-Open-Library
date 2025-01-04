@@ -16,7 +16,7 @@ const Register: React.FC = () => {
     const submit = async (e: React.FormEvent) => {
         try {
             e.preventDefault()
-            await axios.post('http://localhost:3001/API/register', {
+            await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/register`, {
                 ...regState,
                 rePass: regState.show ? undefined : regState.rePass
             }, { withCredentials: true })
