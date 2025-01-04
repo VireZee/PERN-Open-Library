@@ -5,12 +5,14 @@ import { Request, Response } from 'express'
 const AddRemove = async (req: Request, res: Response) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
-        const { user_id, isbn, title } = req.body
+        const { cover_i, user_id, isbn, title, author } = req.body
         const bookCollection = await colRepo.findOne({
             where: {
                 user_id,
+                cover_i,
                 isbn,
-                title
+                title,
+                author
             }
         })
         if (bookCollection) {
@@ -18,8 +20,10 @@ const AddRemove = async (req: Request, res: Response) => {
         } else {
             const newBookCollection = colRepo.create({
                 user_id,
+                cover_i,
                 isbn,
                 title,
+                author,
                 created: new Date()
             })
             await colRepo.save(newBookCollection)

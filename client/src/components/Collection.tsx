@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/BookAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosResponse, AxiosError } from 'axios'
+import Load from './Load'
+import Net from './errors/Internet'
+import NB from './errors/NoBooks'
 
 interface Props {
     search: string,
@@ -53,7 +56,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 }
         }
         const collectionData = (res: AxiosResponse) => {
-            if (res.data.numFound === 0) {
+            if (res.data.found === 0) {
                 dispatch(setBooks([]))
             } else {
                 dispatch(setBooks(res.data.collection))
@@ -119,9 +122,50 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         )
     }
     return (
-        <div className="mt-16">
-            <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl">This is Collection</h1>
-        </div>
+        <>
+            {colState.load ? (
+                <Load />
+            ) : (
+                <>
+                    {colState.online ? (
+                        <>
+                            {colState.books.length === 0 ? (
+                                <NB />
+                            ) : (
+                                <>
+                                    <div className="mt-16 grid grid-cols-3">
+                                        {colState.books.map((book: Books, idx: number) => (
+                                            <div key={idx} className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
+                                                 <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
+                                                    alt={book.title}
+                                                    className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
+                                                <div className="ml-4">
+                                                    <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
+                                                    <h2 className="text-sm mb-2">Author(s): {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
+                                                    <label className="flex items-center space-x-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={true}
+                                                            onChange={() => { removeCollection(book.isbn[0]) }}
+                                                        />
+                                                        <span>Added to Collection</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-center">
+                                        {pageNumbers()}
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <Net />
+                    )}
+                </>
+            )}
+        </>
     )
 }
 export default Collection
