@@ -17,6 +17,36 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     const dispatch = useDispatch()
     const colState = useSelector((state: RootState) => state.COL)
     const pg = colState.currentPage
+    const fetchCollection = async () => {
+        if (isUser && isUser.user_id)
+            try {
+                dispatch(setLoad(true))
+                const query = search ? search.split(' ').join('+') : ''
+                const params = {
+                    u: isUser.user_id,
+                    t: query,
+                    p: colState.currentPage
+                }
+                const res = await axios.get('http://localhost:3001/API/collection', {
+                    params: search ? params : { u: isUser.user_id, p: colState.currentPage },
+                    withCredentials: true
+                })
+                collectionData(res)
+            } catch (err) {
+                const XR = err as AxiosError
+                alert('Fetch Error: ' + XR)
+            } finally {
+                dispatch(setLoad(false))
+            }
+    }
+    const collectionData = (res: AxiosResponse) => {
+        if (res.data.found === 0) {
+            dispatch(setBooks([]))
+        } else {
+            dispatch(setBooks(res.data.collection))
+            dispatch(setTotalPages(Math.ceil(res.data.totalCollection / 100)))
+        }
+    }
     const removeCollection = async (isbn: string) => {
         if (isUser && isUser.user_id)
             try {
@@ -24,6 +54,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                     user_id: isUser.user_id,
                     isbn
                 }, { withCredentials: true })
+                fetchCollection()
             } catch (err) {
                 const XR = err as AxiosError
                 alert(XR)
@@ -33,36 +64,6 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline)
-        const fetchCollection = async () => {
-            if (isUser && isUser.user_id)
-                try {
-                    dispatch(setLoad(true))
-                    const query = search ? search.split(' ').join('+') : ''
-                    const params = {
-                        u: isUser.user_id,
-                        t: query,
-                        p: colState.currentPage
-                    }
-                    const res = await axios.get('http://localhost:3001/API/collection', {
-                        params: search ? params : { u: isUser.user_id, p: colState.currentPage },
-                        withCredentials: true
-                    })
-                    collectionData(res)
-                } catch (err) {
-                    const XR = err as AxiosError
-                    alert('Fetch Error: ' + XR)
-                } finally {
-                    dispatch(setLoad(false))
-                }
-        }
-        const collectionData = (res: AxiosResponse) => {
-            if (res.data.found === 0) {
-                dispatch(setBooks([]))
-            } else {
-                dispatch(setBooks(res.data.collection))
-                dispatch(setTotalPages(Math.ceil(res.data.totalCollection / 100)))
-            }
-        }
         if (colState.online) {
             fetchCollection()
         }
@@ -136,7 +137,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                                     <div className="mt-16 grid grid-cols-3">
                                         {colState.books.map((book: Books, idx: number) => (
                                             <div key={idx} className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
-                                                 <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
+                                                <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
                                                     alt={book.title}
                                                     className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
                                                 <div className="ml-4">

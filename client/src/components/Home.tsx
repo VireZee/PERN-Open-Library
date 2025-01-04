@@ -99,7 +99,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
         if (isUser && isUser.user_id) {
             homeState.books.forEach((book: Books) => {
                 if (book.isbn) {
-                    fetchStatus(book.isbn.find(isbn => isbn.length === 13) || book.isbn[0])
+                    fetchStatus((book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0])
                 }
             })
         }
@@ -178,8 +178,8 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                     <label className="flex items-center space-x-2">
                                                         <input
                                                             type="checkbox"
-                                                            checked={book.isbn ? homeState.status[book.isbn.find(isbn => isbn.length === 13) || book.isbn[0]] || false : false}
-                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, book.isbn.find(isbn => isbn.length === 13) || book.isbn[0], book.title, book.author_name ? book.author_name.join(', ') : 'Unknown') }}
+                                                            checked={book.isbn ? homeState.status[(book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0]] || false : false}
+                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, (book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0], book.title, book.author_name ? book.author_name.join(', ') : 'Unknown') }}
                                                             disabled={!book.isbn}
                                                         />
                                                         <span>Add to Collection</span>
