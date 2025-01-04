@@ -174,12 +174,12 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                     className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
                                                 <div className="ml-4">
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
-                                                    <h2 className="text-sm mb-2">Author(s): {book.author_name ? book.author_name.join(', ') : 'Unknown'}</h2>
+                                                    <h2 className="text-sm mb-2">Author(s): {Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown'}</h2>
                                                     <label className="flex items-center space-x-2">
                                                         <input
                                                             type="checkbox"
                                                             checked={book.isbn ? homeState.status[(book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0]] || false : false}
-                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, (book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0], book.title, book.author_name ? book.author_name.join(', ') : 'Unknown') }}
+                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, (book.isbn as string[]).find(isbn => isbn.length === 13) || book.isbn[0], book.title, Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown') }}
                                                             disabled={!book.isbn}
                                                         />
                                                         <span>Add to Collection</span>
