@@ -146,7 +146,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                                                         <input
                                                             type="checkbox"
                                                             checked={true}
-                                                            onChange={() => { removeCollection(book.isbn[0]) }}
+                                                            onChange={() => { removeCollection(book.isbn as string) }}
                                                         />
                                                         <span>Added to Collection</span>
                                                     </label>

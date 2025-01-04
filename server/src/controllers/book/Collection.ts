@@ -12,7 +12,12 @@ const Collection = async (req: Request, res: Response) => {
             where: { user_id },
             select: ['cover_i', 'isbn', 'title', 'author_name'],
             skip: (page - 1) * limit,
-            take: limit
+            take: limit,
+            order: {
+                created: {
+                    direction: 'ASC'
+                }
+            }
         })
         const found = bookCollection.length
         const collection = bookCollection.map(book => ({
