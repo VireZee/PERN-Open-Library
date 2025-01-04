@@ -1,11 +1,11 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/BookAction'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/HomeAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
-import Net from './errors/Internet'
-import NB from './errors/NoBooks'
+import Net from './error/Internet'
+import NB from './error/NoBooks'
 
 interface Props {
     search: string,
@@ -71,13 +71,15 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
-    }, [isUser, colState.online, search])
+    }, [isUser, colState.online])
+    console.log(colState)
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {
             for (let i = s; i <= e; i++) pages.push(i)
         }
         const { currentPage, totalPages } = colState
+        console.log(totalPages)
         if (totalPages <= 9) addPages(1, totalPages)
         else if (search || pg <= 6) {
             addPages(1, 7)

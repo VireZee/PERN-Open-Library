@@ -7,7 +7,7 @@ const Collection = async (req: Request, res: Response) => {
         const colRepo = AppDataSource.getRepository(Col)
         const user_id = Number(req.query.u)
         const page = Number(req.query.p)
-        const limit = 100
+        const limit = 2
         const [bookCollection, totalCollection] = await colRepo.findAndCount({
             where: { user_id },
             select: ['cover_i', 'isbn', 'title', 'author_name'],
@@ -15,7 +15,7 @@ const Collection = async (req: Request, res: Response) => {
             take: limit,
             order: {
                 created: {
-                    direction: 'ASC'
+                    direction: 'DESC'
                 }
             }
         })

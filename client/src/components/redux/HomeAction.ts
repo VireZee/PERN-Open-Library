@@ -17,10 +17,10 @@ export interface Books {
     cover_i: string
     isbn: string[] | string
     title: string
-    author_name: string[]
+    author_name: string[] | string
 }
 const HomeAction = createSlice({
-    name: 'BOOK',
+    name: 'HOME',
     initialState,
     reducers: {
         setOnline: (state, { payload }: PayloadAction<boolean>) => {

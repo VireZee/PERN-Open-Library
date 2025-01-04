@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/BookAction'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
-import Net from './errors/Internet'
-import NB from './errors/NoBooks'
+import Net from './error/Internet'
+import NB from './error/NoBooks'
 
 interface Props {
     search: string,
@@ -29,6 +29,12 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             return isbn.find(isbn => isbn.length === 13) || isbn[0]
         }
         return isbn
+    }
+    const getValidAuthor = (author: string[] | string) => {
+        if (Array.isArray(author)) {
+            return author.join(', ')
+        }
+        return author || 'Unknown'
     }
     const fetchStatus = async (isbn: string) => {
         if (isUser && isUser.user_id)
@@ -185,7 +191,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                         <input
                                                             type="checkbox"
                                                             checked={book.isbn ? homeState.status[getValidIsbn(book.isbn)] || false : false}
-                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, getValidIsbn(book.isbn), book.title, Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown') }}
+                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, getValidIsbn(book.isbn), book.title, getValidAuthor(book.author_name)) }}
                                                             disabled={!book.isbn}
                                                         />
                                                         <span>Add to Collection</span>

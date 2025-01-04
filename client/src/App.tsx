@@ -12,7 +12,7 @@ import Log from './components/auth/Login'
 // import FP from './components/auth/ForgotPassword'
 import Col from './components/Collection'
 import API from './components/API'
-import NF from './components/errors/NotFound'
+import NF from './components/error/NotFound'
 
 const App: React.FC = () => {
     const dispatch = useDispatch()
