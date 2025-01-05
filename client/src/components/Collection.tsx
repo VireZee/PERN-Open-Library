@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/HomeAction'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
@@ -45,6 +45,8 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         } else {
             dispatch(setBooks(res.data.collection))
             dispatch(setTotalPages(Math.ceil(res.data.totalCollection / 100)))
+            console.log(res.data.totalCollection)
+            console.log(colState.totalPages)
         }
     }
     const removeCollection = async (isbn: string) => {
@@ -72,7 +74,6 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             window.removeEventListener('offline', handleOnline)
         }
     }, [isUser, colState.online])
-    console.log(colState)
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {

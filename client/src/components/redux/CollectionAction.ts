@@ -13,9 +13,9 @@ const initialState: State = {
 }
 export interface Books {
     cover_i: string
-    isbn: string[] | string
+    isbn: string
     title: string
-    author_name: string[]
+    author_name: string
 }
 const CollectionAction = createSlice({
     name: 'COL',
