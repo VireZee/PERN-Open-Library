@@ -1,5 +1,5 @@
 {
-  "name": "pern.openlibrary",
+  "name": "pern-open-library",
   "private": true,
   "scripts": {
     "dev": "vite",
