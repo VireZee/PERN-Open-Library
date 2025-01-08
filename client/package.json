@@ -9,7 +9,7 @@
   "devDependencies": {
     "@reduxjs/toolkit": "^2.5.0",
     "@types/lodash": "^4.17.14",
-    "@types/react": "^19.0.2",
+    "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react-swc": "^3.7.2",
     "autoprefixer": "^10.4.20",
@@ -25,5 +25,5 @@
     "vite": "^6.0.7",
     "vite-plugin-node-polyfills": "^0.22.0"
   },
-  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
+  "packageManager": "pnpm@9.15.3"
 }

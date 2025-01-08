@@ -44,9 +44,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             dispatch(setBooks([]))
         } else {
             dispatch(setBooks(res.data.collection))
-            dispatch(setTotalPages(Math.ceil(res.data.totalCollection / 100)))
-            console.log(res.data.totalCollection)
-            console.log(colState.totalPages)
+            dispatch(setTotalPages(Math.ceil(res.data.totalCollection / 9)))
         }
     }
     const removeCollection = async (isbn: string) => {
@@ -80,7 +78,6 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             for (let i = s; i <= e; i++) pages.push(i)
         }
         const { currentPage, totalPages } = colState
-        console.log(totalPages)
         if (totalPages <= 9) addPages(1, totalPages)
         else if (search || pg <= 6) {
             addPages(1, 7)
