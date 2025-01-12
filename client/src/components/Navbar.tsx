@@ -49,6 +49,14 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
             alert(XR)
         }
     }
+    React.useEffect(() => {
+        const path = window.location.pathname
+        if (path === '/collection') {
+            dispatch(setActive('col'))
+        } else if (path === '/API') {
+            dispatch(setActive('api'))
+        }
+    }, [])
     return (
         <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-[#282828]">
             <div className="text-white">
