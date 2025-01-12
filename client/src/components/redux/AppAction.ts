@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: string | undefined | null | UserData
+    [key: string]: string | undefined | null | UserData | Boolean
 }
 const initialState: State = {
     search: '',
-    user: undefined
+    user: undefined,
+    loadUser: true
 }
 interface UserData {
     user_id: number
@@ -23,6 +24,7 @@ const AppAction = createSlice({
         },
         setUser: (state, { payload }: PayloadAction<null | UserData>) => {
             state['user'] = payload
+            state['loadUser'] = false
         }
     }
 })
