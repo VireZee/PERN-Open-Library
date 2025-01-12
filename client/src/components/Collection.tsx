@@ -21,10 +21,9 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         if (isUser && isUser.user_id)
             try {
                 dispatch(setLoad(true))
-                const query = search ? search.split(' ').join('+') : ''
                 const params = {
                     u: isUser.user_id,
-                    t: query,
+                    t: search ?? '',
                     p: colState.currentPage
                 }
                 const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
