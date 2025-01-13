@@ -70,7 +70,9 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
                     <Link to="" className='text-gray-500'>Home</Link>
                 )}
             </div>
-            <input placeholder="Search Title or ISBN (without &quot;-&quot; or spaces)" className="w-[25vw] p-2 rounded-full" defaultValue={str} onKeyDown={handleKeyDown} />
+            {navState.active !== 'api' && (
+                <input placeholder={navState.active === 'home' ? 'Search Title or ISBN (without &quot;-&quot; or spaces)' : 'Search Title'} className="w-[25vw] p-2 rounded-full" defaultValue={str} onKeyDown={handleKeyDown} />
+            )}
             <div className="text-white flex items-center">
                 {isUser ? (
                     <>

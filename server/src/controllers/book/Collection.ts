@@ -10,7 +10,6 @@ const Collection = async (req: Request, res: Response) => {
         const search = req.query.t ?? ''
         const page = Number(req.query.p)
         const limit = 9
-        console.log(search)
         const [bookCollection, totalCollection] = await colRepo.findAndCount({
             where: {
                 user_id,
