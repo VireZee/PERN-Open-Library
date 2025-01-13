@@ -16,8 +16,8 @@ export default class User {
     email: string
     @Column()
     pass: string
-    @Column({ nullable: true })
-    api_key: string
+    @Column({ type: "bytea", nullable: true })
+    api_key: Buffer
     @Column({ type: "timestamptz" })
     created: Date
     @Column({ type: "timestamptz", nullable: true })
