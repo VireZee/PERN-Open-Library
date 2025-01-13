@@ -7,7 +7,7 @@ const Collection = async (req: Request, res: Response) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
         const user_id = Number(req.query.u)
-        const search = String(req.query.t)
+        const search = req.query.t ?? ''
         const page = Number(req.query.p)
         const limit = 9
         console.log(search)

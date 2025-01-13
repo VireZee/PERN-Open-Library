@@ -23,7 +23,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 dispatch(setLoad(true))
                 const params = {
                     u: isUser.user_id,
-                    t: search ?? '',
+                    t: search,
                     p: colState.currentPage
                 }
                 const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
@@ -70,7 +70,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
-    }, [isUser, colState.online])
+    }, [colState.online, search])
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {
