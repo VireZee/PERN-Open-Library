@@ -18,8 +18,8 @@ export default class User {
     pass: string
     @Column({ type: "bytea", nullable: true })
     api_key: Buffer
-    @Column({ type: "timestamptz" })
-    created: Date
     @Column({ type: "timestamptz", nullable: true })
     updated: Date
+    @Column({ type: "timestamptz" })
+    created: Date
 }

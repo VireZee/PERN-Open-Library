@@ -52,7 +52,7 @@ const API: React.FC<Props> = ({ isUser }) => {
             {apiState.online ? (
                 <div className="mt-16">
                     {apiState.apiKey !== null ? (
-                        <h1 className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl break-all">{apiState.apiKey}</h1>
+                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl">{apiState.apiKey}</p>
                     ) : (
                         <button
                             onClick={generate}
