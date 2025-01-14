@@ -46,7 +46,6 @@ const API: React.FC<Props> = ({ isUser }) => {
     React.useEffect(() => {
         check()
     }, [apiState.online, apiState.apiKey])
-    console.log(apiState.apiKey)
     return (
         <>
             {apiState.online ? (
