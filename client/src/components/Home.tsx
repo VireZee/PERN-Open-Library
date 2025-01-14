@@ -37,26 +37,25 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
         return author || 'Unknown'
     }
     const fetchStatus = async (isbn: string) => {
-        if (isUser && isUser.user_id)
-            try {
-                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/fetch`, {
-                    params: { user_id: isUser.user_id, isbn },
-                    withCredentials: true
-                })
-                dispatch(setStatus(res.data))
-            } catch (err) {
-                const XR = err as AxiosError<{ e: string }>
-                if (XR.response!.data.e) {
-                    alert('Fetch Error: ' + XR.response!.data.e)
-                } else {
-                    alert('Fetch Error: ' + XR.response!.statusText)
-                }
+        try {
+            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/fetch`, {
+                params: { user_id: isUser!.user_id, isbn },
+                withCredentials: true
+            })
+            dispatch(setStatus(res.data))
+        } catch (err) {
+            const XR = err as AxiosError<{ e: string }>
+            if (XR.response!.data.e) {
+                alert('Fetch Error: ' + XR.response!.data.e)
+            } else {
+                alert('Fetch Error: ' + XR.response!.statusText)
             }
+        }
     }
     const addToCollection = async (cover_i: string, isbn: string, title: string, author_name: string) => {
         if (!isUser) {
             location.href = '/login'
-        } else if (isUser.user_id) {
+        } else if (isUser) {
             try {
                 await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/add`, {
                     user_id: isUser.user_id,

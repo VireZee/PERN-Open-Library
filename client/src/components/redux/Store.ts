@@ -1,19 +1,21 @@
 import { configureStore, Store } from '@reduxjs/toolkit'
-import AA from './AppAction'
-import NA from './NavbarAction'
-import RA from './RegisterAction'
-import LA from './LoginAction'
-import HA from './HomeAction'
-import CA from './CollectionAction'
+import AppAct from './AppAction'
+import NavAct from './NavbarAction'
+import RegAct from './RegisterAction'
+import LogAct from './LoginAction'
+import HomeAct from './HomeAction'
+import ColAct from './CollectionAction'
+import APIAct from './APIAction'
 
 const ReduxStore: Store = configureStore({
     reducer: {
-        APP: AA,
-        NAV: NA,
-        REG: RA,
-        LOG: LA,
-        HOME: HA,
-        COL: CA
+        APP: AppAct,
+        NAV: NavAct,
+        REG: RegAct,
+        LOG: LogAct,
+        HOME: HomeAct,
+        COL: ColAct,
+        API: APIAct
     }
 })
 export type RootState = ReturnType<typeof ReduxStore.getState>

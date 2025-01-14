@@ -18,29 +18,28 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     const colState = useSelector((state: RootState) => state.COL)
     const pg = colState.currentPage
     const fetchCollection = async () => {
-        if (isUser && isUser.user_id)
-            try {
-                dispatch(setLoad(true))
-                const params = {
-                    u: isUser.user_id,
-                    t: search,
-                    p: colState.currentPage
-                }
-                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
-                    params: search ? params : { u: isUser.user_id, p: colState.currentPage },
-                    withCredentials: true
-                })
-                collectionData(res)
-            } catch (err) {
-                const XR = err as AxiosError<{ e: string }>
-                if (XR.response!.data.e) {
-                    alert('Fetch Error: ' + XR.response!.data.e)
-                } else {
-                    alert('Fetch Error: ' + XR.response!.statusText)
-                }
-            } finally {
-                dispatch(setLoad(false))
+        try {
+            dispatch(setLoad(true))
+            const params = {
+                u: isUser!.user_id,
+                t: search,
+                p: colState.currentPage
             }
+            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
+                params: search ? params : { u: isUser!.user_id, p: colState.currentPage },
+                withCredentials: true
+            })
+            collectionData(res)
+        } catch (err) {
+            const XR = err as AxiosError<{ e: string }>
+            if (XR.response!.data.e) {
+                alert('Fetch Error: ' + XR.response!.data.e)
+            } else {
+                alert('Fetch Error: ' + XR.response!.statusText)
+            }
+        } finally {
+            dispatch(setLoad(false))
+        }
     }
     const collectionData = (res: AxiosResponse) => {
         if (res.data.found === 0) {
@@ -51,21 +50,20 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         }
     }
     const removeCollection = async (isbn: string) => {
-        if (isUser && isUser.user_id)
-            try {
-                await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/remove`, {
-                    user_id: isUser.user_id,
-                    isbn
-                }, { withCredentials: true })
-                fetchCollection()
-            } catch (err) {
-                const XR = err as AxiosError<{ e: string }>
-                if (XR.response!.data.e) {
-                    alert(XR.response!.data.e)
-                } else {
-                    alert(XR.response!.statusText)
-                }
+        try {
+            await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/remove`, {
+                user_id: isUser!.user_id,
+                isbn
+            }, { withCredentials: true })
+            fetchCollection()
+        } catch (err) {
+            const XR = err as AxiosError<{ e: string }>
+            if (XR.response!.data.e) {
+                alert(XR.response!.data.e)
+            } else {
+                alert(XR.response!.statusText)
             }
+        }
     }
     React.useEffect(() => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))

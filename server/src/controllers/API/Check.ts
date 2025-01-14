@@ -4,7 +4,7 @@ import User from '../../models/User'
 
 const Check = async (req: Request, res: Response) => {
     try {
-        const { user_id } = req.body
+        const user_id = Number(req.query.u)
         const userRepo = AppDataSource.getRepository(User)
         const user = await userRepo.findOne({
             where: { user_id }
