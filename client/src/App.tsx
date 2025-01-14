@@ -41,7 +41,7 @@ const App: React.FC = () => {
                     <Route path='/' element={<Home isUser={appState.user} search={appState.search} />} />
                     <Route path='s' element={<Home isUser={appState.user} search={appState.search} />} />
                     <Route path='collection' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
-                    <Route path='API' element={appState.loadUser ? null : appState.user ? <API /> : <Navigate to='/login' />} />
+                    <Route path='API' element={appState.loadUser ? null : appState.user ? <API isUser={appState.user} /> : <Navigate to='/login' />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />
                     <Route path='login' element={!appState.user ? <Log /> : <Navigate to='/' />} />
                     {/* <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} /> */}

@@ -32,8 +32,12 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 })
                 collectionData(res)
             } catch (err) {
-                const XR = err as AxiosError
-                alert('Fetch Error: ' + XR)
+                const XR = err as AxiosError<{ e: string }>
+                if (XR.response!.data.e) {
+                    alert('Fetch Error: ' + XR.response!.data.e)
+                } else {
+                    alert('Fetch Error: ' + XR.response!.statusText)
+                }
             } finally {
                 dispatch(setLoad(false))
             }
@@ -55,8 +59,12 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 }, { withCredentials: true })
                 fetchCollection()
             } catch (err) {
-                const XR = err as AxiosError
-                alert(XR)
+                const XR = err as AxiosError<{ e: string }>
+                if (XR.response!.data.e) {
+                    alert(XR.response!.data.e)
+                } else {
+                    alert(XR.response!.statusText)
+                }
             }
     }
     React.useEffect(() => {

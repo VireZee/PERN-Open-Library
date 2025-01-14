@@ -19,9 +19,11 @@ const Login: React.FC = () => {
             await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/login`, logState, { withCredentials: true })
             location.href = '/'
         } catch (err) {
-            const XR = err as AxiosError<{ error: string }>
+            const XR = err as AxiosError<{ error: string, e: string }>
             if (XR.response!.data.error) {
                 dispatch(setError(XR.response!.data.error))
+            } else if (XR.response!.data.e) {
+                alert(XR.response!.data.e)
             } else {
                 alert(XR.response!.statusText)
             }

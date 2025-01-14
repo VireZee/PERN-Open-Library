@@ -29,8 +29,12 @@ const AddRemove = async (req: Request, res: Response) => {
             await colRepo.save(newBookCollection)
         }
         res.status(200).json()
-    } catch {
-        res.status(500).json()
+    } catch (e) {
+        if (e instanceof Error) {
+            res.status(500).json({ e: e.message })
+        } else {
+            res.status(500).json()
+        }
     }
 }
 export default AddRemove

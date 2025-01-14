@@ -45,8 +45,12 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
             await axios.delete(`http://${import.meta.env.VITE_DOMAIN}/API/signout`, { withCredentials: true })
             location.href = '/'
         } catch (err) {
-            const XR = err as AxiosError
-            alert(XR)
+            const XR = err as AxiosError<{ e: string }>
+            if (XR.response!.data.e) {
+                alert(XR.response!.data.e)
+            } else {
+                alert(XR.response!.statusText)
+            }
         }
     }
     React.useEffect(() => {

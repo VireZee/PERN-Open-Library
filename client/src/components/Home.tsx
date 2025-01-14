@@ -45,8 +45,12 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 })
                 dispatch(setStatus(res.data))
             } catch (err) {
-                const XR = err as AxiosError
-                alert('Fetch Error: ' + XR)
+                const XR = err as AxiosError<{ e: string }>
+                if (XR.response!.data.e) {
+                    alert('Fetch Error: ' + XR.response!.data.e)
+                } else {
+                    alert('Fetch Error: ' + XR.response!.statusText)
+                }
             }
     }
     const addToCollection = async (cover_i: string, isbn: string, title: string, author_name: string) => {
@@ -63,8 +67,12 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 }, { withCredentials: true })
                 fetchStatus(isbn)
             } catch (err) {
-                const XR = err as AxiosError
-                alert(XR)
+                const XR = err as AxiosError<{ e: string }>
+                if (XR.response!.data.e) {
+                    alert(XR.response!.data.e)
+                } else {
+                    alert(XR.response!.statusText)
+                }
             }
         }
     }

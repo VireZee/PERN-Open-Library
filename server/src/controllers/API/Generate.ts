@@ -3,7 +3,7 @@ import AppDataSource from '../../DataSource'
 import User from '../../models/User'
 import crypto from 'crypto'
 
-const API = async (req: Request, res: Response) => {
+const Generate = async (req: Request, res: Response) => {
     try {
         const { user_id } = req.body
         const userRepo = AppDataSource.getRepository(User)
@@ -13,9 +13,12 @@ const API = async (req: Request, res: Response) => {
         user!.api_key = Buffer.from(apiKey)
         await userRepo.save(user!)
         res.status(200).json({ apiKey })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json()
+    } catch (e) {
+        if (e instanceof Error) {
+            res.status(500).json({ e: e.message })
+        } else {
+            res.status(500).json()
+        }
     }
 }
-export default API
+export default Generate

@@ -32,8 +32,12 @@ const Collection = async (req: Request, res: Response) => {
             author_name: book.author_name
         }))
         res.status(200).json({ found, collection, totalCollection })
-    } catch {
-        res.status(500).json()
+    } catch (e) {
+        if (e instanceof Error) {
+            res.status(500).json({ e: e.message })
+        } else {
+            res.status(500).json()
+        }
     }
 }
 export default Collection
