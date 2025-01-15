@@ -69,9 +69,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
         window.addEventListener('offline', handleOnline)
-        if (colState.online) {
-            fetchCollection()
-        }
+        fetchCollection()
         return () => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)

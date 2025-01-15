@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setApiKey } from './redux/APIAction'
+import { setOnline, setApiKey } from './redux/APIAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosError } from 'axios'
 import Net from './error/Internet'
@@ -44,14 +44,21 @@ const API: React.FC<Props> = ({ isUser }) => {
         }
     }
     React.useEffect(() => {
+        const handleOnline = () => dispatch(setOnline(navigator.onLine))
+        window.addEventListener('online', handleOnline)
+        window.addEventListener('offline', handleOnline)
         check()
+        return () => {
+            window.removeEventListener('online', handleOnline)
+            window.removeEventListener('offline', handleOnline)
+        }
     }, [apiState.online, apiState.apiKey])
     return (
         <>
             {apiState.online ? (
                 <div className="mt-16">
                     {apiState.apiKey !== null ? (
-                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl">{apiState.apiKey}</p>
+                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}/API/{apiState.apiKey}</p>
                     ) : (
                         <button
                             onClick={generate}
