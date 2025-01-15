@@ -75,54 +75,6 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             }
         }
     }
-    useEffect(() => {
-        const handleOnline = () => dispatch(setOnline(navigator.onLine))
-        window.addEventListener('online', handleOnline)
-        window.addEventListener('offline', handleOnline);
-        (async () => {
-            const fetchBooks = async () => {
-                const type = /^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title'
-                const query = search.split(' ').join('+')
-                const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
-                booksData(res)
-                dispatch(setLoad(false))
-            }
-            const booksData = (res: AxiosResponse) => {
-                if (res.data.numFound === 0) {
-                    dispatch(setBooks([]))
-                } else {
-                    dispatch(setBooks(res.data.docs))
-                    dispatch(setTotalPages(Math.ceil(res.data.numFound / 100)))
-                }
-            }
-            if (homeState.online) {
-                dispatch(setLoad(true))
-                if (search) {
-                    dispatch(setCurrentPage(1))
-                    fetchBooks()
-                } else {
-                    const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
-                    const query = str ? str.split(' ').join('+') : 'harry+potter'
-                    const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
-                    booksData(res)
-                    dispatch(setLoad(false))
-                }
-            }
-        })()
-        return () => {
-            window.removeEventListener('online', handleOnline)
-            window.removeEventListener('offline', handleOnline)
-        }
-    }, [homeState.online, search])
-    useEffect(() => {
-        if (isUser && isUser.user_id) {
-            homeState.books.forEach((book: Books) => {
-                if (book.isbn) {
-                    fetchStatus(getValidIsbn(book.isbn))
-                }
-            })
-        }
-    }, [homeState.books])
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {
@@ -173,6 +125,55 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             </>
         )
     }
+    useEffect(() => {
+        const handleOnline = () => dispatch(setOnline(navigator.onLine))
+        window.addEventListener('online', handleOnline)
+        window.addEventListener('offline', handleOnline);
+        (async () => {
+            const fetchBooks = async () => {
+                const type = /^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title'
+                const query = search.split(' ').join('+')
+                const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
+                booksData(res)
+                dispatch(setLoad(false))
+            }
+            const booksData = (res: AxiosResponse) => {
+                const { numFound, docs } = res.data
+                if (numFound === 0) {
+                    dispatch(setBooks([]))
+                } else {
+                    dispatch(setBooks(docs))
+                    dispatch(setTotalPages(Math.ceil(numFound / 100)))
+                }
+            }
+            if (homeState.online) {
+                dispatch(setLoad(true))
+                if (search) {
+                    dispatch(setCurrentPage(1))
+                    fetchBooks()
+                } else {
+                    const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
+                    const query = str ? str.split(' ').join('+') : 'harry+potter'
+                    const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
+                    booksData(res)
+                    dispatch(setLoad(false))
+                }
+            }
+        })()
+        return () => {
+            window.removeEventListener('online', handleOnline)
+            window.removeEventListener('offline', handleOnline)
+        }
+    }, [homeState.online, search])
+    useEffect(() => {
+        if (isUser && isUser.user_id) {
+            homeState.books.forEach((book: Books) => {
+                if (book.isbn) {
+                    fetchStatus(getValidIsbn(book.isbn))
+                }
+            })
+        }
+    }, [homeState.books])
     return (
         <>
             {homeState.load ? (

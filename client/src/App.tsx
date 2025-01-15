@@ -38,8 +38,8 @@ const App: React.FC = () => {
             </header>
             <main>
                 <Routes>
-                    <Route path='/' element={<Home isUser={appState.user} search={appState.search} />} />
-                    <Route path='s' element={<Home isUser={appState.user} search={appState.search} />} />
+                    <Route path='' element={<Home isUser={appState.user} search={appState.search} />} />
+                    <Route path='collection' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='collection' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='API' element={appState.loadUser ? null : appState.user ? <API isUser={appState.user} /> : <Navigate to='/login' />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />

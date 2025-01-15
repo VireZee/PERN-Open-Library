@@ -13,20 +13,25 @@ interface Props {
         user_id: number
     } | null
 }
+interface URLParams {
+    title?: string
+    page?: string
+}
 const Collection: React.FC<Props> = ({ isUser, search }) => {
     const dispatch = useDispatch()
     const colState = useSelector((state: RootState) => state.COL)
-    const pg = colState.currentPage
+    const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
+    const pg = Number(page) || 1
     const fetchCollection = async () => {
         try {
             dispatch(setLoad(true))
             const params = {
                 u: isUser!.user_id,
-                t: search,
-                p: colState.currentPage
+                t: search || title,
+                p: pg
             }
             const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
-                params: search ? params : { u: isUser!.user_id, p: colState.currentPage },
+                params,
                 withCredentials: true
             })
             collectionData(res)
@@ -42,11 +47,12 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         }
     }
     const collectionData = (res: AxiosResponse) => {
-        if (res.data.found === 0) {
+        const { found, collection, totalCollection } = res.data
+        if (found === 0) {
             dispatch(setBooks([]))
         } else {
-            dispatch(setBooks(res.data.collection))
-            dispatch(setTotalPages(Math.ceil(res.data.totalCollection / 9)))
+            dispatch(setBooks(collection))
+            dispatch(setTotalPages(Math.ceil(totalCollection / 9)))
         }
     }
     const removeCollection = async (isbn: string) => {
@@ -65,22 +71,12 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             }
         }
     }
-    React.useEffect(() => {
-        const handleOnline = () => dispatch(setOnline(navigator.onLine))
-        window.addEventListener('online', handleOnline)
-        window.addEventListener('offline', handleOnline)
-        fetchCollection()
-        return () => {
-            window.removeEventListener('online', handleOnline)
-            window.removeEventListener('offline', handleOnline)
-        }
-    }, [colState.online, search])
     const pageNumbers = () => {
         const pages = []
         const addPages = (s: number, e: number) => {
             for (let i = s; i <= e; i++) pages.push(i)
         }
-        const { currentPage, totalPages } = colState
+        const { totalPages } = colState
         if (totalPages <= 9) addPages(1, totalPages)
         else if (search || pg <= 6) {
             addPages(1, 7)
@@ -117,14 +113,24 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === (search ? 1 : pg) ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        <a href={`collection/?${search ? search.split(' ').join('+') : ''}&page=${currentPage}`}>
+                        <a href={`collection?${search ? `title=${search.split(' ').join('+')}&page=${pg}` : `page=${pg}`}`}>
                             {page}
                         </a>
-                    </span>
+                    </span >
                 ))}
             </>
         )
     }
+    React.useEffect(() => {
+        const handleOnline = () => dispatch(setOnline(navigator.onLine))
+        window.addEventListener('online', handleOnline)
+        window.addEventListener('offline', handleOnline)
+        fetchCollection()
+        return () => {
+            window.removeEventListener('online', handleOnline)
+            window.removeEventListener('offline', handleOnline)
+        }
+    }, [colState.online, search])
     return (
         <>
             {colState.load ? (
