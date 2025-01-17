@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams, useLocation  } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
 import { RootState } from './redux/Store'
@@ -13,15 +14,13 @@ interface Props {
         user_id: number
     } | null
 }
-interface URLParams {
-    title?: string
-    page?: string
-}
 const Collection: React.FC<Props> = ({ isUser, search }) => {
     const dispatch = useDispatch()
     const colState = useSelector((state: RootState) => state.COL)
-    const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
-    const pg = Number(page) || 1
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
+    const title = searchParams.get('title')
+    const pg = Number(searchParams.get('page')) || 1
     const fetchCollection = async () => {
         try {
             dispatch(setLoad(true))
@@ -113,7 +112,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === (search ? 1 : pg) ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        <a href={`collection?${search ? `title=${search.split(' ').join('+')}&page=${pg}` : `page=${pg}`}`}>
+                        <a href={`collection/${search ? `${search.split(' ').join('+')}` : ''}/${page}`}>
                             {page}
                         </a>
                     </span >
