@@ -1,5 +1,4 @@
 import React from 'react'
-import { useParams, useLocation  } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
 import { RootState } from './redux/Store'
@@ -14,20 +13,22 @@ interface Props {
         user_id: number
     } | null
 }
+interface URLParams {
+    title?: string
+    page?: string
+}
 const Collection: React.FC<Props> = ({ isUser, search }) => {
     const dispatch = useDispatch()
     const colState = useSelector((state: RootState) => state.COL)
-    const location = useLocation()
-    const searchParams = new URLSearchParams(location.search)
-    const title = searchParams.get('title')
-    const pg = Number(searchParams.get('page')) || 1
+    const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
+    const pg = Number(page)
     const fetchCollection = async () => {
         try {
             dispatch(setLoad(true))
             const params = {
                 u: isUser!.user_id,
                 t: search || title,
-                p: pg
+                p: pg || colState.currentPage
             }
             const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
                 params,
@@ -112,7 +113,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                         onClick={() => handleClick(page)}
                         className={`cursor-pointer px-3 py-1 rounded-full ${page === (search ? 1 : pg) ? 'bg-blue-500 text-white' : ''}`}
                     >
-                        <a href={`collection/${search ? `${search.split(' ').join('+')}` : ''}/${page}`}>
+                        <a href={`collection?${search ? `title=${search.split(' ').join('+')}&page=${colState.currentPage}` : `page=${colState.currentPage}`}`}>
                             {page}
                         </a>
                     </span >
