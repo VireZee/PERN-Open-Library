@@ -10,22 +10,22 @@ importers:
     devDependencies:
       '@reduxjs/toolkit':
         specifier: ^2.5.0
-        version: 2.5.0(react-redux@9.2.0(@types/react@19.0.6)(react@19.0.0)(redux@5.0.1))(react@19.0.0)
+        version: 2.5.0(react-redux@9.2.0(@types/react@19.0.7)(react@19.0.0)(redux@5.0.1))(react@19.0.0)
       '@types/lodash':
         specifier: ^4.17.14
         version: 4.17.14
       '@types/react':
-        specifier: ^19.0.6
-        version: 19.0.6
+        specifier: ^19.0.7
+        version: 19.0.7
       '@types/react-dom':
         specifier: ^19.0.3
-        version: 19.0.3(@types/react@19.0.6)
+        version: 19.0.3(@types/react@19.0.7)
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.2
-        version: 3.7.2(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1))
+        version: 3.7.2(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1))
       autoprefixer:
         specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.49)
+        version: 10.4.20(postcss@8.5.1)
       axios:
         specifier: ^1.7.9
         version: 1.7.9
@@ -33,8 +33,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       postcss:
-        specifier: ^8.4.49
-        version: 8.4.49
+        specifier: ^8.5.1
+        version: 8.5.1
       react:
         specifier: ^19.0.0
         version: 19.0.0
@@ -43,22 +43,22 @@ importers:
         version: 19.0.0(react@19.0.0)
       react-redux:
         specifier: ^9.2.0
-        version: 9.2.0(@types/react@19.0.6)(react@19.0.0)(redux@5.0.1)
+        version: 9.2.0(@types/react@19.0.7)(react@19.0.0)(redux@5.0.1)
       react-router-dom:
-        specifier: ^7.1.1
-        version: 7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^7.1.3
+        version: 7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       sass:
-        specifier: ^1.83.1
-        version: 1.83.1
+        specifier: ^1.83.4
+        version: 1.83.4
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.17
       vite:
         specifier: ^6.0.7
-        version: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1)
+        version: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1)
       vite-plugin-node-polyfills:
-        specifier: ^0.22.0
-        version: 0.22.0(rollup@4.29.1)(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1))
+        specifier: ^0.23.0
+        version: 0.23.0(rollup@4.29.1)(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1))
 
 packages:
 
@@ -552,8 +552,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.0.0
 
-  '@types/react@19.0.6':
-    resolution: {integrity: sha512-gIlMztcTeDgXCUj0vCBOqEuSEhX//63fW9SZtCJ+agxoQTOklwDfiEMlTWn4mR/C/UK5VHlpwsCsOyf7/hc4lw==}
+  '@types/react@19.0.7':
+    resolution: {integrity: sha512-MoFsEJKkAtZCrC1r6CM8U22GzhG7u2Wir8ons/aCKH6MBdD1ibV24zOSSkdZVUKqN5i396zG5VKLYZ3yaUZdLA==}
 
   '@types/use-sync-external-store@0.0.6':
     resolution: {integrity: sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==}
@@ -1230,8 +1230,8 @@ packages:
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
-  postcss@8.4.49:
-    resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
+  postcss@8.5.1:
+    resolution: {integrity: sha512-6oz2beyjc5VMn/KV1pPw8fliQkhBXrVn1Z3TVyqZxU8kZpzEKhBdmCFqI6ZbmGtamQvQGuU1sgPTk8ZrXDD7jQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   process-nextick-args@2.0.1:
@@ -1284,15 +1284,15 @@ packages:
       redux:
         optional: true
 
-  react-router-dom@7.1.1:
-    resolution: {integrity: sha512-vSrQHWlJ5DCfyrhgo0k6zViOe9ToK8uT5XGSmnuC2R3/g261IdIMpZVqfjD6vWSXdnf5Czs4VA/V60oVR6/jnA==}
+  react-router-dom@7.1.3:
+    resolution: {integrity: sha512-qQGTE+77hleBzv9SIUIkGRvuFBQGagW+TQKy53UTZAO/3+YFNBYvRsNIZ1GT17yHbc63FylMOdS+m3oUriF1GA==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
-  react-router@7.1.1:
-    resolution: {integrity: sha512-39sXJkftkKWRZ2oJtHhCxmoCrBCULr/HAH4IT5DHlgu/Q0FCPV0S4Lx+abjDTx/74xoZzNYDYbOZWlJjruyuDQ==}
+  react-router@7.1.3:
+    resolution: {integrity: sha512-EezYymLY6Guk/zLQ2vRA8WvdUhWFEj5fcE3RfWihhxXBW7+cd1LsIiA3lmx+KCmneAGQuyBv820o44L2+TtkSA==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
@@ -1360,8 +1360,8 @@ packages:
   safe-buffer@5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
 
-  sass@1.83.1:
-    resolution: {integrity: sha512-EVJbDaEs4Rr3F0glJzFSOvtg2/oy2V/YrGFPqPY24UqcLDWcI9ZY5sN+qyO3c/QCZwzgfirvhXvINiJCE/OLcA==}
+  sass@1.83.4:
+    resolution: {integrity: sha512-B1bozCeNQiOgDcLd33e2Cs2U60wZwjUUXzh900ZyQF5qUasvMdDZYbQ566LJu7cqR+sAHlAfO6RMkaID5s6qpA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -1504,10 +1504,10 @@ packages:
   util@0.12.5:
     resolution: {integrity: sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==}
 
-  vite-plugin-node-polyfills@0.22.0:
-    resolution: {integrity: sha512-F+G3LjiGbG8QpbH9bZ//GSBr9i1InSTkaulfUHFa9jkLqVGORFBoqc2A/Yu5Mmh1kNAbiAeKeK+6aaQUf3x0JA==}
+  vite-plugin-node-polyfills@0.23.0:
+    resolution: {integrity: sha512-4n+Ys+2bKHQohPBKigFlndwWQ5fFKwaGY6muNDMTb0fSQLyBzS+jjUNRZG9sKF0S/Go4ApG6LFnUGopjkILg3w==}
     peerDependencies:
-      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
 
   vite@6.0.7:
     resolution: {integrity: sha512-RDt8r/7qx9940f8FcOIAH9PTViRrghKaK2K1jY3RaAURrEUbm9Du1mJ72G+jlhtG3WwodnfzY8ORQZbBavZEAQ==}
@@ -1763,7 +1763,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@reduxjs/toolkit@2.5.0(react-redux@9.2.0(@types/react@19.0.6)(react@19.0.0)(redux@5.0.1))(react@19.0.0)':
+  '@reduxjs/toolkit@2.5.0(react-redux@9.2.0(@types/react@19.0.7)(react@19.0.0)(redux@5.0.1))(react@19.0.0)':
     dependencies:
       immer: 10.1.1
       redux: 5.0.1
@@ -1771,7 +1771,7 @@ snapshots:
       reselect: 5.1.1
     optionalDependencies:
       react: 19.0.0
-      react-redux: 9.2.0(@types/react@19.0.6)(react@19.0.0)(redux@5.0.1)
+      react-redux: 9.2.0(@types/react@19.0.7)(react@19.0.0)(redux@5.0.1)
 
   '@rollup/plugin-inject@5.0.5(rollup@4.29.1)':
     dependencies:
@@ -1909,20 +1909,20 @@ snapshots:
       undici-types: 6.20.0
     optional: true
 
-  '@types/react-dom@19.0.3(@types/react@19.0.6)':
+  '@types/react-dom@19.0.3(@types/react@19.0.7)':
     dependencies:
-      '@types/react': 19.0.6
+      '@types/react': 19.0.7
 
-  '@types/react@19.0.6':
+  '@types/react@19.0.7':
     dependencies:
       csstype: 3.1.3
 
   '@types/use-sync-external-store@0.0.6': {}
 
-  '@vitejs/plugin-react-swc@3.7.2(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1))':
+  '@vitejs/plugin-react-swc@3.7.2(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1))':
     dependencies:
       '@swc/core': 1.10.3
-      vite: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1)
+      vite: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -1961,14 +1961,14 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.20(postcss@8.4.49):
+  autoprefixer@10.4.20(postcss@8.5.1):
     dependencies:
       browserslist: 4.24.3
       caniuse-lite: 1.0.30001690
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.4.49
+      postcss: 8.5.1
       postcss-value-parser: 4.2.0
 
   available-typed-arrays@1.0.7:
@@ -2634,28 +2634,28 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
-  postcss-import@15.1.0(postcss@8.4.49):
+  postcss-import@15.1.0(postcss@8.5.1):
     dependencies:
-      postcss: 8.4.49
+      postcss: 8.5.1
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.10
 
-  postcss-js@4.0.1(postcss@8.4.49):
+  postcss-js@4.0.1(postcss@8.5.1):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.49
+      postcss: 8.5.1
 
-  postcss-load-config@4.0.2(postcss@8.4.49):
+  postcss-load-config@4.0.2(postcss@8.5.1):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.6.1
     optionalDependencies:
-      postcss: 8.4.49
+      postcss: 8.5.1
 
-  postcss-nested@6.2.0(postcss@8.4.49):
+  postcss-nested@6.2.0(postcss@8.5.1):
     dependencies:
-      postcss: 8.4.49
+      postcss: 8.5.1
       postcss-selector-parser: 6.1.2
 
   postcss-selector-parser@6.1.2:
@@ -2665,7 +2665,7 @@ snapshots:
 
   postcss-value-parser@4.2.0: {}
 
-  postcss@8.4.49:
+  postcss@8.5.1:
     dependencies:
       nanoid: 3.3.8
       picocolors: 1.1.1
@@ -2710,22 +2710,22 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0
 
-  react-redux@9.2.0(@types/react@19.0.6)(react@19.0.0)(redux@5.0.1):
+  react-redux@9.2.0(@types/react@19.0.7)(react@19.0.0)(redux@5.0.1):
     dependencies:
       '@types/use-sync-external-store': 0.0.6
       react: 19.0.0
       use-sync-external-store: 1.4.0(react@19.0.0)
     optionalDependencies:
-      '@types/react': 19.0.6
+      '@types/react': 19.0.7
       redux: 5.0.1
 
-  react-router-dom@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-router-dom@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-      react-router: 7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-router: 7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@types/cookie': 0.6.0
       cookie: 1.0.2
@@ -2817,7 +2817,7 @@ snapshots:
 
   safe-buffer@5.2.1: {}
 
-  sass@1.83.1:
+  sass@1.83.4:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.0.3
@@ -2951,11 +2951,11 @@ snapshots:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.1.1
-      postcss: 8.4.49
-      postcss-import: 15.1.0(postcss@8.4.49)
-      postcss-js: 4.0.1(postcss@8.4.49)
-      postcss-load-config: 4.0.2(postcss@8.4.49)
-      postcss-nested: 6.2.0(postcss@8.4.49)
+      postcss: 8.5.1
+      postcss-import: 15.1.0(postcss@8.5.1)
+      postcss-js: 4.0.1(postcss@8.5.1)
+      postcss-load-config: 4.0.2(postcss@8.5.1)
+      postcss-nested: 6.2.0(postcss@8.5.1)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.10
       sucrase: 3.35.0
@@ -3012,24 +3012,24 @@ snapshots:
       is-typed-array: 1.1.15
       which-typed-array: 1.1.18
 
-  vite-plugin-node-polyfills@0.22.0(rollup@4.29.1)(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1)):
+  vite-plugin-node-polyfills@0.23.0(rollup@4.29.1)(vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@4.29.1)
       node-stdlib-browser: 1.3.0
-      vite: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1)
+      vite: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1)
     transitivePeerDependencies:
       - rollup
 
-  vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.1)(yaml@2.6.1):
+  vite@6.0.7(@types/node@22.10.3)(jiti@1.21.7)(sass@1.83.4)(yaml@2.6.1):
     dependencies:
       esbuild: 0.24.2
-      postcss: 8.4.49
+      postcss: 8.5.1
       rollup: 4.29.1
     optionalDependencies:
       '@types/node': 22.10.3
       fsevents: 2.3.3
       jiti: 1.21.7
-      sass: 1.83.1
+      sass: 1.83.4
       yaml: 2.6.1
 
   vm-browserify@1.1.2: {}
