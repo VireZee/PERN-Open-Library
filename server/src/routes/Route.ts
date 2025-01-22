@@ -5,8 +5,8 @@ import LogCon from '../controllers/auth/Login'
 import FetCon from '../controllers/book/Fetch'
 import AddRemCon from '../controllers/book/AddRemove'
 import ColCon from '../controllers/book/Collection'
-import GenCon from '../controllers/API/Generate'
-import ChckCon from '../controllers/API/Check'
+import GenCon from '../controllers/api/Generate'
+import ChckCon from '../controllers/api/Check'
 import OutCon from '../controllers/auth/SignOut'
 
 const router = express.Router({

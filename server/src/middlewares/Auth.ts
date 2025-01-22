@@ -20,8 +20,12 @@ const Auth = async (req: Request, res: Response) => {
             })
             if (!user) res.status(401).json()
             else res.status(200).json({ user_id: user.user_id, photo: user.photo, name: user.name, uname: user.username, email: user.email })
-        } catch {
-            res.status(401).json()
+        } catch (e) {
+            if (e instanceof Error) {
+                res.status(500).json({ e: e.message })
+            } else {
+                res.status(500).json()
+            }
         }
     }
 }
