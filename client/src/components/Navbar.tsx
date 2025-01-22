@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setActive, setIsDropdownOpen } from './redux/NavbarAction'
 import { RootState } from './redux/Store'
-import _debounce from 'lodash/debounce'
 import axios, { AxiosError } from 'axios'
 
 interface Props {
