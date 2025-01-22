@@ -4,7 +4,7 @@ import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 
 const userRepo = AppDataSource.getRepository(User)
-const defSvg = (name: string) => {
+export const defSvg = (name: string) => {
     const initials = name.split(' ').map(w => w.charAt(0).toUpperCase()).slice(0, 5).join('')
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
         <circle cx="256" cy="256" r="256" fill="#000"/>
@@ -12,7 +12,7 @@ const defSvg = (name: string) => {
     </svg>`
     return Buffer.from(svg).toString('base64')
 }
-const valName = (name: string) => {
+export const valName = (name: string) => {
     if (!name) {
         return "Name can't be empty!"
     } else if (name.length >= 75) {
@@ -20,12 +20,12 @@ const valName = (name: string) => {
     }
     return
 }
-const frmtName = (name: string) => {
+export const frmtName = (name: string) => {
     const nameParts = name.split(' ')
     const cap = nameParts.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
     return name = cap.join(' ')
 }
-const valUname = async (uname: string) => {
+export const valUname = async (uname: string) => {
     if (!uname) {
         return "Username can't be empty!"
     } else if (!/^[\w\d]+$/.test(uname)) {
@@ -37,10 +37,10 @@ const valUname = async (uname: string) => {
     }
     return
 }
-const frmtUname = (uname: string) => {
+export const frmtUname = (uname: string) => {
     return uname.toLowerCase()
 }
-const valEmail = async (email: string) => {
+export const valEmail = async (email: string) => {
     if (!email) {
         return "Email can't be empty!"
     } else if (!/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
@@ -50,7 +50,7 @@ const valEmail = async (email: string) => {
     }
     return
 }
-const Hash = async (pass: string) => {
+export const Hash = async (pass: string) => {
     const genSecKey = () => {
         const ranges = [
             { s: 0x0020, e: 0x007E },
@@ -80,13 +80,12 @@ const Hash = async (pass: string) => {
     }
     return await argon2.hash(pass + process.env.PEPPER, opt)
 }
-const verHash = async (pass: string, hashedPass: string) => {
+export const verHash = async (pass: string, hashedPass: string) => {
     return await argon2.verify(hashedPass, pass + process.env.PEPPER)
 }
-const genToken = (id: number, name: string, uname: string, email: string) => {
+export const genToken = (id: number, name: string, uname: string, email: string) => {
     return jwt.sign({ id, name, uname, email }, process.env.SECRET_KEY!, { algorithm: 'HS512', expiresIn: '30d' })
 }
-const verToken = (t: string) => {
+export const verToken = (t: string) => {
     return jwt.verify(t, process.env.SECRET_KEY!) as jwt.JwtPayload
 }
-export { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, verHash, genToken, verToken }
