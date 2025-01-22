@@ -20,12 +20,12 @@ const server = new ApolloServer({
     await server.start()
     app.use(
         '/graphql',
-        cors<cors.CorsRequest>({ origin: 'http://localhost:3000', credentials: true }),
+        cors<cors.CorsRequest>({ origin: `http://${process.env.DOMAIN}:${process.env.CLIENT_PORT}`, credentials: true }),
         express.json(),
         cp(),
         expressMiddleware(server, {
             context: async ({ req }) => ({ req })
         })
     )
-    app.listen(process.env.PORT)
+    httpServer.listen(process.env.PORT)
 })()

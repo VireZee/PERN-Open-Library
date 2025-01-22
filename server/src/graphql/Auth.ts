@@ -6,8 +6,8 @@ import { verToken } from '../utils/Validation'
 
 const Auth = {
     Query: {
-        auth: async (_: null, __: {}, { req }: { req: Request }) => {
-            const t = req.cookies['!']
+        auth: async (_: null, __: {}, context: { req: Request }) => {
+            const t = context.req.cookies['!']
             if (!t) throw new Error('Unauthorized')
             try {
                 const decoded = verToken(t)

@@ -6,8 +6,8 @@ import App from './App.tsx'
 
 const client = new ApolloClient({
     uri: `http://${import.meta.env.VITE_DOMAIN}/graphql`,
-    cache: new InMemoryCache(),
-    credentials: 'include'
+    credentials: 'include',
+    cache: new InMemoryCache()
 })
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ApolloProvider client={client}>
