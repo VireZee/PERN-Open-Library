@@ -1,23 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: boolean | undefined | string | null
+    data: APIData[] | null
 }
 const initialState: State = {
-    online: navigator.onLine,
-    apiKey: undefined
+    data: null
+}
+interface APIData {
+    isbn: string
+    title: string
+    author_name: string
 }
 const APIAction = createSlice({
     name: 'API',
     initialState,
     reducers: {
-        setOnline: (state, { payload }: PayloadAction<boolean>) => {
-            state['online'] = payload
-        },
-        setApiKey: (state, { payload }: PayloadAction<string | null>) => {
-            state['apiKey'] = payload
+        setData: (state, { payload }: PayloadAction<APIData[]>) => {
+            state.data = payload
         }
     }
 })
-export const { setOnline, setApiKey } = APIAction.actions
+export const { setData } = APIAction.actions
 export default APIAction.reducer

@@ -1,11 +1,12 @@
 import AppDataSource from '../DataSource'
 import User from '../models/User'
 import { Request } from 'express'
+// import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { verToken } from '../utils/Validation'
 
 const Auth = {
     Query: {
-        auth: async (_: any, __: any, { req }: { req: Request }) => {
+        auth: async (_: null, __: {}, { req }: { req: Request }) => {
             const t = req.cookies['!']
             if (!t) throw new Error('Unauthorized')
             try {
