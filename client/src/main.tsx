@@ -5,7 +5,7 @@ import store from './components/redux/Store'
 import App from './App.tsx'
 
 const client = new ApolloClient({
-    uri: `http://${import.meta.env.VITE_DOMAIN}/graphql`,
+    uri: `http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/graphql`,
     credentials: 'include',
     cache: new InMemoryCache()
 })

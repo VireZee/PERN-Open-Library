@@ -9,6 +9,5 @@ module.exports = {
                 sans: ["Times New Roman"]
             }
         }
-    },
-    plugins: []
+    }
 }
