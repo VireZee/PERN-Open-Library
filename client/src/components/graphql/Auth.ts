@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const GET_AUTH = gql`
+const AUTH = gql`
     query {
         auth {
             user_id
@@ -11,4 +11,4 @@ const GET_AUTH = gql`
         }
     }
 `
-export default GET_AUTH
+export default AUTH

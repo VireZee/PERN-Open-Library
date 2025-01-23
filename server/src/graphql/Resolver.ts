@@ -1,4 +1,4 @@
-import Auth from './resolvers/auth/Auth'
+import Auth from './resolvers/middlewares/Auth'
 import Login from './resolvers/auth/Login'
 
 const Resolver = {

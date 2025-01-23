@@ -2,10 +2,12 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { change, setShow, setError } from '../redux/LoginAction'
 import { RootState } from '../redux/Store'
-import axios, { AxiosError } from 'axios'
+import { useMutation } from '@apollo/client'
+import LoginGQL from '../graphql/Login'
 
 const Login: React.FC = () => {
     const dispatch = useDispatch()
+    const [login] = useMutation(LoginGQL)
     const logState = useSelector((state: RootState) => state.LOG)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -14,21 +16,21 @@ const Login: React.FC = () => {
     }
     const toggle = () => dispatch(setShow(!logState.show))
     const submit = async (e: React.FormEvent) => {
+        e.preventDefault()
         try {
-            e.preventDefault()
-            await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/login`, logState, { withCredentials: true })
-            location.href = '/'
-        } catch (err) {
-            const XR = err as AxiosError<{ error: string, e: string }>
-            if (XR.response!.data.error) {
-                dispatch(setError(XR.response!.data.error))
-            } else if (XR.response!.data.e) {
-                alert(XR.response!.data.e)
-            } else {
-                alert(XR.response!.statusText)
+            const { data } = await login({
+                variables: {
+                    emailOrUname: logState.emailOrUname,
+                    pass: logState.pass
+                }
+            })
+            if (data.login) {
+                location.href = '/'
             }
+        } catch (err) {
+            console.log(err)
         }
-    }
+    };
     return (
         <div className="bg-black flex justify-center items-center h-screen">
             <div className="bg-white p-8 rounded-lg shadow-2xl w-96">

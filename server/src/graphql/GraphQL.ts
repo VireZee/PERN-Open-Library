@@ -1,7 +1,8 @@
 import Schema from './Schema'
-import Auth from './Resolver'
+import Resolver from './Resolver'
 
 export const typeDefs = Schema
 export const resolvers = {
-    Query: Auth.Query
+    Query: Resolver.Query,
+    Mutation: Resolver.Mutation
 }

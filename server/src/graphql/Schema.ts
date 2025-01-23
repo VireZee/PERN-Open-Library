@@ -9,5 +9,8 @@ const Schema = `#graphql
     type Query {
         auth: Auth
     }
+    type Mutation {
+        login(emailOrUname: String!, pass: String!): Boolean!
+    }
 `
 export default Schema

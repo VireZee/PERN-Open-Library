@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { setActive } from './redux/NavbarAction'
+import { setActive, setIsDropdownOpen } from './redux/NavbarAction'
 import { RootState } from './redux/Store'
 import axios, { AxiosError } from 'axios'
 

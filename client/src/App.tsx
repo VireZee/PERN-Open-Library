@@ -4,7 +4,7 @@ import { setSearch, setUser } from './components/redux/AppAction'
 import { RootState } from './components/redux/Store'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
-import GetAuth from './components/graphql/GetAuth'
+import AuthGQL from './components/graphql/Auth'
 import './styles/App.css'
 import Nav from './components/Navbar'
 import Home from './components/Home'
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     const appState = useSelector((state: RootState) => state.APP)
     const searchHandler = (s: string) => dispatch(setSearch(s))
     const authNav = ['/register', '/login'].includes(window.location.pathname)
-    const { loading, error, data } = useQuery(GetAuth)
+    const { loading, error, data } = useQuery(AuthGQL)
     React.useEffect(() => {
         if (!loading) {
             if (data) {
@@ -30,17 +30,7 @@ const App: React.FC = () => {
             }
             else if (error) dispatch(setUser(null))
         }
-        // (async () => {
-        //     try {
-        //         const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/auth`, { withCredentials: true })
-        //         const photo = Buffer.from(res.data.photo.data).toString('base64')
-        //         dispatch(setUser({ ...res.data, photo }))
-        //     } catch {
-        //         dispatch(setUser(null))
-        //     }
-        // })()
     }, [data, error])
-    console.log(appState.user)
     return (
         <BrowserRouter>
             <header className="fixed w-screen">

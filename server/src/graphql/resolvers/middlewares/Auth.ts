@@ -1,8 +1,8 @@
 import AppDataSource from '../../../DataSource'
 import User from '../../../models/User'
 import { Request } from 'express'
-import { GraphQLError } from 'graphql'
 import { verToken } from '../../../utils/Validation'
+import { GraphQLError } from 'graphql'
 
 const Auth = async (_: null, __: {}, context: { req: Request }) => {
     const t = context.req.cookies['!']
@@ -26,8 +26,12 @@ const Auth = async (_: null, __: {}, context: { req: Request }) => {
             uname: user.username,
             email: user.email
         }
-    } catch {
-        throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
+    } catch (e) {
+        if (e instanceof Error) {
+            throw new GraphQLError(e.message, { extensions: { code: '400' } })
+        } else {
+            throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
+        }
     }
 }
 export default Auth

@@ -24,7 +24,7 @@ const server = new ApolloServer({
         express.json(),
         cp(),
         expressMiddleware(server, {
-            context: async ({ req }) => ({ req })
+            context: async ({ req, res }) => ({ req, res })
         })
     )
     httpServer.listen(process.env.PORT)
