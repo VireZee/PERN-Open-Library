@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setSearch, setUser } from './components/redux/AppAction'
 import { RootState } from './components/redux/Store'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import axios from 'axios'
 import { useQuery } from '@apollo/client'
 import GetAuth from './components/graphql/GetAuth'
 import './styles/App.css'
@@ -22,28 +21,26 @@ const App: React.FC = () => {
     const appState = useSelector((state: RootState) => state.APP)
     const searchHandler = (s: string) => dispatch(setSearch(s))
     const authNav = ['/register', '/login'].includes(window.location.pathname)
-    // const { loading, error, data } = useQuery(GetAuth)
+    const { loading, error, data } = useQuery(GetAuth)
     React.useEffect(() => {
-        // if (!loading) {
-        //     if (data) {
-        //         const { user_id, photo, name, uname, email } = data.auth
-        //         dispatch(setUser({ user_id, photo, name, uname, email }))
-        //         console.log(appState.user)
-        //     }
-        //     else if (error) dispatch(setUser(null))
-        // }
-        (async () => {
-            try {
-                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/auth`, { withCredentials: true })
-                const photo = Buffer.from(res.data.photo.data).toString('base64')
-                console.log(res)
-                // dispatch(setUser({ ...res.data, photo }))
-            } catch {
-                dispatch(setUser(null))
+        if (!loading) {
+            if (data) {
+                const { user_id, photo, name, uname, email } = data.auth
+                dispatch(setUser({ user_id, photo, name, uname, email }))
             }
-        })()
-    }, [])
-    // console.log(appState.user)
+            else if (error) dispatch(setUser(null))
+        }
+        // (async () => {
+        //     try {
+        //         const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/auth`, { withCredentials: true })
+        //         const photo = Buffer.from(res.data.photo.data).toString('base64')
+        //         dispatch(setUser({ ...res.data, photo }))
+        //     } catch {
+        //         dispatch(setUser(null))
+        //     }
+        // })()
+    }, [data, error])
+    console.log(appState.user)
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
