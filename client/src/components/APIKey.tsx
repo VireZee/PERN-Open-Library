@@ -15,7 +15,7 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
     const apiKeyState = useSelector((state: RootState) => state.APIK)
     const check = async () => {
         try {
-            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/check`, {
+            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/check`, {
                 params: { u: isUser!.user_id },
                 withCredentials: true
             })
@@ -31,7 +31,7 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
     }
     const generate = async () => {
         try {
-            const res = await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/generate`, { user_id: isUser!.user_id }, { withCredentials: true })
+            const res = await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/generate`, { user_id: isUser!.user_id }, { withCredentials: true })
             dispatch(setApiKey(res.data.apiKey))
         } catch (err) {
             const XR = err as AxiosError<{ e: string }>

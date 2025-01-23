@@ -21,24 +21,17 @@ const App: React.FC = () => {
     const appState = useSelector((state: RootState) => state.APP)
     const searchHandler = (s: string) => dispatch(setSearch(s))
     const authNav = ['/register', '/login'].includes(window.location.pathname)
-    const { error, data } = useQuery(GetAuth)
+    const { loading, error, data } = useQuery(GetAuth)
     React.useEffect(() => {
-        if (data?.user) {
-            const photo = Buffer.from(data.user.photo).toString('base64')
-            dispatch(setUser({ ...data.user, photo }))
-        } else if (error) {
-            dispatch(setUser(null))
+        if (!loading) {
+            if (data) {
+                const { user_id, photo, name, uname, email } = data.auth
+                dispatch(setUser({ user_id, photo, name, uname, email }))
+                console.log(appState.user)
+            }
+            else if (error) dispatch(setUser(null))
         }
-        // (async () => {
-        //     try {
-        //         const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/auth`, { withCredentials: true })
-        //         const photo = Buffer.from(res.data.photo.data).toString('base64')
-        //         dispatch(setUser({ ...res.data, photo }))
-        //     } catch {
-        //         dispatch(setUser(null))
-        //     }
-        // })()
-    }, [error, data])
+    }, [data, error])
     return (
         <BrowserRouter>
             <header className="fixed w-screen">
@@ -52,7 +45,7 @@ const App: React.FC = () => {
                     <Route path='collection' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='collection?' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='API' element={appState.loadUser ? null : appState.user ? <APIKey isUser={appState.user} /> : <Navigate to='/login' />} />
-                    <Route path="API/:hash" element={<API  />} />
+                    <Route path="API/:hash" element={<API />} />
                     <Route path='register' element={!appState.user ? <Reg /> : <Navigate to='/' />} />
                     <Route path='login' element={!appState.user ? <Log /> : <Navigate to='/' />} />
                     {/* <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} /> */}

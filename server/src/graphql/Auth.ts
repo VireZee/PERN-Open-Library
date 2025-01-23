@@ -1,14 +1,14 @@
 import AppDataSource from '../DataSource'
 import User from '../models/User'
 import { Request } from 'express'
-// import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 import { verToken } from '../utils/Validation'
 
 const Auth = {
     Query: {
         auth: async (_: null, __: {}, context: { req: Request }) => {
             const t = context.req.cookies['!']
-            if (!t) throw new Error('Unauthorized')
+            if (!t) throw new GraphQLError('Unauthorized', { extensions: { code: '401' } })
             try {
                 const decoded = verToken(t)
                 const userRepo = AppDataSource.getRepository(User)
@@ -20,16 +20,16 @@ const Auth = {
                         email: decoded.email
                     }
                 })
-                if (!user) throw new Error('Unauthorized')
+                if (!user) throw new GraphQLError('Unauthorized', { extensions: { code: '401' } })
                 return {
                     user_id: user.user_id,
+                    photo: Buffer.from(user.photo).toString('base64'),
                     name: user.name,
                     uname: user.username,
-                    email: user.email,
-                    photo: user.photo.toString('base64')
+                    email: user.email
                 }
             } catch {
-                throw new Error('Internal Server Error')
+                throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
             }
         }
     }

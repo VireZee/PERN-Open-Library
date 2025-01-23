@@ -12,7 +12,7 @@ const API: React.FC = () => {
     React.useEffect(() => {
         (async () => {
             try {
-                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/${hash}`)
+                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/${hash}`)
                 dispatch(setData(res.data))
             } catch (err) {
                 const XR = err as AxiosError<{ e: string }>

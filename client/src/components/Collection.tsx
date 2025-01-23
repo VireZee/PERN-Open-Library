@@ -30,7 +30,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
                 t: search || title,
                 p: pg || colState.currentPage
             }
-            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/collection`, {
+            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/collection`, {
                 params,
                 withCredentials: true
             })
@@ -57,7 +57,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     }
     const removeCollection = async (isbn: string) => {
         try {
-            await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/remove`, {
+            await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/remove`, {
                 user_id: isUser!.user_id,
                 isbn
             }, { withCredentials: true })

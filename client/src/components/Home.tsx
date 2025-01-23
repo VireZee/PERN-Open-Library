@@ -38,7 +38,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     }
     const fetchStatus = async (isbn: string) => {
         try {
-            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}/API/fetch`, {
+            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/fetch`, {
                 params: { user_id: isUser!.user_id, isbn },
                 withCredentials: true
             })
@@ -57,7 +57,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             location.href = '/login'
         } else if (isUser) {
             try {
-                await axios.post(`http://${import.meta.env.VITE_DOMAIN}/API/add`, {
+                await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/add`, {
                     user_id: isUser.user_id,
                     cover_i,
                     isbn,
