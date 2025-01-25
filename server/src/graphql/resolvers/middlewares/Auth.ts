@@ -27,11 +27,8 @@ const Auth = async (_: null, __: {}, context: { req: Request }) => {
             email: user.email
         }
     } catch (e) {
-        if (e instanceof Error) {
-            throw new GraphQLError(e.message, { extensions: { code: '400' } })
-        } else {
-            throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
-        }
+        if (e instanceof GraphQLError) throw e
+        else throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
     }
 }
 export default Auth

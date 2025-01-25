@@ -14,7 +14,7 @@ const Login = async (_: null, args: { emailOrUname: string, pass: string }, cont
             ]
         })
         const isPasswordValid = await verHash(args.pass, user!.pass)
-        if (!user || !isPasswordValid) throw new GraphQLError('Invalid login credentials!', { extensions: { code: '401' } })
+        if (!user || !isPasswordValid) throw new GraphQLError('Invalid login credentials!', { extensions: { code: '400' } })
         const t = genToken(user.user_id, user.name, user.username, user.email)
         context.res.cookie('!', t, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
@@ -25,11 +25,8 @@ const Login = async (_: null, args: { emailOrUname: string, pass: string }, cont
         })
         return true
     } catch (e) {
-        if (e instanceof Error) {
-            throw new GraphQLError(e.message, { extensions: { code: '400' } })
-        } else {
-            throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
-        }
+        if (e instanceof GraphQLError) throw e
+        else throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
     }
 }
 export default Login
