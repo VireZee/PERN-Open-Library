@@ -10,8 +10,9 @@ const Schema = `#graphql
         auth: Auth
     }
     type Mutation {
-        login(emailOrUname: String!, pass: String!): Boolean!
         register(name: String!, uname: String!, email: String!, pass: String!, rePass: String, show: Boolean!): Boolean!
+        login(emailOrUname: String!, pass: String!): Boolean!
+        logout: Boolean!
     }
 `
 export default Schema

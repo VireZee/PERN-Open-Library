@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow, setError } from '../redux/LoginAction'
 import { useMutation, ApolloError } from '@apollo/client'
-import LoginGQL from '../graphql/Login'
+import LoginGQL from '../graphql/auth/Login'
 
 const Login: React.FC = () => {
     const logState = useSelector((state: RootState) => state.LOG)

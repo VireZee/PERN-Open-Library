@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
 import { RootState } from './redux/Store'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
 import Net from './error/Internet'
@@ -18,8 +18,8 @@ interface URLParams {
     page?: string
 }
 const Collection: React.FC<Props> = ({ isUser, search }) => {
-    const dispatch = useDispatch()
     const colState = useSelector((state: RootState) => state.COL)
+    const dispatch = useDispatch()
     const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const pg = Number(page)
     const fetchCollection = async () => {

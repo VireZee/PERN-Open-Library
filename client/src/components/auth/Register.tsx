@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow, setErrors, Errors } from '../redux/RegisterAction'
 import { useMutation, ApolloError } from '@apollo/client'
-import RegisterGQL from '../graphql/Register'
+import RegisterGQL from '../graphql/auth/Register'
 
 const Register: React.FC = () => {
     const regState = useSelector((state: RootState) => state.REG)

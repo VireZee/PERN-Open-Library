@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setApiKey } from './redux/APIKeyAction'
 import { RootState } from './redux/Store'
+import { setOnline, setApiKey } from './redux/APIKeyAction'
 import axios, { AxiosError } from 'axios'
 import Net from './error/Internet'
 
@@ -11,8 +11,8 @@ interface Props {
     } | null
 }
 const APIKey: React.FC<Props> = ({ isUser }) => {
-    const dispatch = useDispatch()
     const apiKeyState = useSelector((state: RootState) => state.APIK)
+    const dispatch = useDispatch()
     const check = async () => {
         try {
             const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/check`, {

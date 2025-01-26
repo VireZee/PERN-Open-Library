@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
 import { RootState } from './redux/Store'
+import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Load from './Load'
 import Net from './error/Internet'
@@ -19,8 +19,8 @@ interface URLParams {
     page?: string
 }
 const Home: React.FC<Props> = ({ isUser, search }) => {
-    const dispatch = useDispatch()
     const homeState = useSelector((state: RootState) => state.HOME)
+    const dispatch = useDispatch()
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1

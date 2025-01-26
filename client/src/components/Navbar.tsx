@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { setActive, setIsDropdownOpen } from './redux/NavbarAction'
 import { RootState } from './redux/Store'
-import axios, { AxiosError } from 'axios'
+import { setActive, setIsDropdownOpen } from './redux/NavbarAction'
+import { useMutation, ApolloError } from '@apollo/client'
+import LogoutGQL from './graphql/auth/Logout'
 
 interface Props {
     onSearch: (v: string) => void
@@ -17,8 +18,9 @@ interface URLParams {
     isbn?: string
 }
 const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
-    const dispatch = useDispatch()
     const navState = useSelector((state: RootState) => state.NAV)
+    const dispatch = useDispatch()
+    const [logout] = useMutation(LogoutGQL)
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -42,14 +44,15 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
     }
     const handleSignOut = async () => {
         try {
-            await axios.delete(`http://${import.meta.env.VITE_DOMAIN}/API/signout`, { withCredentials: true })
-            location.href = '/'
+            const { data } = await logout()
+            if (data.logout) {
+                location.href = '/'
+            }
         } catch (err) {
-            const XR = err as AxiosError<{ e: string }>
-            if (XR.response!.data.e) {
-                alert(XR.response!.data.e)
+            if (err instanceof ApolloError) {
+                alert(err.message)
             } else {
-                alert(XR.response!.statusText)
+                alert('An unexpected error occurred.')
             }
         }
     }

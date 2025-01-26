@@ -1,5 +1,4 @@
 import express from 'express'
-import AuthMid from '../middlewares/Auth'
 import RegCon from '../controllers/auth/Register'
 import LogCon from '../controllers/auth/Login'
 import FetCon from '../controllers/book/Fetch'
@@ -14,7 +13,6 @@ const router = express.Router({
     caseSensitive: true,
     strict: true
 })
-router.get('/API/auth', AuthMid)
 router.post('/API/register', RegCon)
 router.post('/API/login', LogCon)
 router.get('/API/fetch', FetCon)
