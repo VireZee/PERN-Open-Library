@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow, setError } from '../redux/LoginAction'
-import { useMutation } from '@apollo/client'
+import { useMutation, ApolloError } from '@apollo/client'
 import LoginGQL from '../graphql/Login'
 
 const Login: React.FC = () => {
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
                 location.href = '/'
             }
         } catch (err) {
-            if (err instanceof Error) {
+            if (err instanceof ApolloError) {
                 dispatch(setError(err.message))
             } else {
                 alert('An unexpected error occurred.')

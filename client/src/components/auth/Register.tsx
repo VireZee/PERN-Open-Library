@@ -2,11 +2,13 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow, setErrors, Errors } from '../redux/RegisterAction'
-import axios, { AxiosError } from 'axios'
+import { useMutation, ApolloError } from '@apollo/client'
+import RegisterGQL from '../graphql/Register'
 
 const Register: React.FC = () => {
     const regState = useSelector((state: RootState) => state.REG)
     const dispatch = useDispatch()
+    const [register, { loading }] = useMutation(RegisterGQL)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))
@@ -14,21 +16,27 @@ const Register: React.FC = () => {
     }
     const toggle = () => dispatch(setShow(!regState.show))
     const submit = async (e: React.FormEvent) => {
+        e.preventDefault()
         try {
-            e.preventDefault()
-            await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/register`, {
-                ...regState,
-                rePass: regState.show ? undefined : regState.rePass
-            }, { withCredentials: true })
-            location.href = '/'
+            const { data } = await register({
+                variables: {
+                    name: regState.name,
+                    uname: regState.uname,
+                    email: regState.email,
+                    pass: regState.pass,
+                    rePass: regState.show ? null : regState.rePass,
+                    show: regState.show,
+                }
+            })
+            if (data.register) {
+                location.href = '/'
+            }
         } catch (err) {
-            const XR = err as AxiosError<{ errs: Errors, e: string }>
-            if (XR.response!.data.errs) {
-                dispatch(setErrors(XR.response!.data.errs))
-            } else if (XR.response!.data.e) {
-                alert(XR.response!.data.e)
+            if (err instanceof ApolloError) {
+                const GQLErr = err.cause!.extensions as { errs: Errors }
+                dispatch(setErrors(GQLErr.errs))
             } else {
-                alert(XR.response!.statusText)
+                alert('An unexpected error occurred.')
             }
         }
     }
@@ -115,7 +123,7 @@ const Register: React.FC = () => {
                             {regState.errors.rePass && <p className="text-red-500 text-sm mt-1">{regState.errors.rePass}</p>}
                         </div>
                     )}
-                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md">Register</button>
+                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md" disabled={loading} >{loading ? 'Loading...' : 'Register'}</button>
                 </form>
                 <div className="mt-4 text-sm text-gray-700 text-center">
                     Already have an account? <a href="/login" className="font-medium text-black hover:text-black">Log In</a>
