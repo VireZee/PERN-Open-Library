@@ -26,19 +26,20 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
             onSearch(e.currentTarget.value)
         }
     }
-    // const imgFormat = (base64String: string) => {
-    //     const hexString = Buffer.from(base64String, 'base64').toString('hex').toUpperCase()
-    //     if (Buffer.from(base64String, 'base64').toString('utf-8').trim().startsWith('<svg')) {
-    //         return 'svg+xml'
-    //     } else if (hexString.startsWith('FFD8FF')) {
-    //         return 'jpeg'
-    //     } else if (hexString.startsWith('89504E470D0A1A0A')) {
-    //         return 'png'
-    //     } else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) {
-    //         return 'gif'
-    //     }
-    //     return
-    // }
+    const imgFormat = (base64String: string) => {
+        const decodedString = atob(base64String)
+        const hexString = Array.from(decodedString).map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join('')
+        if (decodedString.trim().startsWith('<svg')) {
+            return 'svg+xml'
+        } else if (hexString.startsWith('FFD8FF')) {
+            return 'jpeg'
+        } else if (hexString.startsWith('89504E470D0A1A0A')) {
+            return 'png'
+        } else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) {
+            return 'gif'
+        }
+        return
+    }
     const handleSignOut = async () => {
         try {
             await axios.delete(`http://${import.meta.env.VITE_DOMAIN}/API/signout`, { withCredentials: true })
@@ -80,7 +81,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
                 {isUser ? (
                     <>
                         <span className="mr-4">{isUser.name}</span>
-                        {/* <img src={`data:image/${imgFormat(isUser.photo)};base64,${isUser.photo}`} alt="Image" className="rounded-full w-12 h-12 cursor-pointer" onClick={() => dispatch(setIsDropdownOpen(!navState.isDropdownOpen))} /> */}
+                        <img src={`data:image/${imgFormat(isUser.photo)};base64,${isUser.photo}`} alt="Image" className="rounded-full w-12 h-12 cursor-pointer" onClick={() => dispatch(setIsDropdownOpen(!navState.isDropdownOpen))} />
                         {navState.isDropdownOpen && (
                             <div className="absolute top-full right-0 mt-2 bg-white text-black shadow-md rounded-md w-32 z-50">
                                 <ul>
