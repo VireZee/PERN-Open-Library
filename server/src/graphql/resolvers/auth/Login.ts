@@ -13,8 +13,7 @@ const Login = async (_: null, args: { emailOrUname: string, pass: string }, cont
                 { username: args.emailOrUname.toLowerCase() }
             ]
         })
-        const isPasswordValid = await verHash(args.pass, user!.pass)
-        if (!user || !isPasswordValid) throw new GraphQLError('Invalid login credentials!', { extensions: { code: '400' } })
+        if (!user || !(await verHash(args.pass, user!.pass))) throw new GraphQLError('Invalid login credentials!', { extensions: { code: '400' } })
         const t = genToken(user.user_id, user.name, user.username, user.email)
         context.res.cookie('!', t, {
             maxAge: 1000 * 60 * 60 * 24 * 30,

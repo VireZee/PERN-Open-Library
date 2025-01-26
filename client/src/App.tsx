@@ -1,8 +1,8 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { setSearch, setUser } from './components/redux/AppAction'
-import { RootState } from './components/redux/Store'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from './components/redux/Store'
+import { setSearch, setUser } from './components/redux/AppAction'
 import { useQuery } from '@apollo/client'
 import AuthGQL from './components/graphql/Auth'
 import './styles/App.css'
@@ -17,11 +17,11 @@ import API from './components/API'
 import NF from './components/error/NotFound'
 
 const App: React.FC = () => {
-    const dispatch = useDispatch()
     const appState = useSelector((state: RootState) => state.APP)
+    const dispatch = useDispatch()
+    const { loading, error, data } = useQuery(AuthGQL)
     const searchHandler = (s: string) => dispatch(setSearch(s))
     const authNav = ['/register', '/login'].includes(window.location.pathname)
-    const { loading, error, data } = useQuery(AuthGQL)
     React.useEffect(() => {
         if (!loading) {
             if (data) {

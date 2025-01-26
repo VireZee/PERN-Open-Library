@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { change, setShow, setErrors, Errors } from '../redux/RegisterAction'
 import { RootState } from '../redux/Store'
+import { change, setShow, setErrors, Errors } from '../redux/RegisterAction'
 import axios, { AxiosError } from 'axios'
 
 const Register: React.FC = () => {
-    const dispatch = useDispatch()
     const regState = useSelector((state: RootState) => state.REG)
+    const dispatch = useDispatch()
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))

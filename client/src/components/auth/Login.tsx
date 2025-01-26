@@ -1,14 +1,14 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { change, setShow, setError } from '../redux/LoginAction'
 import { RootState } from '../redux/Store'
+import { change, setShow, setError } from '../redux/LoginAction'
 import { useMutation } from '@apollo/client'
 import LoginGQL from '../graphql/Login'
 
 const Login: React.FC = () => {
-    const dispatch = useDispatch()
-    const [login] = useMutation(LoginGQL)
     const logState = useSelector((state: RootState) => state.LOG)
+    const dispatch = useDispatch()
+    const [login, { loading }] = useMutation(LoginGQL)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))
@@ -28,9 +28,13 @@ const Login: React.FC = () => {
                 location.href = '/'
             }
         } catch (err) {
-            console.log(err)
+            if (err instanceof Error) {
+                dispatch(setError(err.message))
+            } else {
+                alert('An unexpected error occurred.')
+            }
         }
-    };
+    }
     return (
         <div className="bg-black flex justify-center items-center h-screen">
             <div className="bg-white p-8 rounded-lg shadow-2xl w-96">
@@ -81,7 +85,7 @@ const Login: React.FC = () => {
                     {/* <div className="flex justify-center mb-4">
                         <a href="fp" className="font-medium text-black hover:text-black">Forgot your password?</a>
                     </div> */}
-                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md">Login</button>
+                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md" disabled={loading} >{loading ? 'Loading...' : 'Login'}</button>
                 </form>
                 <div className="mt-4 text-sm text-gray-700 text-center">
                     Don't have an account? <a href="/register" className="font-medium text-black hover:text-black">Register</a>
