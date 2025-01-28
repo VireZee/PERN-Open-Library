@@ -24,45 +24,30 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            onSearch(e.currentTarget.value)
-        }
+        if (e.key === 'Enter') onSearch(e.currentTarget.value)
     }
     const imgFormat = (base64String: string) => {
         const decodedString = atob(base64String)
         const hexString = Array.from(decodedString).map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join('')
-        if (decodedString.trim().startsWith('<svg')) {
-            return 'svg+xml'
-        } else if (hexString.startsWith('FFD8FF')) {
-            return 'jpeg'
-        } else if (hexString.startsWith('89504E470D0A1A0A')) {
-            return 'png'
-        } else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) {
-            return 'gif'
-        }
+        if (decodedString.trim().startsWith('<svg')) return 'svg+xml'
+        else if (hexString.startsWith('FFD8FF')) return 'jpeg'
+        else if (hexString.startsWith('89504E470D0A1A0A')) return 'png'
+        else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) return 'gif'
         return
     }
-    const handleSignOut = async () => {
+    const handleLogOut = async () => {
         try {
             const { data } = await logout()
-            if (data.logout) {
-                location.href = '/'
-            }
+            if (data.logout) location.href = '/'
         } catch (err) {
-            if (err instanceof ApolloError) {
-                alert(err.message)
-            } else {
-                alert('An unexpected error occurred.')
-            }
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
         }
     }
     React.useEffect(() => {
         const path = window.location.pathname
-        if (path === '/collection') {
-            dispatch(setActive('col'))
-        } else if (path === '/API') {
-            dispatch(setActive('api'))
-        }
+        if (path === '/collection') dispatch(setActive('col'))
+        else if (path === '/API') dispatch(setActive('api'))
     }, [])
     return (
         <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-[#282828]">
@@ -89,7 +74,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
                             <div className="absolute top-full right-0 mt-2 bg-white text-black shadow-md rounded-md w-32 z-50">
                                 <ul>
                                     <li className="p-2 hover:bg-gray-200 cursor-pointer">Settings</li>
-                                    <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={handleSignOut}>Sign Out</li>
+                                    <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={handleLogOut}>Log Out</li>
                                 </ul>
                             </div>
                         )}

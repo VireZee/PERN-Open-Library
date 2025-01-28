@@ -28,16 +28,12 @@ const Register: React.FC = () => {
                     show: regState.show,
                 }
             })
-            if (data.register) {
-                location.href = '/'
-            }
+            if (data.register) location.href = '/'
         } catch (err) {
             if (err instanceof ApolloError) {
                 const GQLErr = err.cause!.extensions as { errs: Errors }
                 dispatch(setErrors(GQLErr.errs))
-            } else {
-                alert('An unexpected error occurred.')
-            }
+            } else alert('An unexpected error occurred.')
         }
     }
     return (

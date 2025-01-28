@@ -24,15 +24,10 @@ const Login: React.FC = () => {
                     pass: logState.pass
                 }
             })
-            if (data.login) {
-                location.href = '/'
-            }
+            if (data.login) location.href = '/'
         } catch (err) {
-            if (err instanceof ApolloError) {
-                dispatch(setError(err.message))
-            } else {
-                alert('An unexpected error occurred.')
-            }
+            if (err instanceof ApolloError) dispatch(setError(err.message))
+            else alert('An unexpected error occurred.')
         }
     }
     return (

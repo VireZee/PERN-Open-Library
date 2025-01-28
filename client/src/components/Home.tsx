@@ -2,7 +2,9 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { useQuery, useMutation, ApolloError } from '@apollo/client'
+import { FETCH, ADD } from './graphql/book/Home'
 import Load from './Load'
 import Net from './error/Internet'
 import NB from './error/NoBooks'
@@ -21,57 +23,51 @@ interface URLParams {
 const Home: React.FC<Props> = ({ isUser, search }) => {
     const homeState = useSelector((state: RootState) => state.HOME)
     const dispatch = useDispatch()
+    const [add] = useMutation(ADD)
+    const { refetch } = useQuery(FETCH, {
+        skip: true
+    })
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
     const getValidIsbn = (isbn: string[] | string) => {
-        if (Array.isArray(isbn)) {
-            return isbn.find(isbn => isbn.length === 13) || isbn[0]
-        }
+        if (Array.isArray(isbn)) return isbn.find(isbn => isbn.length === 13) || isbn[0]
         return isbn
     }
     const getValidAuthor = (author: string[] | string) => {
-        if (Array.isArray(author)) {
-            return author.join(', ')
-        }
+        if (Array.isArray(author)) return author.join(', ')
         return author || 'Unknown'
     }
-    const fetchStatus = async (isbn: string) => {
+    const fetchStatus = async (isbnParam: string) => {
         try {
-            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/fetch`, {
-                params: { user_id: isUser!.user_id, isbn },
-                withCredentials: true
+            const res = await refetch({
+                user_id: isUser!.user_id,
+                isbn: isbnParam
             })
-            dispatch(setStatus(res.data))
+            const { isbn, added } = res.data.fetch
+            dispatch(setStatus({ isbn, added }))
         } catch (err) {
-            const XR = err as AxiosError<{ e: string }>
-            if (XR.response!.data.e) {
-                alert('Fetch Error: ' + XR.response!.data.e)
-            } else {
-                alert('Fetch Error: ' + XR.response!.statusText)
-            }
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
         }
     }
     const addToCollection = async (cover_i: string, isbn: string, title: string, author_name: string) => {
-        if (!isUser) {
-            location.href = '/login'
-        } else if (isUser) {
+        if (!isUser) location.href = '/login'
+        else if (isUser) {
             try {
-                await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/add`, {
-                    user_id: isUser.user_id,
-                    cover_i,
-                    isbn,
-                    title,
-                    author_name
-                }, { withCredentials: true })
-                fetchStatus(isbn)
+                const { data } = await add({
+                    variables: {
+                        user_id: isUser.user_id,
+                        cover_i,
+                        isbn,
+                        title,
+                        author_name
+                    }
+                })
+                if (data.add) fetchStatus(isbn)
             } catch (err) {
-                const XR = err as AxiosError<{ e: string }>
-                if (XR.response!.data.e) {
-                    alert(XR.response!.data.e)
-                } else {
-                    alert(XR.response!.statusText)
-                }
+                if (err instanceof ApolloError) alert(err.message)
+                else alert('An unexpected error occurred.')
             }
         }
     }
@@ -105,9 +101,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             addPages(pg - 6, pg)
         }
         const handleClick = (page: number) => {
-            if (typeof page === 'number') {
-                dispatch(setCurrentPage(page))
-            }
+            if (typeof page === 'number') dispatch(setCurrentPage(page))
         }
         return (
             <>
@@ -139,9 +133,8 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             }
             const booksData = (res: AxiosResponse) => {
                 const { numFound, docs } = res.data
-                if (numFound === 0) {
-                    dispatch(setBooks([]))
-                } else {
+                if (numFound === 0) dispatch(setBooks([]))
+                else {
                     dispatch(setBooks(docs))
                     dispatch(setTotalPages(Math.ceil(numFound / 100)))
                 }
@@ -168,9 +161,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     useEffect(() => {
         if (isUser && isUser.user_id) {
             homeState.books.forEach((book: Books) => {
-                if (book.isbn) {
-                    fetchStatus(getValidIsbn(book.isbn))
-                }
+                if (book.isbn) fetchStatus(getValidIsbn(book.isbn))
             })
         }
     }, [homeState.books])
