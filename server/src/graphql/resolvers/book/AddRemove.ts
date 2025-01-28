@@ -5,23 +5,24 @@ import { GraphQLError } from 'graphql'
 const AddRemove = async (_: null, args: { user_id: number, cover_i: string, isbn: string, title: string, author_name: string }) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
+        const { user_id, cover_i, isbn, title, author_name } = args
         const bookCollection = await colRepo.findOne({
             where: {
-                user_id: args.user_id,
-                cover_i: args.cover_i,
-                isbn: args.isbn,
-                title: args.title,
-                author_name: args.author_name
+                user_id,
+                cover_i,
+                isbn,
+                title,
+                author_name
             }
         })
         if (bookCollection) await colRepo.delete(bookCollection)
         else {
             const newBookCollection = colRepo.create({
-                user_id: args.user_id,
-                cover_i: args.cover_i,
-                isbn: args.isbn,
-                title: args.title,
-                author_name: args.author_name,
+                user_id,
+                cover_i,
+                isbn,
+                title,
+                author_name,
                 created: new Date()
             })
             await colRepo.save(newBookCollection)

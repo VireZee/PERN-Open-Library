@@ -2,7 +2,8 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import { useQuery, useMutation, ApolloQueryResult, ApolloError } from '@apollo/client'
+import { FETCH, REMOVE } from './graphql/book/Collection'
 import Load from './Load'
 import Net from './error/Internet'
 import NB from './error/NoBooks'
@@ -20,55 +21,46 @@ interface URLParams {
 const Collection: React.FC<Props> = ({ isUser, search }) => {
     const colState = useSelector((state: RootState) => state.COL)
     const dispatch = useDispatch()
+    const { refetch } = useQuery(FETCH, { skip: true })
+    const [remove] = useMutation(REMOVE)
     const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const pg = Number(page)
     const fetchCollection = async () => {
         try {
             dispatch(setLoad(true))
-            const params = {
-                u: isUser!.user_id,
-                t: search || title,
-                p: pg || colState.currentPage
-            }
-            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/collection`, {
-                params,
-                withCredentials: true
+            const res = await refetch({
+                user_id: isUser!.user_id,
+                search: search || title,
+                page: pg || colState.currentPage
             })
             collectionData(res)
         } catch (err) {
-            const XR = err as AxiosError<{ e: string }>
-            if (XR.response!.data.e) {
-                alert('Fetch Error: ' + XR.response!.data.e)
-            } else {
-                alert('Fetch Error: ' + XR.response!.statusText)
-            }
+            if (err instanceof ApolloError) alert('Fetch Error: ' + err.message)
+            else alert('Fetch Error: An unexpected error occurred.')
         } finally {
             dispatch(setLoad(false))
         }
     }
-    const collectionData = (res: AxiosResponse) => {
-        const { found, collection, totalCollection } = res.data
-        if (found === 0) {
-            dispatch(setBooks([]))
-        } else {
+    const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: string; isbn: string; title: string; author_name: string; }[]; totalCollection: number } }>) => {
+        const { found, collection, totalCollection } = res.data.collection
+        if (found === 0) dispatch(setBooks([]))
+        else {
             dispatch(setBooks(collection))
             dispatch(setTotalPages(Math.ceil(totalCollection / 9)))
         }
     }
     const removeCollection = async (isbn: string) => {
         try {
-            await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/remove`, {
-                user_id: isUser!.user_id,
-                isbn
-            }, { withCredentials: true })
-            fetchCollection()
+            const { data } = await remove({
+                variables: {
+                    user_id: isUser!.user_id,
+                    isbn
+                }
+            })
+            if (data.remove) fetchCollection()
         } catch (err) {
-            const XR = err as AxiosError<{ e: string }>
-            if (XR.response!.data.e) {
-                alert(XR.response!.data.e)
-            } else {
-                alert(XR.response!.statusText)
-            }
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
         }
     }
     const pageNumbers = () => {
@@ -101,9 +93,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             addPages(pg - 6, pg)
         }
         const handleClick = (page: number) => {
-            if (typeof page === 'number') {
-                dispatch(setCurrentPage(page))
-            }
+            if (typeof page === 'number') dispatch(setCurrentPage(page))
         }
         return (
             <>

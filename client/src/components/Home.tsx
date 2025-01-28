@@ -23,10 +23,8 @@ interface URLParams {
 const Home: React.FC<Props> = ({ isUser, search }) => {
     const homeState = useSelector((state: RootState) => state.HOME)
     const dispatch = useDispatch()
+    const { refetch } = useQuery(FETCH, { skip: true })
     const [add] = useMutation(ADD)
-    const { refetch } = useQuery(FETCH, {
-        skip: true
-    })
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
@@ -47,8 +45,8 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             const { isbn, added } = res.data.fetch
             dispatch(setStatus({ isbn, added }))
         } catch (err) {
-            if (err instanceof ApolloError) alert(err.message)
-            else alert('An unexpected error occurred.')
+            if (err instanceof ApolloError) alert('Fetch Error: ' + err.message)
+            else alert('Fetch Error: An unexpected error occurred.')
         }
     }
     const addToCollection = async (cover_i: string, isbn: string, title: string, author_name: string) => {

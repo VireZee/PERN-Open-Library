@@ -10,12 +10,28 @@ const Schema = `#graphql
         isbn: String!
         added: Boolean!
     }
+    type Book {
+        cover_i: String!
+        isbn: String!
+        title: String!
+        author_name: String!
+    }
+    type Collection {
+        found: Int!
+        collection: [Book!]!
+        totalCollection: Int!
+    }
     type Query {
-        auth: Auth
+        auth: Auth!
         fetch(
             user_id: ID!
             isbn: String!
-        ): Fetch
+        ): Fetch!
+        collection(
+            user_id: ID!
+            search: String
+            page: Int!
+        ): Collection!
     }
     type Mutation {
         register(
@@ -32,10 +48,14 @@ const Schema = `#graphql
         ): Boolean!
         add(
             user_id: ID!
-            cover_i: String!
+            cover_i: Int!
             isbn: String!
             title: String!
             author_name: String!
+        ): Boolean!
+        remove(
+            user_id: ID!
+            isbn: String!
         ): Boolean!
         logout: Boolean!
     }

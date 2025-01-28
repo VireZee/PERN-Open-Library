@@ -9,7 +9,7 @@ export const FETCH = gql`
     }
 `
 export const ADD = gql`
-    mutation($user_id: ID!, $cover_i: String!, $isbn: String!, $title: String!, $author_name: String!) {
+    mutation($user_id: ID!, $cover_i: Int!, $isbn: String!, $title: String!, $author_name: String!) {
         add(user_id: $user_id, cover_i: $cover_i, isbn: $isbn, title: $title, author_name: $author_name)
     }
 `

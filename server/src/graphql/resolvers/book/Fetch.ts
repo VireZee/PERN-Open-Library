@@ -5,17 +5,19 @@ import { GraphQLError } from 'graphql'
 const Fetch = async (_: null, args: { user_id: number, isbn: string }) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
+        const { user_id, isbn } = args
         const bookCollection = await colRepo.findOne({
             where: {
-                user_id: args.user_id,
-                isbn: args.isbn
+                user_id,
+                isbn
             }
         })
         return {
-            isbn: args.isbn,
+            isbn,
             added: !!bookCollection
         }
-    } catch {
+    } catch (e) {
+        if (e instanceof GraphQLError) throw e
         throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
     }
 }
