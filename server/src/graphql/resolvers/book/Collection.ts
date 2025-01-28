@@ -3,7 +3,7 @@ import AppDataSource from '../../../DataSource'
 import Col from '../../../models/Collection'
 import { GraphQLError } from 'graphql'
 
-const Collection = async (_: null, args: { user_id: number, search?: string, page: number }) => {
+const Collection = async (_: null, args: { user_id: number, search: string, page: number }) => {
     try {
         const colRepo = AppDataSource.getRepository(Col)
         const { user_id, search = '', page } = args
@@ -34,6 +34,5 @@ const Collection = async (_: null, args: { user_id: number, search?: string, pag
         if (e instanceof GraphQLError) throw e
         else throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
     }
-
 }
 export default Collection

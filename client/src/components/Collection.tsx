@@ -41,11 +41,12 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
             dispatch(setLoad(false))
         }
     }
-    const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: string; isbn: string; title: string; author_name: string; }[]; totalCollection: number } }>) => {
+    const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: string; isbn: string; title: string; author_name: string; __typename: string }[]; totalCollection: number } }>) => {
         const { found, collection, totalCollection } = res.data.collection
+        const formattedCollection = collection.map(({ __typename, ...rest }) => rest)
         if (found === 0) dispatch(setBooks([]))
         else {
-            dispatch(setBooks(collection))
+            dispatch(setBooks(formattedCollection))
             dispatch(setTotalPages(Math.ceil(totalCollection / 9)))
         }
     }
