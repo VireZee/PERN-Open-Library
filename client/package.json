@@ -7,8 +7,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@apollo/client": "^3.12.7",
-    "@reduxjs/toolkit": "^2.5.0",
+    "@apollo/client": "^3.12.8",
+    "@reduxjs/toolkit": "^2.5.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
