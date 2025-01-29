@@ -1,9 +1,9 @@
 import React from 'react'
+import { useQuery, useMutation, ApolloQueryResult, ApolloError } from '@apollo/client'
+import { FETCH, REMOVE } from './graphql/book/Collection'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages } from './redux/CollectionAction'
-import { useQuery, useMutation, ApolloQueryResult, ApolloError } from '@apollo/client'
-import { FETCH, REMOVE } from './graphql/book/Collection'
 import Load from './Load'
 import Net from './error/Internet'
 import NB from './error/NoBooks'
@@ -19,10 +19,10 @@ interface URLParams {
     page?: string
 }
 const Collection: React.FC<Props> = ({ isUser, search }) => {
-    const colState = useSelector((state: RootState) => state.COL)
-    const dispatch = useDispatch()
     const { refetch } = useQuery(FETCH, { skip: true })
     const [remove] = useMutation(REMOVE)
+    const dispatch = useDispatch()
+    const colState = useSelector((state: RootState) => state.COL)
     const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const pg = Number(page)
     const fetchCollection = async () => {
@@ -43,10 +43,9 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     }
     const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: string; isbn: string; title: string; author_name: string; __typename: string }[]; totalCollection: number } }>) => {
         const { found, collection, totalCollection } = res.data.collection
-        const formattedCollection = collection.map(({ __typename, ...rest }) => rest)
         if (found === 0) dispatch(setBooks([]))
         else {
-            dispatch(setBooks(formattedCollection))
+            dispatch(setBooks(collection))
             dispatch(setTotalPages(Math.ceil(totalCollection / 9)))
         }
     }

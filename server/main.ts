@@ -4,9 +4,9 @@ import http from 'http'
 import cors from 'cors'
 import cp from 'cookie-parser'
 import { ApolloServer } from '@apollo/server'
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { expressMiddleware } from '@apollo/server/express4'
 import { typeDefs, resolvers } from './src/graphql/GraphQL'
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 
 AppDataSource.initialize()
 const app = express()
@@ -19,7 +19,7 @@ const server = new ApolloServer({
 (async () => {
     await server.start()
     app.use(
-        '/graphql',
+        '/gql',
         cors<cors.CorsRequest>({ origin: `http://${process.env.DOMAIN}:${process.env.CLIENT_PORT}`, credentials: true }),
         express.json(),
         cp(),

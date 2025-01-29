@@ -1,14 +1,14 @@
 import React from 'react'
+import { useMutation, ApolloError } from '@apollo/client'
+import RegisterGQL from '../graphql/auth/Register'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow, setErrors, Errors } from '../redux/RegisterAction'
-import { useMutation, ApolloError } from '@apollo/client'
-import RegisterGQL from '../graphql/auth/Register'
 
 const Register: React.FC = () => {
-    const regState = useSelector((state: RootState) => state.REG)
-    const dispatch = useDispatch()
     const [register, { loading }] = useMutation(RegisterGQL)
+    const dispatch = useDispatch()
+    const regState = useSelector((state: RootState) => state.REG)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))

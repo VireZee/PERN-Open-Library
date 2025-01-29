@@ -17,7 +17,7 @@ const Register = async (_: null, args: { name: string; uname: string; email: str
         if (emailErr) errs.email = emailErr
         if (!pass) errs.pass = "Password can't be empty!"
         if (!show && pass !== rePass) errs.rePass = "Password do not match!"
-        if (Object.keys(errs).length > 0) throw new GraphQLError('Unprocessable Content', { extensions: { code: '422', errs } })
+        if (Object.keys(errs).length > 0) throw new GraphQLError('Unprocessable Content', { extensions: { errs, code: '422' } })
         const newUser = userRepo.create({
             photo: Buffer.from(defSvg(name), 'base64'),
             name: frmtName(name),

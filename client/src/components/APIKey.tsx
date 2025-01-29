@@ -1,4 +1,6 @@
 import React from 'react'
+import { useQuery } from '@apollo/client'
+import CheckGQL from './graphql/api/Check'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setApiKey } from './redux/APIKeyAction'
@@ -11,23 +13,13 @@ interface Props {
     } | null
 }
 const APIKey: React.FC<Props> = ({ isUser }) => {
-    const apiKeyState = useSelector((state: RootState) => state.APIK)
+    const { loading, data, error } = useQuery(CheckGQL, { variables: { isUser: isUser!.user_id } })
+    console.log(isUser!.user_id)
     const dispatch = useDispatch()
+    const apiKeyState = useSelector((state: RootState) => state.APIK)
     const check = async () => {
-        try {
-            const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/check`, {
-                params: { u: isUser!.user_id },
-                withCredentials: true
-            })
-            dispatch(setApiKey(res.data.apiKey))
-        } catch (err) {
-            const XR = err as AxiosError<{ e: string }>
-            if (XR.response!.data.e) {
-                alert('Check Error: ' + XR.response!.data.e)
-            } else {
-                alert('Check Error: ' + XR.response!.statusText)
-            }
-        }
+        if (!loading && data) dispatch(setApiKey(data.checkApiKey))
+        else if (error) alert(error)
     }
     const generate = async () => {
         try {
@@ -51,7 +43,7 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
-    }, [apiKeyState.online, apiKeyState.apiKey])
+    }, [apiKeyState.online, data, error])
     return (
         <>
             {apiKeyState.online ? (

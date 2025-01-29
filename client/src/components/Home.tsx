@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
+import { useQuery, useMutation, ApolloError } from '@apollo/client'
+import { FETCH, ADD } from './graphql/book/Home'
+import axios, { AxiosResponse } from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
-import axios, { AxiosResponse } from 'axios'
-import { useQuery, useMutation, ApolloError } from '@apollo/client'
-import { FETCH, ADD } from './graphql/book/Home'
 import Load from './Load'
 import Net from './error/Internet'
 import NB from './error/NoBooks'
@@ -21,10 +21,10 @@ interface URLParams {
     page?: string
 }
 const Home: React.FC<Props> = ({ isUser, search }) => {
-    const homeState = useSelector((state: RootState) => state.HOME)
-    const dispatch = useDispatch()
     const { refetch } = useQuery(FETCH, { skip: true })
     const [add] = useMutation(ADD)
+    const dispatch = useDispatch()
+    const homeState = useSelector((state: RootState) => state.HOME)
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
@@ -42,8 +42,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                 user_id: isUser!.user_id,
                 isbn: isbnParam
             })
-            const { isbn, added } = res.data.fetch
-            dispatch(setStatus({ isbn, added }))
+            dispatch(setStatus(res.data.fetch))
         } catch (err) {
             if (err instanceof ApolloError) alert('Fetch Error: ' + err.message)
             else alert('Fetch Error: An unexpected error occurred.')

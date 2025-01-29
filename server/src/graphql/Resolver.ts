@@ -1,16 +1,18 @@
-import Auth from './resolvers/middlewares/Auth'
-import Register from './resolvers/auth/Register'
-import Login from './resolvers/auth/Login'
-import Fetch from './resolvers/book/Fetch'
-import Collection from './resolvers/book/Collection'
-import AddRemove from './resolvers/book/AddRemove'
-import Logout from './resolvers/auth/Logout'
+import Auth from './resolver/middleware/Auth'
+import Register from './resolver/auth/Register'
+import Login from './resolver/auth/Login'
+import Fetch from './resolver/book/Fetch'
+import Collection from './resolver/book/Collection'
+import CheckAPIKey from './resolver/api/Check'
+import AddRemove from './resolver/book/AddRemove'
+import Logout from './resolver/auth/Logout'
 
 const Resolver = {
     Query: {
         auth: Auth,
         fetch: Fetch,
-        collection: Collection
+        collection: Collection,
+        checkApiKey: CheckAPIKey
     },
     Mutation: {
         register: Register,

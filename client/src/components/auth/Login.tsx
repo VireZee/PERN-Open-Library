@@ -1,14 +1,14 @@
 import React from 'react'
+import { useMutation, ApolloError } from '@apollo/client'
+import LoginGQL from '../graphql/auth/Login'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow, setError } from '../redux/LoginAction'
-import { useMutation, ApolloError } from '@apollo/client'
-import LoginGQL from '../graphql/auth/Login'
 
 const Login: React.FC = () => {
-    const logState = useSelector((state: RootState) => state.LOG)
-    const dispatch = useDispatch()
     const [login, { loading }] = useMutation(LoginGQL)
+    const dispatch = useDispatch()
+    const logState = useSelector((state: RootState) => state.LOG)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))

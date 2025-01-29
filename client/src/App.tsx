@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import AuthGQL from './components/graphql/auth/Auth'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './components/redux/Store'
 import { setSearch, setUser } from './components/redux/AppAction'
-import { useQuery } from '@apollo/client'
-import AuthGQL from './components/graphql/auth/Auth'
 import './styles/App.css'
 import Nav from './components/Navbar'
 import Home from './components/Home'
@@ -17,17 +17,14 @@ import API from './components/API'
 import NF from './components/error/NotFound'
 
 const App: React.FC = () => {
-    const appState = useSelector((state: RootState) => state.APP)
+    const { loading, data, error } = useQuery(AuthGQL)
     const dispatch = useDispatch()
-    const { loading, error, data } = useQuery(AuthGQL)
+    const appState = useSelector((state: RootState) => state.APP)
     const searchHandler = (s: string) => dispatch(setSearch(s))
     const authNav = ['/register', '/login'].includes(window.location.pathname)
     React.useEffect(() => {
         if (!loading) {
-            if (data) {
-                const { user_id, photo, name, uname, email } = data.auth
-                dispatch(setUser({ user_id, photo, name, uname, email }))
-            }
+            if (data) dispatch(setUser(data.auth))
             else if (error) dispatch(setUser(null))
         }
     }, [data, error])
