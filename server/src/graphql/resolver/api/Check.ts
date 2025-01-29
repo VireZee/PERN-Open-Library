@@ -6,10 +6,11 @@ const Check = async (_: null, args: { user_id: number }) => {
     try {
         const userRepo = AppDataSource.getRepository(User)
         const { user_id } = args
+        console.log(user_id)
         const user = await userRepo.findOne({
             where: { user_id }
         })
-        return user!.api_key ? user!.api_key.toString('hex') : null
+        return user?.api_key ? user.api_key.toString('hex') : null
     } catch (e) {
         if (e instanceof GraphQLError) throw e
         else throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })

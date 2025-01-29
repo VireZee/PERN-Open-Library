@@ -13,8 +13,7 @@ interface Props {
     } | null
 }
 const APIKey: React.FC<Props> = ({ isUser }) => {
-    const { loading, data, error } = useQuery(CheckGQL, { variables: { isUser: isUser!.user_id } })
-    console.log(isUser!.user_id)
+    const { loading, data, error } = useQuery(CheckGQL, { variables: { user_id: isUser!.user_id } })
     const dispatch = useDispatch()
     const apiKeyState = useSelector((state: RootState) => state.APIK)
     const check = async () => {
