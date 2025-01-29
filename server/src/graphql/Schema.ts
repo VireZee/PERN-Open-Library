@@ -32,7 +32,7 @@ const Schema = `#graphql
             search: String
             page: Int!
         ): Collection!
-        checkApiKey(user_id: ID!): String
+        check(user_id: ID!): String
     }
     type Mutation {
         register(
@@ -58,6 +58,7 @@ const Schema = `#graphql
             user_id: ID!
             isbn: String!
         ): Boolean!
+        generate(user_id: ID!) : String!
         logout: Boolean!
     }
 `

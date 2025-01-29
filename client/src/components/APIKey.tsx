@@ -1,10 +1,10 @@
 import React from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation, ApolloError } from '@apollo/client'
 import CheckGQL from './graphql/api/Check'
+import GenerateGQL from './graphql/api/Generate'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setApiKey } from './redux/APIKeyAction'
-import axios, { AxiosError } from 'axios'
 import Net from './error/Internet'
 
 interface Props {
@@ -14,23 +14,24 @@ interface Props {
 }
 const APIKey: React.FC<Props> = ({ isUser }) => {
     const { loading, data, error } = useQuery(CheckGQL, { variables: { user_id: isUser!.user_id } })
+    const [gen] = useMutation(GenerateGQL)
     const dispatch = useDispatch()
     const apiKeyState = useSelector((state: RootState) => state.APIK)
     const check = async () => {
-        if (!loading && data) dispatch(setApiKey(data.checkApiKey))
+        if (!loading && data) dispatch(setApiKey(data.check))
         else if (error) alert(error)
     }
     const generate = async () => {
         try {
-            const res = await axios.post(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/generate`, { user_id: isUser!.user_id }, { withCredentials: true })
-            dispatch(setApiKey(res.data.apiKey))
+            const { data } = await gen({
+                variables: {
+                    user_id: isUser!.user_id
+                }
+            })
+            if (data) dispatch(setApiKey(data.generate))
         } catch (err) {
-            const XR = err as AxiosError<{ e: string }>
-            if (XR.response!.data.e) {
-                alert(XR.response!.data.e)
-            } else {
-                alert(XR.response!.statusText)
-            }
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
         }
     }
     React.useEffect(() => {
