@@ -18,8 +18,10 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
     const dispatch = useDispatch()
     const apiKeyState = useSelector((state: RootState) => state.APIK)
     const check = async () => {
-        if (!loading && data) dispatch(setApiKey(data.check))
-        else if (error) alert(error)
+        if (!loading) {
+            if (data) dispatch(setApiKey(data.check))
+            else if (error) alert(error)
+        }
     }
     const generate = async () => {
         try {
@@ -49,7 +51,7 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
             {apiKeyState.online ? (
                 <div className="mt-16">
                     {apiKeyState.apiKey !== null ? (
-                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}/API/{apiKeyState.apiKey}</p>
+                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}:3000/API/{apiKeyState.apiKey}</p>
                     ) : (
                         <button
                             onClick={generate}

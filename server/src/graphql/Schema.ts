@@ -21,6 +21,16 @@ const Schema = `#graphql
         collection: [Book!]!
         totalCollection: Int!
     }
+    type Data {
+        user_id: ID!
+        email: String!
+        username: String!
+        books: [Book!]!
+    }
+    type Error {
+        message: String!
+    }
+    union API = Data | Error
     type Query {
         auth: Auth!
         fetch(
@@ -33,6 +43,7 @@ const Schema = `#graphql
             page: Int!
         ): Collection!
         check(user_id: ID!): String
+        api(api_key: String!): API!
     }
     type Mutation {
         register(
@@ -40,7 +51,7 @@ const Schema = `#graphql
             uname: String!
             email: String!
             pass: String!
-            rePass: String
+            rePass: String!
             show: Boolean!
         ): Boolean!
         login(

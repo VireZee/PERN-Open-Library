@@ -1,37 +1,33 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import APIGQL from './graphql/api/API'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
-import { setData } from './redux/APIAction'
-import axios, { AxiosError } from 'axios'
+import { setApi } from './redux/APIAction'
 
 const API: React.FC = () => {
+    const { hash } = useParams<{ hash: string }>()
+    const { loading, data, error } = useQuery(APIGQL, { variables: { api_key: hash } })
     const apiState = useSelector((state: RootState) => state.API)
     const dispatch = useDispatch()
-    const { hash } = useParams<{ hash: string }>()
     React.useEffect(() => {
-        (async () => {
-            try {
-                const res = await axios.get(`http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/API/${hash}`)
-                dispatch(setData(res.data))
-            } catch (err) {
-                const XR = err as AxiosError<{ e: string }>
-                if (XR.response!.data.e) {
-                    alert(XR.response!.data.e)
-                } else {
-                    alert(XR.response!.statusText)
-                }
+        if (!loading) {
+            if (data) {
+                const { __typename, ...api } = data.api
+                dispatch(setApi(api))
             }
-        })()
-    }, [hash])
+            else if (error) { }
+        }
+    }, [data, error])
     return (
-        <div>
-            {apiState.data ? (
-                apiState.data
+        <>
+            {apiState ? (
+                <pre>{JSON.stringify(apiState, null, 2)}</pre>
             ) : (
-                <div>Loading...</div>
+                <>Loading...</>
             )}
-        </div>
+        </>
     )
 }
 export default API

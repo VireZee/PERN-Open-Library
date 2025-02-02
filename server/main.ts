@@ -6,7 +6,7 @@ import cp from 'cookie-parser'
 import { ApolloServer } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { expressMiddleware } from '@apollo/server/express4'
-import { typeDefs, resolvers } from './src/graphql/GraphQL'
+import { typeDefs, resolvers } from './src/graphql/Resolver'
 
 AppDataSource.initialize()
 const app = express()

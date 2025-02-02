@@ -7,9 +7,7 @@ import App from './App.tsx'
 const client = new ApolloClient({
     uri: `http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/gql`,
     credentials: 'include',
-    cache: new InMemoryCache({
-        addTypename: false
-    })
+    cache: new InMemoryCache()
 })
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ApolloProvider client={client}>
