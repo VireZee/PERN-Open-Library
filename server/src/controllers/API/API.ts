@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import AppDataSource from '../../DataSource';
-import User from '../../models/User';
-import Book from '../../models/Collection';
+import AppDataSource from '../../DataSource'
+import User from '../../models/User'
+import Books  from '../../graphql/resolver/api/Books'
 
 const API = async (req: Request, res: Response) => {
     try {
@@ -9,17 +9,15 @@ const API = async (req: Request, res: Response) => {
         const hashBuffer = Buffer.from(hash, 'hex')
         const userRepo = AppDataSource.getRepository(User)
         const user = await userRepo.findOne({ where: { api_key: hashBuffer } })
-        if (!user) {
-            res.status(404).json({ message: 'Invalid API key' })
+        if (!user) res.status(404).json({ message: 'Invalid API Key!' })
+        const books = await Books({ user_id: user!.user_id })
+        const response = {
+            user_id: user!.user_id,
+            email: user!.email,
+            username: user!.username,
+            books
         }
-        const bookRepo = AppDataSource.getRepository(Book)
-        const books = await bookRepo.find({ where: { user_id: user!.user_id } })
-        const result = books.map(book => ({
-            isbn: book.isbn,
-            title: book.title,
-            author_name: book.author_name,
-        }))
-        res.status(200).json(result)
+        res.status(200).json(JSON.parse(JSON.stringify(response, null, 2)))
     } catch (e) {
         if (e instanceof Error) {
             res.status(500).json({ e: e.message })

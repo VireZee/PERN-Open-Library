@@ -51,7 +51,7 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
             {apiKeyState.online ? (
                 <div className="mt-16">
                     {apiKeyState.apiKey !== null ? (
-                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}:3000/API/{apiKeyState.apiKey}</p>
+                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}:{import.meta.env.VITE_SERVER_PORT}/API/{apiKeyState.apiKey}</p>
                     ) : (
                         <button
                             onClick={generate}
