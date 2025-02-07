@@ -10,7 +10,7 @@ import Net from './error/Internet'
 import NB from './error/NoBooks'
 
 interface Props {
-    search: string,
+    search: string
     isUser: {
         user_id: number
     } | null

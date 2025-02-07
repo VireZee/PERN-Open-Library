@@ -21,7 +21,8 @@ const App: React.FC = () => {
     const dispatch = useDispatch()
     const appState = useSelector((state: RootState) => state.APP)
     const searchHandler = (s: string) => dispatch(setSearch(s))
-    const authNav = ['/register', '/login'].includes(window.location.pathname)
+    const showBackLink = ['/register', '/login'].includes(window.location.pathname)
+    const hideHeader = window.location.pathname === '/settings'
     React.useEffect(() => {
         if (!loading) {
             if (data) dispatch(setUser(data.auth))
@@ -30,10 +31,15 @@ const App: React.FC = () => {
     }, [data, error])
     return (
         <BrowserRouter>
-            <header className="fixed w-screen">
-                {!authNav && <Nav isUser={appState.user} onSearch={searchHandler} />}
-                {authNav && <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>}
-            </header>
+            {!hideHeader && (
+                <header className="fixed w-screen">
+                    {showBackLink ? (
+                        <a href="/" className="absolute top-4 left-4 text-[1.2rem] text-white no-underline">&#8592; Back to home</a>
+                    ) : (
+                        <Nav isUser={appState.user} onSearch={searchHandler} />
+                    )}
+                </header>
+            )}
             <main>
                 <Routes>
                     <Route path='' element={<Home isUser={appState.user} search={appState.search} />} />
@@ -43,7 +49,7 @@ const App: React.FC = () => {
                     <Route path='collection' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='collection?' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='API' element={appState.loadUser ? null : appState.user ? <APIKey isUser={appState.user} /> : <Navigate to='/login' />} />
-                    <Route path='settings' element={!appState.user ? <Set /> : <Navigate to='/login' />} />
+                    <Route path='settings' element={appState.loadUser ? null : appState.user ? <Set isUser={appState.user} /> : <Navigate to='/login' />} />
                     {/* <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} /> */}
                     <Route path='*' element={<NF />} />
                 </Routes>

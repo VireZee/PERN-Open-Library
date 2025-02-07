@@ -9,8 +9,8 @@ import LogoutGQL from './graphql/auth/Logout'
 interface Props {
     onSearch: (v: string) => void
     isUser: {
-        name: string
         photo: string
+        name: string
     } | null
 }
 interface URLParams {
@@ -50,7 +50,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
         else if (path === '/API') dispatch(setActive('api'))
     }, [])
     return (
-        <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-[#282828]">
+        <nav className="flex justify-between items-center -mt-16 p-7 h-16 bg-[#282820]">
             <div className="text-white">
                 {isUser ? (
                     <>
@@ -63,7 +63,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
                 )}
             </div>
             {navState.active !== 'api' && (
-                <input placeholder={navState.active === 'home' ? 'Search Title or ISBN (without "-" or spaces)' : 'Search Title'} className="w-[25vw] p-2 rounded-full" defaultValue={str} onKeyDown={handleKeyDown} />
+                <input placeholder={navState.active === 'home' ? 'Search Title or ISBN (without "-" or spaces)' : 'Search Title'} className="bg-white w-[25vw] p-2 rounded-full" defaultValue={str} onKeyDown={handleKeyDown} />
             )}
             <div className="text-white flex items-center">
                 {isUser ? (
@@ -73,7 +73,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
                         {navState.isDropdownOpen && (
                             <div className="absolute top-full right-0 mt-2 bg-white text-black shadow-md rounded-md w-32 z-50">
                                 <ul>
-                                    <li className="p-2 hover:bg-gray-200 cursor-pointer">Settings</li>
+                                    <li className="p-2 hover:bg-gray-200 cursor-pointer"><a href="settings">Settings</a></li>
                                     <li className="p-2 hover:bg-gray-200 cursor-pointer" onClick={handleLogOut}>Log Out</li>
                                 </ul>
                             </div>
