@@ -6,6 +6,7 @@ import LogAct from './LoginAction'
 import HomeAct from './HomeAction'
 import ColAct from './CollectionAction'
 import APIKeyAct from './APIKeyAction'
+import SetAct from './SettingsAction'
 import APIAct from './APIAction'
 
 const ReduxStore: Store = configureStore({
@@ -17,6 +18,7 @@ const ReduxStore: Store = configureStore({
         HOME: HomeAct,
         COL: ColAct,
         APIK: APIKeyAct,
+        SET: SetAct,
         API: APIAct
     }
 })
