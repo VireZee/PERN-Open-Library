@@ -65,7 +65,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                         <label className="text-sm text-gray-600">Email</label>
                         <input
                             type="email"
-                            name="EMAIL"
+                            name="email"
                             className="w-full p-2 border rounded-md mt-1"
                             value={setState.email}
                             onChange={handleChange}
