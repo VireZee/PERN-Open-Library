@@ -119,7 +119,7 @@ const Register: React.FC = () => {
                             {regState.errors.rePass && <p className="text-red-500 text-sm mt-1">{regState.errors.rePass}</p>}
                         </div>
                     )}
-                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md" disabled={loading} >{loading ? 'Loading...' : 'Register'}</button>
+                    <button type="submit" className="w-full bg-black text-white py-2 px-4 rounded-md" disabled={loading}>{loading ? 'Loading...' : 'Register'}</button>
                 </form>
                 <div className="mt-4 text-sm text-gray-700 text-center">
                     Already have an account? <a href="/login" className="font-medium text-black hover:text-black">Log In</a>

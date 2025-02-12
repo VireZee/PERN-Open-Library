@@ -1,4 +1,6 @@
 import React from 'react'
+import { useMutation, ApolloError } from '@apollo/client'
+import SettingsGQL from '../graphql/auth/Settings'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { change, setShow } from '../redux/SettingsAction'
@@ -12,6 +14,7 @@ interface Props {
     }
 }
 const Settings: React.FC<Props> = ({ isUser }) => {
+    const [settings, { loading }] = useMutation(SettingsGQL)
     const dispatch = useDispatch()
     const setState = useSelector((state: RootState) => state.SET)
     const imgFormat = (base64String: string) => {
@@ -28,6 +31,27 @@ const Settings: React.FC<Props> = ({ isUser }) => {
         dispatch(change({ name, value }))
     }
     const toggle = (name: 'old' | 'new') => dispatch(setShow({ ...setState.show, [name]: !setState.show[name] }))
+    const submit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+            await settings({
+                variables: {
+                    name: setState.name,
+                    uname: setState.uname,
+                    email: setState.email,
+                    oldPass: setState.oldPass,
+                    newPass: setState.newPass,
+                    rePass: setState.show['new'] ? null : setState.rePass,
+                    show: setState.show['new']
+                }
+            })
+        } catch (err) {
+            if (err instanceof ApolloError) {
+                // const GQLErr = err.cause!.extensions as { errs: Errors }
+                // dispatch(setErrors(GQLErr.errs))
+            } else alert('An unexpected error occurred.')
+        }
+    }
     React.useEffect(() => {
         dispatch(change({ name: 'name', value: isUser.name }))
         dispatch(change({ name: 'uname', value: isUser.uname }))
@@ -37,7 +61,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-3xl font-extrabold text-center mb-4">Settings</h2>
-                <form>
+                <form onSubmit={submit}>
                     <div className="flex justify-center mb-6">
                         <img src={`data:image/${imgFormat(isUser.photo)};base64,${isUser.photo}`} alt="Image" className="rounded-full w-72 h-72 cursor-pointer" />
                     </div>
@@ -142,8 +166,8 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             />
                         )}
                     </div>
-                    <button className="w-full p-2 bg-black text-white rounded-md mt-5">
-                        Save Changes
+                    <button className="w-full p-2 bg-black text-white rounded-md mt-5" disabled={loading}>
+                        {loading ? 'Loading...' : 'Save Changes'}
                     </button>
                 </form>
             </div>
