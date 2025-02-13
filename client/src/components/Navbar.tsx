@@ -29,7 +29,7 @@ const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
     const imgFormat = (base64String: string) => {
         const decodedString = atob(base64String)
         const hexString = Array.from(decodedString).map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join('')
-        if (decodedString.trim().startsWith('<svg')) return 'svg+xml'
+        if (decodedString.trim().startsWith('<?xml') || decodedString.trim().startsWith('<svg')) return 'svg+xml'
         else if (hexString.startsWith('FFD8FF')) return 'jpeg'
         else if (hexString.startsWith('89504E470D0A1A0A')) return 'png'
         else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) return 'gif'

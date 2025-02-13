@@ -4,6 +4,7 @@ interface State {
     [key: string]: string | { old: boolean, new: boolean }
 }
 const initialState: State = {
+    photo: '',
     name: '',
     uname: '',
     email: '',

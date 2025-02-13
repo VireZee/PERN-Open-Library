@@ -15,16 +15,29 @@ interface Props {
 }
 const Settings: React.FC<Props> = ({ isUser }) => {
     const [settings, { loading }] = useMutation(SettingsGQL)
+    const inputFileRef = React.useRef<HTMLInputElement>(null)
     const dispatch = useDispatch()
     const setState = useSelector((state: RootState) => state.SET)
     const imgFormat = (base64String: string) => {
         const decodedString = atob(base64String)
         const hexString = Array.from(decodedString).map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join('')
-        if (decodedString.trim().startsWith('<svg')) return 'svg+xml'
+        if (decodedString.trim().startsWith('<?xml') || decodedString.trim().startsWith('<svg')) return 'svg+xml'
         else if (hexString.startsWith('FFD8FF')) return 'jpeg'
         else if (hexString.startsWith('89504E470D0A1A0A')) return 'png'
         else if (hexString.startsWith('474946383761') || hexString.startsWith('474946383961')) return 'gif'
         return
+    }
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files![0]
+        if (!file) return
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            const base64String = reader.result!.toString().split(',')[1]
+            const format = imgFormat(base64String)
+            if (format) dispatch(change({ name: 'photo', value: base64String }))
+            else alert('Invalid file format. Please upload an JPG/JPEG, PNG, GIF, or SVG image!')
+        }
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -36,6 +49,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
         try {
             await settings({
                 variables: {
+                    photo: setState.photo,
                     name: setState.name,
                     uname: setState.uname,
                     email: setState.email,
@@ -53,6 +67,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
         }
     }
     React.useEffect(() => {
+        dispatch(change({ name: 'photo', value: isUser.photo }))
         dispatch(change({ name: 'name', value: isUser.name }))
         dispatch(change({ name: 'uname', value: isUser.uname }))
         dispatch(change({ name: 'email', value: isUser.email }))
@@ -62,8 +77,15 @@ const Settings: React.FC<Props> = ({ isUser }) => {
             <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-3xl font-extrabold text-center mb-4">Settings</h2>
                 <form onSubmit={submit}>
-                    <div className="flex justify-center mb-6">
-                        <img src={`data:image/${imgFormat(isUser.photo)};base64,${isUser.photo}`} alt="Image" className="rounded-full w-72 h-72 cursor-pointer" />
+                    <div className="flex justify-center mb-6" onClick={() => inputFileRef.current!.click()}>
+                        <img src={`data:image/${imgFormat(setState.photo)};base64,${setState.photo}`} alt="Image" className="rounded-full w-72 h-72 cursor-pointer object-cover" />
+                        <input
+                            type="file"
+                            accept="image/jpeg, image/png, image/gif, image/svg+xml"
+                            ref={inputFileRef}
+                            className="hidden"
+                            onChange={handleFileChange}
+                        />
                     </div>
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Name</label>
