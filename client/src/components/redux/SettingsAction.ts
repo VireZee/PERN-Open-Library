@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: number | string | { old: boolean, new: boolean } | Errors
+    [key: string]: boolean | number | string | { old: boolean, new: boolean } | Errors
 }
 const initialState: State = {
+    isDropdownOpen: false,
     user_id: 0,
     photo: '',
     name: '',
@@ -28,6 +29,9 @@ const SettingsAction = createSlice({
     name: 'SET',
     initialState,
     reducers: {
+        setIsDropdownOpen: (state, { payload }: PayloadAction<boolean>) => {
+            state['isDropdownOpen'] = payload
+        },
         change: (state, { payload: { name, value } }: PayloadAction<{ name: keyof State, value: number | string }>) => {
             state[name] = value
         },
@@ -39,5 +43,5 @@ const SettingsAction = createSlice({
         }
     }
 })
-export const { change, setShow, setErrors } = SettingsAction.actions
+export const { setIsDropdownOpen, change, setShow, setErrors } = SettingsAction.actions
 export default SettingsAction.reducer

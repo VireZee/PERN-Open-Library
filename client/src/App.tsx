@@ -50,7 +50,6 @@ const App: React.FC = () => {
                     <Route path='collection?' element={appState.loadUser ? null : appState.user ? <Col isUser={appState.user} search={appState.search} /> : <Navigate to='/login' />} />
                     <Route path='API' element={appState.loadUser ? null : appState.user ? <APIKey isUser={appState.user} /> : <Navigate to='/login' />} />
                     <Route path='settings' element={appState.loadUser ? null : appState.user ? <Set isUser={appState.user} /> : <Navigate to='/login' />} />
-                    {/* <Route path='fp' element={!appState.user ? <FP /> : <Navigate to='/' />} /> */}
                     <Route path='*' element={<NF />} />
                 </Routes>
             </main>

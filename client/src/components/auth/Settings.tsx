@@ -3,7 +3,7 @@ import { useMutation, ApolloError } from '@apollo/client'
 import SettingsGQL from '../graphql/auth/Settings'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
-import { change, setShow, setErrors, Errors } from '../redux/SettingsAction'
+import { setIsDropdownOpen, change, setShow, setErrors, Errors } from '../redux/SettingsAction'
 
 interface Props {
     isUser: {
@@ -40,6 +40,14 @@ const Settings: React.FC<Props> = ({ isUser }) => {
             else alert('Invalid file format. Please upload an JPG/JPEG, PNG, GIF, or SVG image!')
         }
         dispatch(setErrors({ ...setState.errors, photo: '' }))
+    }
+    const removeImage = () => {
+        const initials = setState.name.split(' ').map((w: string) => w.charAt(0).toUpperCase()).slice(0, 5).join('')
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+            <circle cx="256" cy="256" r="256" fill="#000"/>
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-family="Times New Roman" font-size="128" fill="white">${initials}</text>
+        </svg>`
+        dispatch(change({ name: 'photo', value: Buffer.from(svg).toString('base64') }))
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -86,8 +94,8 @@ const Settings: React.FC<Props> = ({ isUser }) => {
             <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-3xl font-extrabold text-center mb-4">Settings</h2>
                 <form onSubmit={submit}>
-                    <div className="flex justify-center mb-6" onClick={() => inputFileRef.current!.click()}>
-                        <img src={`data:image/${imgFormat(setState.photo)};base64,${setState.photo}`} alt="Image" className="rounded-full w-72 h-72 cursor-pointer object-cover" />
+                    <div className="relative flex justify-center mb-6">
+                        <img src={`data:image/${imgFormat(setState.photo)};base64,${setState.photo}`} alt="Image" className="rounded-full w-72 h-72 cursor-pointer object-cover" onClick={() => dispatch(setIsDropdownOpen(!setState.isDropdownOpen))} />
                         <input
                             type="file"
                             accept="image/jpeg, image/png, image/gif, image/svg+xml"
@@ -95,6 +103,31 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             className="hidden"
                             onChange={handleFileChange}
                         />
+                        {setState.isDropdownOpen && (
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-black shadow-md rounded-md w-40 z-50">
+                                <ul className="text-center">
+                                    <li
+                                        className="p-2 hover:bg-gray-200 cursor-pointer"
+                                        onClick={() => {
+                                            inputFileRef.current!.click()
+                                            dispatch(setIsDropdownOpen(false))
+                                        }}
+                                    >
+                                        Upload Image
+                                    </li>
+                                    <li
+                                        className="p-2 hover:bg-gray-200 cursor-pointer"
+                                        onClick={() => {
+                                            removeImage()
+                                            dispatch(setIsDropdownOpen(false))
+                                        }
+                                        }
+                                    >
+                                        Remove Image
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
                     </div>
                     {setState.errors.photo && <p className="text-red-500 text-sm mt-1 text-center">{setState.errors.photo}</p>}
                     <div className="mb-4">
