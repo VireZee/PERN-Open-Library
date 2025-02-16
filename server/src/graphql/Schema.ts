@@ -40,7 +40,7 @@ const Schema = `#graphql
             uname: String!
             email: String!
             pass: String!
-            rePass: String!
+            rePass: String
             show: Boolean!
         ): Boolean!
         login(
@@ -59,6 +59,17 @@ const Schema = `#graphql
             isbn: String!
         ): Boolean!
         generate(user_id: ID!) : String!
+        settings(
+            user_id: ID!
+            photo: String!
+            name: String!
+            uname: String!
+            email: String!
+            oldPass: String
+            newPass: String
+            rePass: String
+            show: Boolean!
+        ): Boolean!
         logout: Boolean!
     }
 `

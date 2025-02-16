@@ -22,7 +22,7 @@ const server = new ApolloServer({
     app.use(
         '/gql',
         cors<cors.CorsRequest>({ origin: `http://${process.env.DOMAIN}:${process.env.CLIENT_PORT}`, credentials: true }),
-        express.json(),
+        express.json({limit: "5mb"}),
         cp(),
         expressMiddleware(server, {
             context: async ({ req, res }) => ({ req, res })

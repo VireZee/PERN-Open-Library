@@ -4,9 +4,10 @@ import Register from './resolver/auth/Register'
 import Login from './resolver/auth/Login'
 import Fetch from './resolver/book/Fetch'
 import Collection from './resolver/book/Collection'
+import AddRemove from './resolver/book/AddRemove'
 import Check from './resolver/api/Check'
 import Generate from './resolver/api/Generate'
-import AddRemove from './resolver/book/AddRemove'
+import Settings from './resolver/auth/Settings'
 import Logout from './resolver/auth/Logout'
 
 export const typeDefs = Schema
@@ -23,6 +24,7 @@ export const resolvers = {
         add: AddRemove,
         remove: AddRemove,
         generate: Generate,
+        settings: Settings,
         logout: Logout
     }
 }

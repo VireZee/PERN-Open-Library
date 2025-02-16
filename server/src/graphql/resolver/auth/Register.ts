@@ -4,7 +4,7 @@ import { Response } from 'express'
 import { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const Register = async (_: null, args: { name: string; uname: string; email: string; pass: string; rePass?: string; show: boolean }, context: { res: Response }) => {
+const Register = async (_: null, args: { name: string; uname: string; email: string; pass: string; rePass: string; show: boolean }, context: { res: Response }) => {
     try {
         const userRepo = AppDataSource.getRepository(User)
         const { name, uname, email, pass, rePass, show } = args

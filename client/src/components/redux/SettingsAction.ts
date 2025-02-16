@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: string | { old: boolean, new: boolean }
+    [key: string]: number | string | { old: boolean, new: boolean } | Errors
 }
 const initialState: State = {
+    user_id: 0,
     photo: '',
     name: '',
     uname: '',
@@ -11,19 +12,32 @@ const initialState: State = {
     oldPass: '',
     newPass: '',
     rePass: '',
-    show: { old: false, new: false }
+    show: { old: false, new: false },
+    errors: {}
+}
+export interface Errors {
+    photo?: string
+    name?: string
+    uname?: string
+    email?: string
+    oldPass?: string
+    newPass?: string
+    rePass?: string
 }
 const SettingsAction = createSlice({
     name: 'SET',
     initialState,
     reducers: {
-        change: (state, { payload: { name, value } }: PayloadAction<{ name: keyof State, value: string }>) => {
+        change: (state, { payload: { name, value } }: PayloadAction<{ name: keyof State, value: number | string }>) => {
             state[name] = value
         },
         setShow: (state, { payload }: PayloadAction<{ old: boolean; new: boolean }>) => {
             state['show'] = payload
+        },
+        setErrors: (state, { payload }: PayloadAction<Errors>) => {
+            state['errors'] = payload
         }
     }
 })
-export const { change, setShow } = SettingsAction.actions
+export const { change, setShow, setErrors } = SettingsAction.actions
 export default SettingsAction.reducer

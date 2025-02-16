@@ -3,10 +3,11 @@ import { useMutation, ApolloError } from '@apollo/client'
 import SettingsGQL from '../graphql/auth/Settings'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
-import { change, setShow } from '../redux/SettingsAction'
+import { change, setShow, setErrors, Errors } from '../redux/SettingsAction'
 
 interface Props {
     isUser: {
+        user_id: number
         photo: string
         name: string
         uname: string
@@ -38,17 +39,20 @@ const Settings: React.FC<Props> = ({ isUser }) => {
             if (format) dispatch(change({ name: 'photo', value: base64String }))
             else alert('Invalid file format. Please upload an JPG/JPEG, PNG, GIF, or SVG image!')
         }
+        dispatch(setErrors({ ...setState.errors, photo: '' }))
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))
+        dispatch(setErrors({ ...setState.errors, [name]: '' }))
     }
     const toggle = (name: 'old' | 'new') => dispatch(setShow({ ...setState.show, [name]: !setState.show[name] }))
     const submit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            await settings({
+            const { data } = await settings({
                 variables: {
+                    user_id: setState.user_id,
                     photo: setState.photo,
                     name: setState.name,
                     uname: setState.uname,
@@ -59,14 +63,19 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                     show: setState.show['new']
                 }
             })
+            if (data.settings) {
+                alert('Changes saved!')
+                location.href = '/'
+            }
         } catch (err) {
             if (err instanceof ApolloError) {
-                // const GQLErr = err.cause!.extensions as { errs: Errors }
-                // dispatch(setErrors(GQLErr.errs))
+                const GQLErr = err.cause!.extensions as { errs: Errors }
+                dispatch(setErrors(GQLErr.errs))
             } else alert('An unexpected error occurred.')
         }
     }
     React.useEffect(() => {
+        dispatch(change({ name: 'user_id', value: isUser.user_id }))
         dispatch(change({ name: 'photo', value: isUser.photo }))
         dispatch(change({ name: 'name', value: isUser.name }))
         dispatch(change({ name: 'uname', value: isUser.uname }))
@@ -87,6 +96,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             onChange={handleFileChange}
                         />
                     </div>
+                    {setState.errors.photo && <p className="text-red-500 text-sm mt-1 text-center">{setState.errors.photo}</p>}
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Name</label>
                         <input
@@ -96,6 +106,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             value={setState.name}
                             onChange={handleChange}
                         />
+                        {setState.errors.name && <p className="text-red-500 text-sm mt-1">{setState.errors.name}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Username</label>
@@ -106,6 +117,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             value={setState.uname}
                             onChange={handleChange}
                         />
+                        {setState.errors.uname && <p className="text-red-500 text-sm mt-1">{setState.errors.uname}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Email</label>
@@ -116,6 +128,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             value={setState.email}
                             onChange={handleChange}
                         />
+                        {setState.errors.email && <p className="text-red-500 text-sm mt-1">{setState.errors.email}</p>}
                     </div>
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Change Password</label>
@@ -148,6 +161,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                                 )}
                             </button>
                         </div>
+                        {setState.errors.oldPass && <p className="text-red-500 text-sm mt-1">{setState.errors.oldPass}</p>}
                         <div className="relative">
                             <input
                                 type={setState.show['new'] ? "text" : "password"}
@@ -177,15 +191,19 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                                 )}
                             </button>
                         </div>
+                        {setState.errors.newPass && <p className="text-red-500 text-sm mt-1">{setState.errors.newPass}</p>}
                         {!setState.show['new'] && (
-                            <input
-                                type="password"
-                                name="rePass"
-                                placeholder="Retype Password"
-                                className="w-full p-2 border rounded-md mt-1"
-                                value={setState.rePass}
-                                onChange={handleChange}
-                            />
+                            <>
+                                <input
+                                    type="password"
+                                    name="rePass"
+                                    placeholder="Retype New Password"
+                                    className="w-full p-2 border rounded-md mt-1"
+                                    value={setState.rePass}
+                                    onChange={handleChange}
+                                />
+                                {setState.errors.rePass && <p className="text-red-500 text-sm mt-1">{setState.errors.rePass}</p>}
+                            </>
                         )}
                     </div>
                     <button className="w-full p-2 bg-black text-white rounded-md mt-5" disabled={loading}>

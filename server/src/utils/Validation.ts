@@ -1,3 +1,4 @@
+import { Not } from 'typeorm'
 import AppDataSource from '../DataSource'
 import User from '../models/User'
 import argon2 from 'argon2'
@@ -25,25 +26,35 @@ export const frmtName = (name: string) => {
     const cap = nameParts.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
     return name = cap.join(' ')
 }
-export const valUname = async (uname: string) => {
+export const valUname = async (uname: string, user_id?: number) => {
     if (!uname) {
         return "Username can't be empty!"
     } else if (!/^[\w\d]+$/.test(uname)) {
         return "Username can only contain Latin Alphabets, Numbers, and Underscores!"
     } else if (uname.length >= 20) {
         return "Username is too long!"
-    } else if (await userRepo.findOne({ where: { username: frmtUname(uname) } })) {
+    } else if (await userRepo.findOne({
+        where: {
+            username: frmtUname(uname),
+            ...(user_id && { user_id: Not(user_id) })
+        }
+    })) {
         return "Username is unavailable!"
     }
     return
 }
 export const frmtUname = (uname: string) => uname.toLowerCase()
-export const valEmail = async (email: string) => {
+export const valEmail = async (email: string, user_id?: number) => {
     if (!email) {
         return "Email can't be empty!"
     } else if (!/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
         return "Email must be valid!"
-    } else if (await userRepo.findOne({ where: { email } })) {
+    } else if (await userRepo.findOne({
+        where: {
+            email,
+            ...(user_id && { user_id: Not(user_id) })
+        }
+    })) {
         return "Email is already registered!"
     }
     return
@@ -57,9 +68,7 @@ export const Hash = async (pass: string) => {
         ]
         const str: string[] = []
         ranges.forEach(r => {
-            for (let i = r.s; i <= r.e; i++) {
-                str.push(String.fromCharCode(i))
-            }
+            for (let i = r.s; i <= r.e; i++) str.push(String.fromCharCode(i))
         })
         let rslt = ''
         for (let i = 0; i < 2048; i++) {

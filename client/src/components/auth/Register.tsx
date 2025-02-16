@@ -12,7 +12,7 @@ const Register: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         dispatch(change({ name, value }))
-        dispatch(setErrors(({ ...regState.errors, [name]: '' })))
+        dispatch(setErrors({ ...regState.errors, [name]: '' }))
     }
     const toggle = () => dispatch(setShow(!regState.show))
     const submit = async (e: React.FormEvent) => {
