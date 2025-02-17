@@ -1,6 +1,6 @@
 import React from 'react'
 import { useMutation, ApolloError } from '@apollo/client'
-import SettingsGQL from '../graphql/auth/Settings'
+import { SETTINGS, DELETE } from '../graphql/auth/Settings'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/Store'
 import { setIsDropdownOpen, change, setShow, setErrors, Errors } from '../redux/SettingsAction'
@@ -15,7 +15,8 @@ interface Props {
     }
 }
 const Settings: React.FC<Props> = ({ isUser }) => {
-    const [settings, { loading }] = useMutation(SettingsGQL)
+    const [settings, { loading: setLoad }] = useMutation(SETTINGS)
+    const [del, { loading: delLoad }] = useMutation(DELETE)
     const inputFileRef = React.useRef<HTMLInputElement>(null)
     const dispatch = useDispatch()
     const setState = useSelector((state: RootState) => state.SET)
@@ -47,7 +48,7 @@ const Settings: React.FC<Props> = ({ isUser }) => {
             <circle cx="256" cy="256" r="256" fill="#000"/>
             <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-family="Times New Roman" font-size="128" fill="white">${initials}</text>
         </svg>`
-        dispatch(change({ name: 'photo', value: Buffer.from(svg).toString('base64') }))
+        dispatch(change({ name: 'photo', value: btoa(svg) }))
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -80,6 +81,18 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                 const GQLErr = err.cause!.extensions as { errs: Errors }
                 dispatch(setErrors(GQLErr.errs))
             } else alert('An unexpected error occurred.')
+        }
+    }
+    const handleDeleteAccount = async () => {
+        try {
+            const { data } = await del()
+            if (data.delete) {
+                alert('Account deleted!')
+                location.href = '/'
+            }
+        } catch (err) {
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
         }
     }
     React.useEffect(() => {
@@ -239,9 +252,10 @@ const Settings: React.FC<Props> = ({ isUser }) => {
                             </>
                         )}
                     </div>
-                    <button className="w-full p-2 bg-black text-white rounded-md mt-5" disabled={loading}>
-                        {loading ? 'Loading...' : 'Save Changes'}
+                    <button className="w-full p-2 bg-black text-white rounded-md mt-5" disabled={setLoad}>
+                        {setLoad ? 'Loading...' : 'Save Changes'}
                     </button>
+                    <button className="w-full p-2 bg-red-500 text-white rounded-md mt-5" onClick={handleDeleteAccount} disabled={delLoad}>Delete Account</button>
                 </form>
             </div>
         </div>

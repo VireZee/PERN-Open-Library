@@ -9,6 +9,7 @@ import Check from './resolver/api/Check'
 import Generate from './resolver/api/Generate'
 import Settings from './resolver/auth/Settings'
 import Logout from './resolver/auth/Logout'
+import Delete from './resolver/auth/Delete'
 
 export const typeDefs = Schema
 export const resolvers = {
@@ -25,6 +26,7 @@ export const resolvers = {
         remove: AddRemove,
         generate: Generate,
         settings: Settings,
-        logout: Logout
+        logout: Logout,
+        delete: Delete
     }
 }

@@ -71,6 +71,7 @@ const Schema = `#graphql
             show: Boolean!
         ): Boolean!
         logout: Boolean!
+        delete: Boolean!
     }
 `
 export default Schema
