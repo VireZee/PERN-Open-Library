@@ -17,7 +17,8 @@ const API = async (req: Request, res: Response) => {
             username: user!.username,
             books
         }
-        res.status(200).json(JSON.parse(JSON.stringify(response, null, 2))) // attention to this
+        res.setHeader('Content-Type', 'application/json')
+        res.send(JSON.stringify(response, null, 2)) 
     } catch (e) {
         if (e instanceof Error) {
             res.status(500).json({ e: e.message })
