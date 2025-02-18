@@ -17,7 +17,7 @@ const Settings = async (_: null, args: { user_id: number, photo: string; name: s
         if (nameErr) errs.name = nameErr
         if (unameErr) errs.uname = unameErr
         if (emailErr) errs.email = emailErr
-        if (oldPass && !newPass) errs.newPass = "Password can't be empty!"
+        if (oldPass && !newPass) errs.newPass = "New password can't be empty!"
         if ((newPass && !oldPass) || (newPass && !(await verHash(oldPass, user!.pass)))) errs.oldPass = "Invalid current password"
         if (newPass && await verHash(newPass, user!.pass)) errs.newPass = "The new password can't be the same as the current password!"
         if (!show && newPass !== rePass) errs.rePass = "Password do not match!"

@@ -18,7 +18,7 @@ const Fetch = async (_: null, args: { user_id: number, isbn: string }) => {
         }
     } catch (e) {
         if (e instanceof GraphQLError) throw e
-        throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
+        else throw new GraphQLError('Internal Server Error', { extensions: { code: '500' } })
     }
 }
 export default Fetch

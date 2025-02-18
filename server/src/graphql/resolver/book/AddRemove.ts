@@ -15,7 +15,7 @@ const AddRemove = async (_: null, args: { user_id: number, cover_i: string, isbn
                 author_name
             }
         })
-        if (bookCollection) await colRepo.delete(bookCollection)
+        if (bookCollection) await colRepo.remove(bookCollection)
         else {
             const newBookCollection = colRepo.create({
                 user_id,

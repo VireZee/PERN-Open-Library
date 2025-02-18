@@ -8,8 +8,8 @@ const Auth = async (_: null, __: {}, context: { req: Request }) => {
     const t = context.req.cookies['!']
     if (!t) throw new GraphQLError('Unauthorized', { extensions: { code: '401' } })
     try {
-        const decoded = verToken(t)
         const userRepo = AppDataSource.getRepository(User)
+        const decoded = verToken(t)
         const user = await userRepo.findOne({
             where: {
                 user_id: decoded.id,
