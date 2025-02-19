@@ -14,8 +14,9 @@ const initialState: State = {
     status: {}
 }
 export interface Books {
-    cover_i: string
-    isbn: string[] | string
+    author_key: string[]
+    cover_edition_key: string
+    cover_i: number
     title: string
     author_name: string[] | string
 }
@@ -38,8 +39,8 @@ const HomeAction = createSlice({
         setTotalPages: (state, { payload }: PayloadAction<number>) => {
             state['totalPages'] = payload
         },
-        setStatus: (state, { payload: { isbn, added } }: PayloadAction<{ isbn: string, added: boolean }>) => {
-            state.status[isbn] = added
+        setStatus: (state, { payload: { key, added } }: PayloadAction<{ key: string, added: boolean }>) => {
+            state.status[key] = added
         }
     }
 })

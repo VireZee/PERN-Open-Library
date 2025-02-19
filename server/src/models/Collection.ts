@@ -6,10 +6,12 @@ export default class Book {
     collection_id: number
     @Column({ type: "bigint" })
     user_id: number
+    @Column({ type: 'varchar', array: true })
+    author_key: string[]
     @Column()
-    cover_i: string
-    @Column()
-    isbn: string
+    cover_edition_key: string
+    @Column({ type: "int" })
+    cover_i: number
     @Column()
     title: string
     @Column()

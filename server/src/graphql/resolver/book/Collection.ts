@@ -17,7 +17,7 @@ const Collection = async (_: null, args: { search: string, page: number }, conte
                 user_id,
                 ...(search && { title: ILike(`%${search}%`) })
             },
-            select: ['cover_i', 'isbn', 'title', 'author_name'],
+            select: ['author_key', 'cover_edition_key', 'cover_i', 'title', 'author_name'],
             skip: (page - 1) * limit,
             take: limit,
             order: {
@@ -28,8 +28,9 @@ const Collection = async (_: null, args: { search: string, page: number }, conte
         })
         const found = bookCollection.length
         const collection = bookCollection.map(book => ({
+            author_key: book.author_key,
+            cover_edition_key: book.cover_edition_key,
             cover_i: book.cover_i,
-            isbn: book.isbn,
             title: book.title,
             author_name: book.author_name
         }))

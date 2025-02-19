@@ -8,8 +8,9 @@ const Books = async (parent: { user_id: number }) => {
         const { user_id } = parent
         const books = await bookRepo.find({ where: { user_id } })
         return books.map(book => ({
+            author_key: book.author_key,
+            cover_edition_key: book.cover_edition_key,
             cover_i: book.cover_i,
-            isbn: book.isbn,
             title: book.title,
             author_name: book.author_name
         }))

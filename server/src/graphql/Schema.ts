@@ -6,12 +6,13 @@ const Schema = `#graphql
         email: String!
     }
     type Fetch {
-        isbn: String!
+        key: String!
         added: Boolean!
     }
     type Book {
-        cover_i: String!
-        isbn: String!
+        author_key: [String!]!
+        cover_edition_key: String!
+        cover_i: Int!
         title: String!
         author_name: String!
     }
@@ -22,7 +23,11 @@ const Schema = `#graphql
     }
     type Query {
         auth: Auth!
-        fetch(isbn: String!): Fetch!
+        fetch(
+            author_key: [String!]!
+            cover_edition_key: String!
+            cover_i: Int!
+        ): Fetch!
         collection(
             search: String
             page: Int!
@@ -43,12 +48,17 @@ const Schema = `#graphql
             pass: String!
         ): Boolean!
         add(
+            author_key: [String!]!
+            cover_edition_key: String!
             cover_i: Int!
-            isbn: String!
             title: String!
             author_name: String!
         ): Boolean!
-        remove(isbn: String!): Boolean!
+        remove(
+            author_key: [String!]!
+            cover_edition_key: String!
+            cover_i: Int!
+        ): Boolean!
         generate: String!
         settings(
             photo: String!

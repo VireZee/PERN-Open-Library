@@ -5,8 +5,9 @@ export const FETCH = gql`
         collection(search: $search, page: $page) {
             found
             collection {
+                author_key
+                cover_edition_key
                 cover_i
-                isbn
                 title
                 author_name
             }

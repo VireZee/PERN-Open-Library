@@ -37,7 +37,7 @@ const Collection: React.FC<Props> = ({ search }) => {
             dispatch(setLoad(false))
         }
     }
-    const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: string; isbn: string; title: string; author_name: string; __typename: string }[]; totalCollection: number } }>) => {
+    const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: number; isbn: string; title: string; author_name: string; __typename: string }[]; totalCollection: number } }>) => {
         const { found, collection, totalCollection } = res.data.collection
         if (found === 0) dispatch(setBooks([]))
         else {

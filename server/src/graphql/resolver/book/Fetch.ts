@@ -1,23 +1,26 @@
+import { Raw } from 'typeorm'
 import AppDataSource from '../../../DataSource'
 import Col from '../../../models/Collection'
 import { Request } from 'express'
 import { verToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const Fetch = async (_: null, args: { isbn: string }, context: { req: Request }) => {
+const Fetch = async (_: null, args: { author_key: string[], cover_edition_key: string, cover_i: number }, context: { req: Request }) => {
     const t = context.req.cookies['!']
     try {
         const colRepo = AppDataSource.getRepository(Col)
         const { user_id } = verToken(t)
-        const { isbn } = args
+        const { author_key, cover_edition_key, cover_i } = args
         const bookCollection = await colRepo.findOne({
             where: {
                 user_id,
-                isbn
+                author_key: Raw(ak => `${ak} = :author_key`, { author_key }),
+                cover_edition_key,
+                cover_i
             }
         })
         return {
-            isbn,
+            key: `${author_key.sort().join(',')}|${cover_edition_key}|${cover_i}`,
             added: !!bookCollection
         }
     } catch (e) {

@@ -26,36 +26,37 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
-    const getValidIsbn = (isbn: string[] | string) => {
-        if (Array.isArray(isbn)) return isbn.find(isbn => isbn.length === 13) || isbn[0]
-        return isbn
+    const getValidKey = (author_key: string[], cover_edition_key: string, cover_i: number): string => {
+        return `${[...author_key].sort().join(',')}|${cover_edition_key}|${cover_i}`
     }
     const getValidAuthor = (author: string[] | string) => {
         if (Array.isArray(author)) return author.join(', ')
         return author || 'Unknown'
     }
-    const fetchStatus = async (isbnParam: string) => {
+    const fetchStatus = async (author_key: string[], cover_edition_key: string, cover_i: number) => {
         try {
-            const res = await refetch({ isbn: isbnParam })
-            dispatch(setStatus(res.data.fetch))
+            const res = await refetch({ author_key, cover_edition_key, cover_i })
+            const { key, added } = res.data.fetch
+            dispatch(setStatus({ key, added }))
         } catch (err) {
             if (err instanceof ApolloError) alert('Fetch Error: ' + err.message)
             else alert('Fetch Error: An unexpected error occurred.')
         }
     }
-    const addToCollection = async (cover_i: string, isbn: string, title: string, author_name: string) => {
+    const addToCollection = async (author_key: string[], cover_edition_key: string, cover_i: number, title: string, author_name: string) => {
         if (!isUser) location.href = '/login'
         else if (isUser) {
             try {
                 const { data } = await add({
                     variables: {
+                        author_key,
+                        cover_edition_key,
                         cover_i,
-                        isbn,
                         title,
                         author_name
                     }
                 })
-                if (data.add) fetchStatus(isbn)
+                if (data.add) fetchStatus(author_key, cover_edition_key, cover_i)
             } catch (err) {
                 if (err instanceof ApolloError) alert(err.message)
                 else alert('An unexpected error occurred.')
@@ -152,7 +153,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     useEffect(() => {
         if (isUser) {
             homeState.books.forEach((book: Books) => {
-                if (book.isbn) fetchStatus(getValidIsbn(book.isbn))
+                if (book.author_key && book.cover_edition_key && book.cover_i) fetchStatus(book.author_key, book.cover_edition_key, book.cover_i)
             })
         }
     }, [homeState.books])
@@ -180,9 +181,9 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                                     <label className="flex items-center space-x-2">
                                                         <input
                                                             type="checkbox"
-                                                            checked={book.isbn ? homeState.status[getValidIsbn(book.isbn)] || false : false}
-                                                            onChange={() => { if (book.isbn) addToCollection(book.cover_i, getValidIsbn(book.isbn), book.title, getValidAuthor(book.author_name)) }}
-                                                            disabled={!book.isbn}
+                                                            checked={(book.author_key && book.cover_edition_key && book.cover_i) ? homeState.status[getValidKey(book.author_key, book.cover_edition_key, book.cover_i)] || false : false}
+                                                            onChange={() => { if (book.author_key && book.cover_edition_key && book.cover_i) addToCollection(book.author_key, book.cover_edition_key, book.cover_i, book.title, getValidAuthor(book.author_name)) }}
+                                                            disabled={!(book.author_key && book.cover_edition_key && book.cover_i)}
                                                         />
                                                         <span>Add to Collection</span>
                                                     </label>
