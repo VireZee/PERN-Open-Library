@@ -1,7 +1,7 @@
 import AppDataSource from '../../../DataSource'
 import User from '../../../models/User'
 import { Response } from 'express'
-import { defSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken } from '../../../utils/Validation'
+import { genSvg, valName, frmtName, valUname, frmtUname, valEmail, Hash, genToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
 const Register = async (_: null, args: { name: string; uname: string; email: string; pass: string; rePass: string; show: boolean }, context: { res: Response }) => {
@@ -19,7 +19,7 @@ const Register = async (_: null, args: { name: string; uname: string; email: str
         if (!show && pass !== rePass) errs.rePass = "Password do not match!"
         if (Object.keys(errs).length > 0) throw new GraphQLError('Unprocessable Content', { extensions: { errs, code: '422' } })
         const newUser = userRepo.create({
-            photo: Buffer.from(defSvg(name), 'base64'),
+            photo: Buffer.from(genSvg(name), 'base64'),
             name: frmtName(name),
             username: frmtUname(uname),
             email,

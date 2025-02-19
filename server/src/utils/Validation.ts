@@ -5,7 +5,7 @@ import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 
 const userRepo = AppDataSource.getRepository(User)
-export const defSvg = (name: string) => {
+export const genSvg = (name: string) => {
     const initials = name.split(' ').map(w => w.charAt(0).toUpperCase()).slice(0, 5).join('')
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
         <circle cx="256" cy="256" r="256" fill="#000" />
