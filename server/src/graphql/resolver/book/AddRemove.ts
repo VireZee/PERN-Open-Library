@@ -1,11 +1,15 @@
 import AppDataSource from '../../../DataSource'
 import Col from '../../../models/Collection'
+import { Request } from 'express'
+import { verToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const AddRemove = async (_: null, args: { user_id: number, cover_i: string, isbn: string, title: string, author_name: string }) => {
+const AddRemove = async (_: null, args: { cover_i: string, isbn: string, title: string, author_name: string }, context: { req: Request }) => {
+    const t = context.req.cookies['!']
     try {
         const colRepo = AppDataSource.getRepository(Col)
-        const { user_id, cover_i, isbn, title, author_name } = args
+        const { user_id } = verToken(t)
+        const { cover_i, isbn, title, author_name } = args
         const bookCollection = await colRepo.findOne({
             where: {
                 user_id,

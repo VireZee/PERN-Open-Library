@@ -8,16 +8,9 @@ const Delete = async (_: null, __: {}, context: { req: Request, res: Response })
     const { req, res } = context
     const t = req.cookies['!']
     try {
-        const decoded = verToken(t)
         const userRepo = AppDataSource.getRepository(User)
-        const user = await userRepo.findOne({
-            where: {
-                user_id: decoded.id,
-                name: decoded.name,
-                username: decoded.uname,
-                email: decoded.email
-            }
-        })
+        const { user_id } = verToken(t)
+        const user = await userRepo.findOne({ where: { user_id } })
         if (!user) throw new GraphQLError('Unauthorized', { extensions: { code: '401' } })
         await userRepo.remove(user)
         res.clearCookie('!')

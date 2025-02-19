@@ -10,17 +10,9 @@ const Auth = async (_: null, __: {}, context: { req: Request }) => {
     try {
         const userRepo = AppDataSource.getRepository(User)
         const decoded = verToken(t)
-        const user = await userRepo.findOne({
-            where: {
-                user_id: decoded.id,
-                name: decoded.name,
-                username: decoded.uname,
-                email: decoded.email
-            }
-        })
+        const user = await userRepo.findOne({ where: { user_id: decoded.user_id } })
         if (!user) throw new GraphQLError('Unauthorized', { extensions: { code: '401' } })
         return {
-            user_id: user.user_id,
             photo: Buffer.from(user.photo).toString('base64'),
             name: user.name,
             uname: user.username,

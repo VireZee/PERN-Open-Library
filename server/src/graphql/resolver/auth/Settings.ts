@@ -1,13 +1,15 @@
 import AppDataSource from '../../../DataSource'
 import User from '../../../models/User'
-import { Response } from 'express'
-import { valName, frmtName, valUname, frmtUname, valEmail, Hash, verHash, genToken } from '../../../utils/Validation'
+import { Request, Response } from 'express'
+import { valName, frmtName, valUname, frmtUname, valEmail, Hash, verHash, genToken, verToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const Settings = async (_: null, args: { user_id: number, photo: string; name: string; uname: string; email: string; oldPass: string; newPass: string; rePass: string; show: boolean }, context: { res: Response }) => {
+const Settings = async (_: null, args: { photo: string; name: string; uname: string; email: string; oldPass: string; newPass: string; rePass: string; show: boolean }, context: { req: Request, res: Response }) => {
+    const t = context.req.cookies['!']
     try {
         const userRepo = AppDataSource.getRepository(User)
-        const { user_id, photo, name, uname, email, oldPass, newPass, rePass, show } = args
+        const { user_id } = verToken(t)
+        const { photo, name, uname, email, oldPass, newPass, rePass, show } = args
         const errs: Record<string, string> = {}
         const user = await userRepo.findOne({ where: { user_id } })
         const nameErr = valName(name)
@@ -32,7 +34,7 @@ const Settings = async (_: null, args: { user_id: number, photo: string; name: s
             updatedUser.updated = new Date()
             userRepo.merge(user!, updatedUser)
             await userRepo.save(user!)
-            const t = genToken(user!.user_id, user!.name, user!.username, user!.email)
+            const t = genToken(user!.user_id)
             context.res.cookie('!', t, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 httpOnly: true,

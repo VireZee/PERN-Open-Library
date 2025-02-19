@@ -5,7 +5,8 @@ import { GraphQLError } from 'graphql'
 const Books = async (parent: { user_id: number }) => {
     try {
         const bookRepo = AppDataSource.getRepository(Book)
-        const books = await bookRepo.find({ where: { user_id: parent!.user_id } })
+        const { user_id } = parent
+        const books = await bookRepo.find({ where: { user_id } })
         return books.map(book => ({
             cover_i: book.cover_i,
             isbn: book.isbn,

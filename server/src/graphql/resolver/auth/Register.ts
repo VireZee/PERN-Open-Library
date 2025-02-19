@@ -27,7 +27,7 @@ const Register = async (_: null, args: { name: string; uname: string; email: str
             created: new Date()
         })
         await userRepo.save(newUser)
-        const t = genToken(newUser.user_id, newUser.name, newUser.username, newUser.email)
+        const t = genToken(newUser.user_id)
         context.res.cookie('!', t, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,

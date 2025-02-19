@@ -1,11 +1,15 @@
 import AppDataSource from '../../../DataSource'
 import Col from '../../../models/Collection'
+import { Request } from 'express'
+import { verToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const Fetch = async (_: null, args: { user_id: number, isbn: string }) => {
+const Fetch = async (_: null, args: { isbn: string }, context: { req: Request }) => {
+    const t = context.req.cookies['!']
     try {
         const colRepo = AppDataSource.getRepository(Col)
-        const { user_id, isbn } = args
+        const { user_id } = verToken(t)
+        const { isbn } = args
         const bookCollection = await colRepo.findOne({
             where: {
                 user_id,

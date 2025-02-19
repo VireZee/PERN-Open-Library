@@ -1,12 +1,16 @@
 import { ILike } from 'typeorm'
 import AppDataSource from '../../../DataSource'
 import Col from '../../../models/Collection'
+import { Request } from 'express'
+import { verToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const Collection = async (_: null, args: { user_id: number, search: string, page: number }) => {
+const Collection = async (_: null, args: { user_id: number, search: string, page: number }, context: { req: Request }) => {
+    const t = context.req.cookies['!']
     try {
         const colRepo = AppDataSource.getRepository(Col)
-        const { user_id, search = '', page } = args
+        const { user_id } = verToken(t)
+        const { search = '', page } = args
         const limit = 9
         const [bookCollection, totalCollection] = await colRepo.findAndCount({
             where: {
