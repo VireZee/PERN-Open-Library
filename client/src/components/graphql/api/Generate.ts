@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 const GENERATE = gql`
-    mutation($user_id: ID!) {
-        generate(user_id: $user_id)
+    mutation {
+        generate
     }
 `
 export default GENERATE
