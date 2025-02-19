@@ -10,15 +10,12 @@ import NB from './error/NoBooks'
 
 interface Props {
     search: string
-    isUser: {
-        user_id: number
-    }
 }
 interface URLParams {
     title?: string
     page?: string
 }
-const Collection: React.FC<Props> = ({ isUser, search }) => {
+const Collection: React.FC<Props> = ({ search }) => {
     const { refetch } = useQuery(FETCH, { skip: true })
     const [remove] = useMutation(REMOVE)
     const dispatch = useDispatch()
@@ -29,7 +26,6 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
         try {
             dispatch(setLoad(true))
             const res = await refetch({
-                user_id: isUser!.user_id,
                 search: search || title,
                 page: pg || colState.currentPage
             })
@@ -51,12 +47,7 @@ const Collection: React.FC<Props> = ({ isUser, search }) => {
     }
     const removeCollection = async (isbn: string) => {
         try {
-            const { data } = await remove({
-                variables: {
-                    user_id: isUser!.user_id,
-                    isbn
-                }
-            })
+            const { data } = await remove({ variables: { isbn } })
             if (data.remove) fetchCollection()
         } catch (err) {
             if (err instanceof ApolloError) alert(err.message)

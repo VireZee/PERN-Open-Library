@@ -1,6 +1,5 @@
 const Schema = `#graphql
     type Auth {
-        user_id: ID!
         photo: String!
         name: String!
         uname: String!
@@ -23,16 +22,12 @@ const Schema = `#graphql
     }
     type Query {
         auth: Auth!
-        fetch(
-            user_id: ID!
-            isbn: String!
-        ): Fetch!
+        fetch(isbn: String!): Fetch!
         collection(
-            user_id: ID!
             search: String
             page: Int!
         ): Collection!
-        check(user_id: ID!): String
+        check: String
     }
     type Mutation {
         register(
@@ -48,19 +43,14 @@ const Schema = `#graphql
             pass: String!
         ): Boolean!
         add(
-            user_id: ID!
             cover_i: Int!
             isbn: String!
             title: String!
             author_name: String!
         ): Boolean!
-        remove(
-            user_id: ID!
-            isbn: String!
-        ): Boolean!
-        generate(user_id: ID!) : String!
+        remove(isbn: String!): Boolean!
+        generate: String!
         settings(
-            user_id: ID!
             photo: String!
             name: String!
             uname: String!

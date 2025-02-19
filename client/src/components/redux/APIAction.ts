@@ -1,42 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface State {
-    [key: string]: number | string | Books[]
-    message?: string
+    [key: string]: boolean | undefined | string | null
 }
 const initialState: State = {
-    user_id: 0,
-    email: '',
-    username: '',
-    books: []
-}
-interface API {
-    user_id: number
-    email: string
-    username: string
-    books: Books[]
-    message?: string
-}
-interface Books {
-    cover_i: string
-    isbn: string
-    title: string
-    author_name: string
+    online: navigator.onLine,
+    apiKey: undefined
 }
 const APIAction = createSlice({
     name: 'API',
     initialState,
     reducers: {
-        setApi: (state, { payload }: PayloadAction<API>) => {
-            if (payload.message) state['message'] = payload.message
-            else {
-                state['user_id'] = payload.user_id
-                state['email'] = payload.email
-                state['username'] = payload.username
-                state['books'] = payload.books
-            }
+        setOnline: (state, { payload }: PayloadAction<boolean>) => {
+            state['online'] = payload
+        },
+        setApiKey: (state, { payload }: PayloadAction<string | null>) => {
+            state['apiKey'] = payload
         }
     }
 })
-export const { setApi } = APIAction.actions
+export const { setOnline, setApiKey } = APIAction.actions
 export default APIAction.reducer

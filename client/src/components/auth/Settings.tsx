@@ -7,7 +7,6 @@ import { setIsDropdownOpen, change, setShow, setErrors, Errors } from '../redux/
 
 interface Props {
     isUser: {
-        user_id: number
         photo: string
         name: string
         uname: string
@@ -61,7 +60,6 @@ const Settings: React.FC<Props> = ({ isUser }) => {
         try {
             const { data } = await settings({
                 variables: {
-                    user_id: setState.user_id,
                     photo: setState.photo,
                     name: setState.name,
                     uname: setState.uname,
@@ -96,7 +94,6 @@ const Settings: React.FC<Props> = ({ isUser }) => {
         }
     }
     React.useEffect(() => {
-        dispatch(change({ name: 'user_id', value: isUser.user_id }))
         dispatch(change({ name: 'photo', value: isUser.photo }))
         dispatch(change({ name: 'name', value: isUser.name }))
         dispatch(change({ name: 'uname', value: isUser.uname }))

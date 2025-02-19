@@ -5,7 +5,6 @@ interface State {
 }
 const initialState: State = {
     isDropdownOpen: false,
-    user_id: 0,
     photo: '',
     name: '',
     uname: '',

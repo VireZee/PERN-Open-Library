@@ -9,7 +9,6 @@ const initialState: State = {
     loadUser: true
 }
 interface UserData {
-    user_id: number
     photo: string
     name: string
     uname: string
@@ -19,14 +18,14 @@ const AppAction = createSlice({
     name: 'APP',
     initialState,
     reducers: {
-        setSearch: (state, { payload }: PayloadAction<string>) => {
-            state['search'] = payload
-        },
         setUser: (state, { payload }: PayloadAction<null | UserData>) => {
             state['user'] = payload
             state['loadUser'] = false
+        },
+        setSearch: (state, { payload }: PayloadAction<string>) => {
+            state['search'] = payload
         }
     }
 })
-export const { setSearch, setUser } = AppAction.actions
+export const { setUser, setSearch } = AppAction.actions
 export default AppAction.reducer

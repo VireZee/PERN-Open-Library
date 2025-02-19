@@ -4,19 +4,14 @@ import CheckGQL from './graphql/api/Check'
 import GenerateGQL from './graphql/api/Generate'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
-import { setOnline, setApiKey } from './redux/APIKeyAction'
+import { setOnline, setApiKey } from './redux/APIAction'
 import Net from './error/Internet'
 
-interface Props {
-    isUser: {
-        user_id: number
-    } | null
-}
-const APIKey: React.FC<Props> = ({ isUser }) => {
-    const { loading, data, error } = useQuery(CheckGQL, { variables: { user_id: isUser!.user_id } })
+const API: React.FC = () => {
+    const { loading, data, error } = useQuery(CheckGQL)
     const [gen] = useMutation(GenerateGQL)
     const dispatch = useDispatch()
-    const apiKeyState = useSelector((state: RootState) => state.APIK)
+    const apiState = useSelector((state: RootState) => state.API)
     const check = async () => {
         if (!loading) {
             if (data) dispatch(setApiKey(data.check))
@@ -25,11 +20,7 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
     }
     const generate = async () => {
         try {
-            const { data } = await gen({
-                variables: {
-                    user_id: isUser!.user_id
-                }
-            })
+            const { data } = await gen()
             if (data) dispatch(setApiKey(data.generate))
         } catch (err) {
             if (err instanceof ApolloError) alert(err.message)
@@ -45,13 +36,13 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
             window.removeEventListener('online', handleOnline)
             window.removeEventListener('offline', handleOnline)
         }
-    }, [apiKeyState.online, data, error])
+    }, [apiState.online, data, error])
     return (
         <>
-            {apiKeyState.online ? (
+            {apiState.online ? (
                 <div className="mt-16">
-                    {apiKeyState.apiKey !== null ? (
-                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}:{import.meta.env.VITE_SERVER_PORT}/API/{apiKeyState.apiKey}</p>
+                    {apiState.apiKey !== null ? (
+                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}:{import.meta.env.VITE_SERVER_PORT}/API/{apiState.apiKey}</p>
                     ) : (
                         <button
                             onClick={generate}
@@ -67,4 +58,4 @@ const APIKey: React.FC<Props> = ({ isUser }) => {
         </>
     )
 }
-export default APIKey
+export default API

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
+import axios, { AxiosResponse } from 'axios'
 import { useQuery, useMutation, ApolloError } from '@apollo/client'
 import { FETCH, ADD } from './graphql/book/Home'
-import axios, { AxiosResponse } from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setOnline, setLoad, Books, setBooks, setCurrentPage, setTotalPages, setStatus } from './redux/HomeAction'
@@ -11,9 +11,7 @@ import NB from './error/NoBooks'
 
 interface Props {
     search: string
-    isUser: {
-        user_id: number
-    } | null
+    isUser: Record<string, string> | null
 }
 interface URLParams {
     title?: string
@@ -38,10 +36,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     }
     const fetchStatus = async (isbnParam: string) => {
         try {
-            const res = await refetch({
-                user_id: isUser!.user_id,
-                isbn: isbnParam
-            })
+            const res = await refetch({ isbn: isbnParam })
             dispatch(setStatus(res.data.fetch))
         } catch (err) {
             if (err instanceof ApolloError) alert('Fetch Error: ' + err.message)
@@ -54,7 +49,6 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             try {
                 const { data } = await add({
                     variables: {
-                        user_id: isUser.user_id,
                         cover_i,
                         isbn,
                         title,
@@ -156,7 +150,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
         }
     }, [homeState.online, search])
     useEffect(() => {
-        if (isUser && isUser.user_id) {
+        if (isUser) {
             homeState.books.forEach((book: Books) => {
                 if (book.isbn) fetchStatus(getValidIsbn(book.isbn))
             })

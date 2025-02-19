@@ -5,9 +5,8 @@ import RegAct from './RegisterAction'
 import LogAct from './LoginAction'
 import HomeAct from './HomeAction'
 import ColAct from './CollectionAction'
-import APIKeyAct from './APIKeyAction'
-import SetAct from './SettingsAction'
 import APIAct from './APIAction'
+import SetAct from './SettingsAction'
 
 const ReduxStore: Store = configureStore({
     reducer: {
@@ -17,9 +16,8 @@ const ReduxStore: Store = configureStore({
         LOG: LogAct,
         HOME: HomeAct,
         COL: ColAct,
-        APIK: APIKeyAct,
-        SET: SetAct,
-        API: APIAct
+        API: APIAct,
+        SET: SetAct
     }
 })
 export type RootState = ReturnType<typeof ReduxStore.getState>

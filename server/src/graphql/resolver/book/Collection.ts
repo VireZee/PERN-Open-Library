@@ -5,7 +5,7 @@ import { Request } from 'express'
 import { verToken } from '../../../utils/Validation'
 import { GraphQLError } from 'graphql'
 
-const Collection = async (_: null, args: { user_id: number, search: string, page: number }, context: { req: Request }) => {
+const Collection = async (_: null, args: { search: string, page: number }, context: { req: Request }) => {
     const t = context.req.cookies['!']
     try {
         const colRepo = AppDataSource.getRepository(Col)

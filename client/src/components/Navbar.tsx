@@ -1,26 +1,26 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useMutation, ApolloError } from '@apollo/client'
+import LogoutGQL from './graphql/auth/Logout'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from './redux/Store'
 import { setActive, setIsDropdownOpen } from './redux/NavbarAction'
-import { useMutation, ApolloError } from '@apollo/client'
-import LogoutGQL from './graphql/auth/Logout'
 
 interface Props {
-    onSearch: (v: string) => void
     isUser: {
         photo: string
         name: string
     } | null
+    onSearch: (v: string) => void
 }
 interface URLParams {
     title?: string
     isbn?: string
 }
-const Navbar: React.FC<Props> = ({ onSearch, isUser }) => {
-    const navState = useSelector((state: RootState) => state.NAV)
-    const dispatch = useDispatch()
+const Navbar: React.FC<Props> = ({ isUser, onSearch }) => {
     const [logout] = useMutation(LogoutGQL)
+    const dispatch = useDispatch()
+    const navState = useSelector((state: RootState) => state.NAV)
     const { title, isbn }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
