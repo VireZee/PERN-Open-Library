@@ -12,7 +12,6 @@ const API = async (req: Request, res: Response) => {
         if (!user) res.status(404).json({ message: 'Invalid API Key!' })
         const books = await Books({ user_id: user!.user_id })
         const response = {
-            user_id: user!.user_id,
             email: user!.email,
             username: user!.username,
             books
