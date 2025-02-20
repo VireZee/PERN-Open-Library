@@ -1,7 +1,7 @@
 {
   "name": "pern-open-library",
   "scripts": {
-    "start": "nodemon main.ts"
+    "start": "ts-node main.ts"
   },
   "devDependencies": {
     "@apollo/server": "^4.11.3",
@@ -17,6 +17,7 @@
     "graphql": "^16.10.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.3",
+    "ts-node": "^10.9.2",
     "typeorm": "^0.3.20"
   },
   "packageManager": "pnpm@9.15.4"
