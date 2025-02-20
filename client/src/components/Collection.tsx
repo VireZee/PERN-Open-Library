@@ -37,7 +37,7 @@ const Collection: React.FC<Props> = ({ search }) => {
             dispatch(setLoad(false))
         }
     }
-    const collectionData = (res: ApolloQueryResult<{ collection: { found: number; collection: { cover_i: number; isbn: string; title: string; author_name: string; __typename: string }[]; totalCollection: number } }>) => {
+    const collectionData = (res: ApolloQueryResult<{ collection: { found: number, collection: { author_key: string[], cover_edition_key: string, cover_i: number, title: string, author_name: string }[]; totalCollection: number } }>) => {
         const { found, collection, totalCollection } = res.data.collection
         if (found === 0) dispatch(setBooks([]))
         else {
@@ -45,9 +45,9 @@ const Collection: React.FC<Props> = ({ search }) => {
             dispatch(setTotalPages(Math.ceil(totalCollection / 9)))
         }
     }
-    const removeCollection = async (isbn: string) => {
+    const removeCollection = async (author_key: string[], cover_edition_key: string, cover_i: number) => {
         try {
-            const { data } = await remove({ variables: { isbn } })
+            const { data } = await remove({ variables: { author_key, cover_edition_key, cover_i } })
             if (data.remove) fetchCollection()
         } catch (err) {
             if (err instanceof ApolloError) alert(err.message)
@@ -137,7 +137,7 @@ const Collection: React.FC<Props> = ({ search }) => {
                                                         <input
                                                             type="checkbox"
                                                             checked={true}
-                                                            onChange={() => { removeCollection(book.isbn as string) }}
+                                                            onChange={() => { removeCollection(book.author_key, book.cover_edition_key, book.cover_i) }}
                                                         />
                                                         <span>Added to Collection</span>
                                                     </label>

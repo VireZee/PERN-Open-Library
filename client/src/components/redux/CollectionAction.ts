@@ -12,8 +12,9 @@ const initialState: State = {
     totalPages: 1
 }
 export interface Books {
+    author_key: string[]
+    cover_edition_key: string
     cover_i: number
-    isbn: string
     title: string
     author_name: string
 }

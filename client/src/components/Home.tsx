@@ -36,8 +36,7 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     const fetchStatus = async (author_key: string[], cover_edition_key: string, cover_i: number) => {
         try {
             const res = await refetch({ author_key, cover_edition_key, cover_i })
-            const { key, added } = res.data.fetch
-            dispatch(setStatus({ key, added }))
+            dispatch(setStatus(res.data.fetch))
         } catch (err) {
             if (err instanceof ApolloError) alert('Fetch Error: ' + err.message)
             else alert('Fetch Error: An unexpected error occurred.')

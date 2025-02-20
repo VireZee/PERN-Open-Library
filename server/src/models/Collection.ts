@@ -8,13 +8,13 @@ export default class Book {
     user_id: number
     @Column({ type: 'varchar', array: true })
     author_key: string[]
-    @Column()
+    @Column({ type: "varchar" })
     cover_edition_key: string
     @Column({ type: "int" })
     cover_i: number
-    @Column()
+    @Column({ type: "varchar" })
     title: string
-    @Column()
+    @Column({ type: "varchar" })
     author_name: string
     @Column({ type: "timestamptz" })
     created: Date

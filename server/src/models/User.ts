@@ -11,10 +11,10 @@ export default class User {
     @Column({ length: 20 })
     @Index({ unique: true })
     username: string
-    @Column()
+    @Column({ type: "varchar" })
     @Index({ unique: true })
     email: string
-    @Column()
+    @Column({ type: "varchar" })
     pass: string
     @Column({ type: "bytea", nullable: true })
     api_key: Buffer

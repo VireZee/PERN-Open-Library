@@ -22,7 +22,7 @@ const Collection = async (_: null, args: { search: string, page: number }, conte
             take: limit,
             order: {
                 created: {
-                    direction: 'DESC'
+                    direction: 'desc'
                 }
             }
         })

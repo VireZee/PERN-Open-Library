@@ -16,7 +16,7 @@ export const FETCH = gql`
     }
 `
 export const REMOVE = gql`
-    mutation($isbn: String!) {
-        remove(isbn: $isbn)
+    mutation($author_key: [String!]!, $cover_edition_key: String!, $cover_i: Int!) {
+        remove(author_key: $author_key, cover_edition_key: $cover_edition_key, cover_i: $cover_i)
     }
 `

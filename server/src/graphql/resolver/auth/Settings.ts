@@ -5,7 +5,8 @@ import { valName, frmtName, valUname, frmtUname, valEmail, Hash, verHash, genTok
 import { GraphQLError } from 'graphql'
 
 const Settings = async (_: null, args: { photo: string; name: string; uname: string; email: string; oldPass: string; newPass: string; rePass: string; show: boolean }, context: { req: Request, res: Response }) => {
-    const t = context.req.cookies['!']
+    const { req, res } = context
+    const t = req.cookies['!']
     try {
         const userRepo = AppDataSource.getRepository(User)
         const { user_id } = verToken(t)
@@ -35,7 +36,7 @@ const Settings = async (_: null, args: { photo: string; name: string; uname: str
             userRepo.merge(user!, updatedUser)
             await userRepo.save(user!)
             const t = genToken(user!.user_id)
-            context.res.cookie('!', t, {
+            res.cookie('!', t, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
