@@ -81,8 +81,8 @@ const Navbar: React.FC<Props> = ({ isUser, onSearch }) => {
                     </>
                 ) : (
                     <>
-                        <a href="register" className="hover:text-gray-500 mr-4">Register</a>
-                        <a href="login" className="hover:text-gray-500">Already have an account?</a>
+                        <a href="register" className="hover:text-gray-500 mr-4 text-white">Register</a>
+                        <a href="login" className="hover:text-gray-500 text-white">Already have an account?</a>
                     </>
                 )}
             </div>
