@@ -5,4 +5,4 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm i
 COPY . .
 EXPOSE 3000
-CMD pnpm run dev
+CMD pnpm run dev --host
