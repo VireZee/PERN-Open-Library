@@ -9,24 +9,9 @@ import Net from './error/Internet'
 
 const API: React.FC = () => {
     const { loading, data, error } = useQuery(CheckGQL)
-    const [gen] = useMutation(GenerateGQL)
+    const [gnr] = useMutation(GenerateGQL)
     const dispatch = useDispatch()
     const apiState = useSelector((state: RootState) => state.API)
-    const check = async () => {
-        if (!loading) {
-            if (data) dispatch(setApiKey(data.check))
-            else if (error) alert(error)
-        }
-    }
-    const generate = async () => {
-        try {
-            const { data } = await gen()
-            if (data) dispatch(setApiKey(data.generate))
-        } catch (err) {
-            if (err instanceof ApolloError) alert(err.message)
-            else alert('An unexpected error occurred.')
-        }
-    }
     React.useEffect(() => {
         const handleOnline = () => dispatch(setOnline(navigator.onLine))
         window.addEventListener('online', handleOnline)
@@ -37,16 +22,31 @@ const API: React.FC = () => {
             window.removeEventListener('offline', handleOnline)
         }
     }, [apiState.online, data, error])
+    const check = async () => {
+        if (!loading) {
+            if (data) dispatch(setApiKey(data.check))
+            else if (error) alert(error)
+        }
+    }
+    const generate = async () => {
+        try {
+            const { data } = await gnr()
+            if (data) dispatch(setApiKey(data.generate))
+        } catch (err) {
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
+        }
+    }
     return (
         <>
             {apiState.online ? (
                 <div className="mt-16">
                     {apiState.apiKey !== null ? (
-                        <p className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center">http://{import.meta.env.VITE_DOMAIN}:{import.meta.env.VITE_SERVER_PORT}/API/{apiState.apiKey}</p>
+                        <p className="bg-black text-white px-4 py-3 rounded-lg w-[90vw] max-w-[600px] text-center break-all absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-lg sm:text-xl">http://{import.meta.env.VITE_DOMAIN}:{import.meta.env.VITE_SERVER_PORT}/API/{apiState.apiKey}</p>
                     ) : (
                         <button
                             onClick={generate}
-                            className="bg-black text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl"
+                            className="bg-black text-white px-6 py-3 rounded-lg text-lg sm:text-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                         >
                             Generate
                         </button>

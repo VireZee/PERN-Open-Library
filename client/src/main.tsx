@@ -4,13 +4,13 @@ import { Provider } from 'react-redux'
 import Store from './components/redux/Store'
 import App from './App.tsx'
 
-const client = new ApolloClient({
+const Client = new ApolloClient({
     uri: `http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/gql`,
     credentials: 'include',
     cache: new InMemoryCache({ addTypename: false })
 })
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <ApolloProvider client={client}>
+    <ApolloProvider client={Client}>
         <Provider store={Store}>
             <App />
         </Provider>

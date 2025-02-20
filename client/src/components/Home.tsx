@@ -26,13 +26,52 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
     const { title, isbn, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
     const str = title || isbn
     const pg = Number(page) || 1
-    const getValidKey = (author_key: string[], cover_edition_key: string, cover_i: number): string => {
-        return `${[...author_key].sort().join(',')}|${cover_edition_key}|${cover_i}`
-    }
-    const getValidAuthor = (author: string[] | string) => {
-        if (Array.isArray(author)) return author.join(', ')
-        return author || 'Unknown'
-    }
+    useEffect(() => {
+        const handleOnline = () => dispatch(setOnline(navigator.onLine))
+        window.addEventListener('online', handleOnline)
+        window.addEventListener('offline', handleOnline);
+        (async () => {
+            const fetchBooks = async () => {
+                const type = /^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title'
+                const query = search.split(' ').join('+')
+                const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
+                booksData(res)
+                dispatch(setLoad(false))
+            }
+            const booksData = (res: AxiosResponse) => {
+                const { numFound, docs } = res.data
+                if (numFound === 0) dispatch(setBooks([]))
+                else {
+                    dispatch(setBooks(docs))
+                    dispatch(setTotalPages(Math.ceil(numFound / 100)))
+                }
+            }
+            if (homeState.online) {
+                dispatch(setLoad(true))
+                if (search) {
+                    dispatch(setCurrentPage(1))
+                    fetchBooks()
+                } else {
+                    const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
+                    const query = str ? str.split(' ').join('+') : 'harry+potter'
+                    const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
+                    booksData(res)
+                    dispatch(setLoad(false))
+                }
+            }
+        })()
+        return () => {
+            window.removeEventListener('online', handleOnline)
+            window.removeEventListener('offline', handleOnline)
+        }
+    }, [homeState.online, search])
+    useEffect(() => {
+        if (isUser) {
+            homeState.books.forEach((book: Books) => {
+                if (book.author_key && book.cover_edition_key && book.cover_i) fetchStatus(book.author_key, book.cover_edition_key, book.cover_i)
+            })
+        }
+    }, [homeState.books])
     const fetchStatus = async (author_key: string[], cover_edition_key: string, cover_i: number) => {
         try {
             const res = await refetch({ author_key, cover_edition_key, cover_i })
@@ -42,25 +81,10 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             else alert('Fetch Error: An unexpected error occurred.')
         }
     }
-    const addToCollection = async (author_key: string[], cover_edition_key: string, cover_i: number, title: string, author_name: string) => {
-        if (!isUser) location.href = '/login'
-        else if (isUser) {
-            try {
-                const { data } = await add({
-                    variables: {
-                        author_key,
-                        cover_edition_key,
-                        cover_i,
-                        title,
-                        author_name
-                    }
-                })
-                if (data.add) fetchStatus(author_key, cover_edition_key, cover_i)
-            } catch (err) {
-                if (err instanceof ApolloError) alert(err.message)
-                else alert('An unexpected error occurred.')
-            }
-        }
+    const getValidKey = (author_key: string[], cover_edition_key: string, cover_i: number): string => `${[...author_key].sort().join(',')}|${cover_edition_key}|${cover_i}`
+    const getValidAuthor = (author: string[] | string) => {
+        if (Array.isArray(author)) return author.join(', ')
+        return author || 'Unknown'
     }
     const pageNumbers = () => {
         const pages = []
@@ -110,52 +134,26 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
             </>
         )
     }
-    useEffect(() => {
-        const handleOnline = () => dispatch(setOnline(navigator.onLine))
-        window.addEventListener('online', handleOnline)
-        window.addEventListener('offline', handleOnline);
-        (async () => {
-            const fetchBooks = async () => {
-                const type = /^\d{10}(\d{3})?$/.test(search) ? 'isbn' : 'title'
-                const query = search.split(' ').join('+')
-                const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${homeState.currentPage}`)
-                booksData(res)
-                dispatch(setLoad(false))
+    const addToCollection = async (author_key: string[], cover_edition_key: string, cover_i: number, title: string, author_name: string) => {
+        if (!isUser) location.href = '/login'
+        else if (isUser) {
+            try {
+                const { data } = await add({
+                    variables: {
+                        author_key,
+                        cover_edition_key,
+                        cover_i,
+                        title,
+                        author_name
+                    }
+                })
+                if (data.add) fetchStatus(author_key, cover_edition_key, cover_i)
+            } catch (err) {
+                if (err instanceof ApolloError) alert(err.message)
+                else alert('An unexpected error occurred.')
             }
-            const booksData = (res: AxiosResponse) => {
-                const { numFound, docs } = res.data
-                if (numFound === 0) dispatch(setBooks([]))
-                else {
-                    dispatch(setBooks(docs))
-                    dispatch(setTotalPages(Math.ceil(numFound / 100)))
-                }
-            }
-            if (homeState.online) {
-                dispatch(setLoad(true))
-                if (search) {
-                    dispatch(setCurrentPage(1))
-                    fetchBooks()
-                } else {
-                    const type = /^\d{10}(\d{3})?$/.test(str ?? '') ? 'isbn' : 'title'
-                    const query = str ? str.split(' ').join('+') : 'harry+potter'
-                    const res = await axios.get(`https://openlibrary.org/search.json?${type}=${query}&page=${pg}`)
-                    booksData(res)
-                    dispatch(setLoad(false))
-                }
-            }
-        })()
-        return () => {
-            window.removeEventListener('online', handleOnline)
-            window.removeEventListener('offline', handleOnline)
         }
-    }, [homeState.online, search])
-    useEffect(() => {
-        if (isUser) {
-            homeState.books.forEach((book: Books) => {
-                if (book.author_key && book.cover_edition_key && book.cover_i) fetchStatus(book.author_key, book.cover_edition_key, book.cover_i)
-            })
-        }
-    }, [homeState.books])
+    }
     return (
         <>
             {homeState.load ? (
@@ -168,12 +166,12 @@ const Home: React.FC<Props> = ({ isUser, search }) => {
                                 <NB />
                             ) : (
                                 <>
-                                    <div className="mt-16 grid grid-cols-3">
+                                    <div className="mt-[12rem] sm:mt-[6rem] md:mt-[7rem] lg:mt-[8rem] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
                                         {homeState.books.map((book: Books, idx: number) => (
-                                            <div key={idx} className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
+                                            <div key={idx} className="flex flex-col sm:flex-row max-w-sm sm:max-w-md lg:max-w-lg mx-auto p-6 border border-gray-400 shadow-[0px_4px_20px_rgba(0,0,0,0.6)] rounded-lg bg-white text-black">
                                                 <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
                                                     alt={book.title}
-                                                    className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
+                                                    className="w-full sm:w-[210px] h-[300px] object-cover border-2 border-gray-400" />
                                                 <div className="ml-4">
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author(s): {Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name || 'Unknown'}</h2>

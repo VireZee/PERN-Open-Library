@@ -17,11 +17,21 @@ interface URLParams {
 }
 const Collection: React.FC<Props> = ({ search }) => {
     const { refetch } = useQuery(FETCH, { skip: true })
-    const [remove] = useMutation(REMOVE)
+    const [rmv] = useMutation(REMOVE)
     const dispatch = useDispatch()
     const colState = useSelector((state: RootState) => state.COL)
     const { title, page }: URLParams = Object.fromEntries(new URLSearchParams(window.location.search))
-    const pg = Number(page)
+    const pg = Number(page) || 1
+    React.useEffect(() => {
+        const handleOnline = () => dispatch(setOnline(navigator.onLine))
+        window.addEventListener('online', handleOnline)
+        window.addEventListener('offline', handleOnline)
+        fetchCollection()
+        return () => {
+            window.removeEventListener('online', handleOnline)
+            window.removeEventListener('offline', handleOnline)
+        }
+    }, [colState.online, search])
     const fetchCollection = async () => {
         try {
             dispatch(setLoad(true))
@@ -43,15 +53,6 @@ const Collection: React.FC<Props> = ({ search }) => {
         else {
             dispatch(setBooks(collection))
             dispatch(setTotalPages(Math.ceil(totalCollection / 9)))
-        }
-    }
-    const removeCollection = async (author_key: string[], cover_edition_key: string, cover_i: number) => {
-        try {
-            const { data } = await remove({ variables: { author_key, cover_edition_key, cover_i } })
-            if (data.remove) fetchCollection()
-        } catch (err) {
-            if (err instanceof ApolloError) alert(err.message)
-            else alert('An unexpected error occurred.')
         }
     }
     const pageNumbers = () => {
@@ -102,16 +103,15 @@ const Collection: React.FC<Props> = ({ search }) => {
             </>
         )
     }
-    React.useEffect(() => {
-        const handleOnline = () => dispatch(setOnline(navigator.onLine))
-        window.addEventListener('online', handleOnline)
-        window.addEventListener('offline', handleOnline)
-        fetchCollection()
-        return () => {
-            window.removeEventListener('online', handleOnline)
-            window.removeEventListener('offline', handleOnline)
+    const removeCollection = async (author_key: string[], cover_edition_key: string, cover_i: number) => {
+        try {
+            const { data } = await rmv({ variables: { author_key, cover_edition_key, cover_i } })
+            if (data.remove) fetchCollection()
+        } catch (err) {
+            if (err instanceof ApolloError) alert(err.message)
+            else alert('An unexpected error occurred.')
         }
-    }, [colState.online, search])
+    }
     return (
         <>
             {colState.load ? (
@@ -124,12 +124,12 @@ const Collection: React.FC<Props> = ({ search }) => {
                                 <NB />
                             ) : (
                                 <>
-                                    <div className="mt-16 grid grid-cols-3">
+                                    <div className="mt-[12rem] sm:mt-[6rem] md:mt-[7rem] lg:mt-[8rem] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
                                         {colState.books.map((book: Books, idx: number) => (
-                                            <div key={idx} className="flex w-[600px] h-[320px] m-[20px] p-[10px] shadow-[0_0_20px_#000]">
+                                            <div key={idx} className="flex flex-col sm:flex-row max-w-sm sm:max-w-md lg:max-w-lg mx-auto p-6 border border-gray-400 shadow-[0px_4px_20px_rgba(0,0,0,0.6)] rounded-lg bg-white text-black">
                                                 <img src={`http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`}
                                                     alt={book.title}
-                                                    className="w-[210px] h-[300px] border-solid border-2 border-[#808080]" />
+                                                    className="w-full sm:w-[210px] h-[300px] object-cover border-2 border-gray-400" />
                                                 <div className="ml-4">
                                                     <h1 className="text-center font-black text-xl mb-5">{book.title}</h1>
                                                     <h2 className="text-sm mb-2">Author(s): {book.author_name}</h2>

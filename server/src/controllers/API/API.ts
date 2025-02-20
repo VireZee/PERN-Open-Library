@@ -9,20 +9,19 @@ const API = async (req: Request, res: Response) => {
         const { hash } = req.params
         const hashBuffer = Buffer.from(hash, 'hex')
         const user = await userRepo.findOne({ where: { api_key: hashBuffer } })
-        if (!user) res.status(404).json({ message: 'Invalid API Key!' })
+        if (!user) return res.status(404).json({ message: 'Invalid API Key!' })
         const books = await Books({ user_id: user!.user_id })
         const response = {
             email: user!.email,
             username: user!.username,
             books
         }
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify(response, null, 2)) 
+        return res.setHeader('Content-Type', 'application/json').send(JSON.stringify(response, null, 2))
     } catch (e) {
         if (e instanceof Error) {
-            res.status(500).json({ e: e.message })
+            return res.status(500).json({ e: e.message })
         } else {
-            res.status(500).json()
+            return res.status(500).json()
         }
     }
 }
