@@ -1,2 +1,4 @@
 **/.env
-**/.sql
+**/*.sql
+**/node_modules
+**/.env
