@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}
     ports:
       - 5432:5432
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
