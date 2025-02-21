@@ -1,4 +1,17 @@
 services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    env_file:
+      - ./server/src/configs/.env
+    environment:
+      POSTGRES_DB: pern-open-library
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5432:5432
+    volumes:
+      - pern-open-library_pg_data:/var/lib/postgresql/data
   backend:
     build: server
     container_name: express
@@ -6,6 +19,8 @@ services:
       - ./server/src/configs/.env
     ports:
       - 3001:3001
+    depends_on:
+      - db
   frontend:
     build: client
     container_name: react
@@ -13,3 +28,7 @@ services:
       - ./client/.env
     ports:
       - 3000:3000
+    depends_on:
+      - backend
+volumes:
+  pern-open-library_pg_data:
