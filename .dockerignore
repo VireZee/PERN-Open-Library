@@ -1,5 +1,6 @@
 **/.dockerignore
 **/.env
+**/.sql*
 **/.git
 **/.gitignore
 **/compose.y*ml

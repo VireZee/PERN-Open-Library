@@ -1,20 +1,21 @@
 services:
   db:
     image: postgres:latest
-    container_name: postgres
-    env_file:
-      - ./server/src/configs/.env
+    container_name: pern-open-library-postgres
     environment:
-      POSTGRES_DB: pern-open-library
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - 5432:5432
     volumes:
-      - pern-open-library_pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
+      - ./server/src/configs/init.sql:/docker-entrypoint-initdb.d/init.sql
   backend:
     build: server
-    container_name: express
+    container_name: pern-open-library-express
     env_file:
       - ./server/src/configs/.env
     ports:
@@ -23,7 +24,7 @@ services:
       - db
   frontend:
     build: client
-    container_name: react
+    container_name: pern-open-library-react
     env_file:
       - ./client/.env
     ports:
@@ -31,4 +32,4 @@ services:
     depends_on:
       - backend
 volumes:
-  pern-open-library_pg_data:
+  pg_data:
