@@ -1,12 +1,9 @@
-**/.dockerignore
+**/node_modules
 **/.env
-**/.sql*
+**/*.sql*
+**/Dockerfile*
+**/compose.y*ml
+**/.dockerignore
 **/.git
 **/.gitignore
-**/compose.y*ml
-**/Dockerfile*
-**/node_modules
-**/build
-**/dist
 LICENSE
-README.md
