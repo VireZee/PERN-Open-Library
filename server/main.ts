@@ -29,5 +29,5 @@ const server = new ApolloServer({
         })
     )
     app.use(APIRt)
-    httpServer.listen(process.env.PORT, '0.0.0.0')
+    httpServer.listen(process.env.PORT)
 })()

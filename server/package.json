@@ -1,7 +1,9 @@
 {
   "name": "pern-open-library",
   "scripts": {
-    "start": "ts-node main.ts"
+    "dev": "ts-node main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js"
   },
   "devDependencies": {
     "@apollo/server": "^4.11.3",
