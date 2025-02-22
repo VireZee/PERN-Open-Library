@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const SETTINGS = gql`
-    mutation($photo: String!, $name: String!, $uname: String!, $email: String!, $oldPass: String, $newPass: String, $rePass: String, $show: Boolean!) {
+    mutation Settings($photo: String!, $name: String!, $uname: String!, $email: String!, $oldPass: String, $newPass: String, $rePass: String, $show: Boolean!) {
         settings(photo: $photo, name: $name, uname: $uname, email: $email, oldPass: $oldPass, newPass: $newPass, rePass: $rePass, show: $show)
     }
 `

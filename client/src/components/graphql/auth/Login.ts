@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const LOGIN = gql`
-    mutation($emailOrUname: String!, $pass: String!) {
+    mutation Login($emailOrUname: String!, $pass: String!) {
         login(emailOrUname: $emailOrUname, pass: $pass)
     }
 `

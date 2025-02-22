@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const CHECK = gql`
-    query {
+    query Check {
         check
     }
 `

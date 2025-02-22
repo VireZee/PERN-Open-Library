@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const LOGOUT = gql`
-    mutation {
+    mutation Logout {
         logout
     }
 `

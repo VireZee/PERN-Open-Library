@@ -7,6 +7,11 @@ import App from './App.tsx'
 const Client = new ApolloClient({
     uri: `http://${import.meta.env.VITE_DOMAIN}:${import.meta.env.VITE_SERVER_PORT}/gql`,
     credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json',
+        'x-apollo-operation-name': 'PERNOpenLibraryGraphQL',
+        'apollo-require-preflight': 'true'
+    },
     cache: new InMemoryCache({ addTypename: false })
 })
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const AUTH = gql`
-    query {
+    query Auth {
         auth {
             photo
             name

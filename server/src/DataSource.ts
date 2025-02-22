@@ -9,7 +9,7 @@ const AppDataSource = new DataSource({
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
-    entities: [path.join(__dirname, 'models', '*.ts')],
+    entities: [path.join(__dirname, '..', 'dist', 'models', '*.js')],
     synchronize: process.env.NODE_ENV === 'development'
 })
 export default AppDataSource
