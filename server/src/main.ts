@@ -1,4 +1,4 @@
-import AppDataSource from './src/DataSource'
+import AppDataSource from './DataSource'
 import express from 'express'
 import http from 'http'
 import cors from 'cors'
@@ -6,8 +6,8 @@ import cp from 'cookie-parser'
 import { ApolloServer } from '@apollo/server'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { expressMiddleware } from '@apollo/server/express4'
-import { typeDefs, resolvers } from './src/graphql/Resolver'
-import APIRt from './src/routes/API'
+import { typeDefs, resolvers } from './graphql/Resolver'
+import APIRt from './routes/API'
 
 AppDataSource.initialize()
 const app = express()
