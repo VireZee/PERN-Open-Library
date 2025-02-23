@@ -24,8 +24,6 @@ services:
     build: client
     container_name: pern-open-library-react
     restart: always
-    env_file:
-      - ./client/.env
     ports:
       - 3000:3000
     depends_on:
