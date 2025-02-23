@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:17
+    image: postgres:latest
     container_name: pern-open-library-postgres
     restart: always
     environment:
