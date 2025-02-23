@@ -51,7 +51,7 @@ Each environment file must be placed in its respective service directory:
 #### 🌐 Frontend 🎨 
 Navigate to the project root and create `.env` inside the `client/` directory:
 ```sh
-cd ../
+cd ..
 
 # Linux/macOS
 cp client/.env.example client/.env
