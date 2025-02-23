@@ -159,6 +159,8 @@ DB_USER=<your_database_user>
 DB_PASS=<your_database_password>
 DB_NAME=<your_database_name>
 ```
+> [!Note]
+> **Replace values inside `<...>` with your actual database credentials.**
 
 Also, ensure server/src/configs/.env is updated with the following:
 ```env
@@ -186,5 +188,5 @@ Special thanks to Open Library API for providing free and open access to book da
 ---
 
 ### 👤 Author
-Developed by [VireZee](https://github.com/VireZee). Feel free to contribute or provide feedback! 🚀
+Developed by [VireZee](https://github.com/VireZee). Feel free to contribute or provide feedback! 📝
 Contributions are welcome, especially for improving the frontend.
