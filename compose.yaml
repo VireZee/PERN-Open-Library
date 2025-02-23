@@ -1,16 +1,12 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:17
     container_name: pern-open-library-postgres
     restart: always
-    env_file:
-      - ./server/src/configs/.env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
       POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - pg_data:/var/lib/postgresql/data
   backend:
     build: server
     image: virezee/pern-open-library-backend:latest
@@ -29,5 +25,3 @@ services:
       - 3000:3000
     depends_on:
       - backend
-volumes:
-  pg_data:

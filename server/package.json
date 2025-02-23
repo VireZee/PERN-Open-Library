@@ -1,8 +1,10 @@
 {
   "name": "pern-open-library",
   "scripts": {
-    "dev": "ts-node src/main.ts",
+    "dev": "nodemon -x ts-node src/main.ts",
     "build": "tsc && cpx src/configs/.env dist/configs",
+    "preproduction": "pnpm typeorm migration:generate dist/migrations/Init -d dist/DataSource.js -o && pnpm typeorm migration:run -d dist/DataSource.js",
+    "production": "node dist/main.js",
     "start": "node dist/main.js"
   },
   "devDependencies": {
@@ -14,10 +16,12 @@
     "argon2": "^0.41.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "cpx": "^1.5.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "graphql": "^16.10.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9",
     "pg": "^8.13.3",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",

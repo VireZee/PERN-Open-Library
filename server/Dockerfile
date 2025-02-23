@@ -5,5 +5,4 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm i
 COPY . .
 RUN pnpm run build
-RUN pnpm ts-node node_modules/typeorm/cli.js migration:generate src/configs/migrations/Init -d src/DataSource.ts
-CMD pnpm start
+CMD pnpm typeorm migration:generate dist/migrations/Init -d dist/DataSource.js -o && pnpm typeorm migration:run -d dist/DataSource.js && pnpm start
