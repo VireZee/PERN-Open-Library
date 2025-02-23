@@ -12,6 +12,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   backend:
     build: server
+    image: virezee/pern-open-library-backend:latest
     container_name: pern-open-library-express
     restart: always
     env_file:
@@ -22,6 +23,7 @@ services:
       - db
   frontend:
     build: client
+    image: virezee/pern-open-library-frontend:latest
     container_name: pern-open-library-react
     restart: always
     ports:
