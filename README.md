@@ -96,7 +96,7 @@ SECRET_KEY=<your_secret_key>
 PEPPER=<your_pepper>
 NODE_ENV=development    # or "production"
 ```
-> [!NOTE]
+> [!Note]
 > **Replace values inside `<...>` with your actual database credentials.**
 
 ---
@@ -169,7 +169,7 @@ docker compose up -d
 ```sh
 docker compose down
 ```
-> [!Warning]
+> [!Caution]
 > ⚠️ The PostgreSQL database runs in a non-persistent volume, meaning all data will be lost if the container is stopped or restarted.
 
 ---
