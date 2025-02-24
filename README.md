@@ -116,7 +116,7 @@ pnpm run dev
 ```
 
 ### **🏭 Production Mode**
-Before running the application in production, make sure to modify the `.env` file inside server/src/configs/:
+Before running the application in production, make sure to modify the `.env` file inside `server/src/configs/`:
 ```sh
 NODE_ENV=production
 ```
@@ -164,7 +164,7 @@ DB_NAME=<your_database_name>
 > [!Note]
 > **Replace values inside `<...>` with your actual database credentials.**
 
-Also, ensure server/src/configs/.env is updated with the following:
+Also, ensure `server/src/configs/.env` is updated with the following:
 ```env
 DB_HOST=db  # Use "db" instead of "localhost" when running inside Docker
 NODE_ENV=production  # Ensure the app runs in production mode inside Docker
