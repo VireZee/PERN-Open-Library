@@ -143,6 +143,8 @@ If you prefer running the application inside Docker containers, follow these ste
 ### 1️⃣ Configure Environment Variables 🔑
 Docker requires an additional  `.env` file at the **project root**. Copy the example file:
 ```sh
+cd ..
+
 # Linux/macOS
 cp .env.example .env
 
