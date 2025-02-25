@@ -4,19 +4,19 @@ A lightweight **Open Library System** powered by the **PERN Stack** (**PostgreSQ
 ---
 
 ## 🚀 Quick Start
-### 1️⃣ Create a Docker Network 📡
-```sh
-docker network create <your_network_name>
-```
-> [!Note]
-> **Replace values inside <...> with your preferred network name.**
-
-### 2️⃣ Pull the Images ⏬
+### 1️⃣ Pull the Images ⏬
 ```sh
 docker pull postgres:latest
 docker pull virezee/pern-open-library-backend:latest
 docker pull virezee/pern-open-library-frontend:latest
 ```
+
+### 2️⃣ Create a Docker Network 📡
+```sh
+docker network create <your_network_name>
+```
+> [!Note]
+> **Replace values inside <...> with your preferred network name.**
 
 ### 3️⃣ Run the Containers 🚢
 #### 🗄️ Database 🗃️
