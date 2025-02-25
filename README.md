@@ -29,49 +29,30 @@ git clone https://github.com/VireZee/PERN-Open-Library.git
 cd PERN-Open-Library
 ```
 
-### 2️⃣ Install Dependencies 🔧
-#### 🌐 Frontend 🎨
+### 2️⃣ Install Dependencies 🛠️
+#### ⚙️ Backend 🌐
 ```sh
-cd client
+cd server
 pnpm i
 ```
 
-#### 🖥️ Backend ⚙️
+#### 🖥️ Frontend 📱
 ```sh
-cd ../server
+cd ../client
 pnpm i
 ```
 
 ###  3️⃣ Configure Environment Variables 🔑
-Copy the `.env.example` files to `.env` in both the **frontend** and **backend** directories.
+Copy the `.env.example` files to `.env` in both the **backend** and **frontend** directories.
 Each environment file must be placed in its respective service directory:  
-- Frontend → `client/.env`
 - Backend → `server/src/configs/.env`
+- Frontend → `client/.env`
 
-#### 🌐 Frontend 🎨 
-Navigate to the project root and create `.env` inside the `client/` directory:
+#### ⚙️ Backend 🌐
+Navigate to the project root and create `.env` inside `server/src/configs/` directory:
 ```sh
 cd ..
 
-# Linux/macOS
-cp client/.env.example client/.env
-
-# Windows (cmd)
-copy client\.env.example client\.env
-
-# Windows (PowerShell)
-Copy-Item client/.env.example client/.env
-```
-
-Modify .env with:
-```sh
-VITE_DOMAIN=localhost
-VITE_SERVER_PORT=3001
-```
-
-#### 🖥️ Backend ⚙️
-Create `.env` inside `server/src/configs/`:
-```sh
 # Linux/macOS
 cp server/src/configs/.env.example server/src/configs/.env
 
@@ -99,19 +80,38 @@ NODE_ENV=development    # or "production"
 > [!Note]
 > **Replace values inside `<...>` with your actual database credentials.**
 
+#### 🖥️ Frontend 📱
+Create `.env` inside the `client/`:
+```sh
+# Linux/macOS
+cp client/.env.example client/.env
+
+# Windows (cmd)
+copy client\.env.example client\.env
+
+# Windows (PowerShell)
+Copy-Item client/.env.example client/.env
+```
+
+Modify .env with:
+```sh
+VITE_DOMAIN=localhost
+VITE_SERVER_PORT=3001
+```
+
 ---
 
 ## **🚀 Running the Application**
 ### **🚧 Development Mode**
-#### 🌐 Start Frontend 🎨 (React)
+#### ⚙️ Start Backend 🌐 (Express)
 ```sh
-cd client
+cd server
 pnpm run dev
 ```
 
-#### 🖥️ Start Backend ⚙️ (Express)
+#### 🖥️ Start Frontend 📱 (React)
 ```sh
-cd ../server
+cd ../client
 pnpm run dev
 ```
 
@@ -121,18 +121,18 @@ Before running the application in production, make sure to modify the `.env` fil
 NODE_ENV=production
 ```
 
-#### 🌐 Frontend 🎨
-```sh
-cd ../client
-pnpm run build
-pnpm serve -s dist -l 3000
-```
-
-#### 🖥️ Backend ⚙️
+#### ⚙️ Backend 🌐
 ```sh
 cd ../server
 pnpm run build
 pnpm production
+```
+
+#### 🖥️ Frontend 📱
+```sh
+cd ../client
+pnpm run build
+pnpm serve -s dist -l 3000
 ```
 
 ---
@@ -175,7 +175,7 @@ NODE_ENV=production  # Ensure the app runs in production mode inside Docker
 docker compose up -d
 ```
 
-### 3️⃣ Stop Containers 🛑
+### 3️⃣ Stop Containers ⛔
 ```sh
 docker compose down
 ```
