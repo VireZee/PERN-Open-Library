@@ -21,12 +21,12 @@ docker network create <your_network_name>
 ### 3️⃣ Run the Containers 🚢
 #### 🗄️ Database 🗃️
 ```sh
-docker run -d --name <your_database_container_name> \
-  --network <your_network_name> \
-  -e POSTGRES_USER=<your_database_user> \
-  -e POSTGRES_PASSWORD=<your_database_password> \
-  -e POSTGRES_DB=<your_database_name> \
-  --restart always \
+docker run -d --name <your_database_container_name> `
+  --network <your_network_name> `
+  -e POSTGRES_USER=<your_database_user> `
+  -e POSTGRES_PASSWORD=<your_database_password> `
+  -e POSTGRES_DB=<your_database_name> `
+  --restart always `
   postgres:latest
 ```
 > [!Note]
@@ -34,21 +34,21 @@ docker run -d --name <your_database_container_name> \
 
 #### ⚙️ Backend 🌐
 ```sh
-docker run -d --name <your_backend_container_name> \
-  --network <your_network_name> \
-  -e DB_HOST=<your_database_container_name> \
-  -e DB_PORT=5432 \
-  -e DB_USER=<your_database_user> \
-  -e DB_PASS=<your_database_password> \
-  -e DB_NAME=<your_database_name> \
-  -e DOMAIN=localhost \
-  -e PORT=3001 \
-  -e CLIENT_PORT=3000 \
-  -e SECRET_KEY=<your_secret_key> \
-  -e PEPPER=<your_pepper> \
-  -e NODE_ENV=production \
-  -p 3001:3001 \
-  --restart always \
+docker run -d --name <your_backend_container_name> `
+  --network <your_network_name> `
+  -e DB_HOST=<your_database_container_name> `
+  -e DB_PORT=5432 `
+  -e DB_USER=<your_database_user> `
+  -e DB_PASS=<your_database_password> `
+  -e DB_NAME=<your_database_name> `
+  -e DOMAIN=localhost `
+  -e PORT=3001 `
+  -e CLIENT_PORT=3000 `
+  -e SECRET_KEY=<your_secret_key> `
+  -e PEPPER=<your_pepper> `
+  -e NODE_ENV=production `
+  -p 3001:3001 `
+  --restart always `
   virezee/pern-open-library-backend:latest
 ```
 > [!Note]
@@ -56,12 +56,12 @@ docker run -d --name <your_backend_container_name> \
 
 #### 🖥️ Frontend 📱
 ```sh
-docker run -d --name <your_frontend_container_name> \
-  --network <your_network_name> \
-  -e VITE_DOMAIN=localhost \
-  -e VITE_SERVER_PORT=3001 \
-  -p 3000:3000 \
-  --restart always \
+docker run -d --name <your_frontend_container_name> `
+  --network <your_network_name> `
+  -e VITE_DOMAIN=localhost `
+  -e VITE_SERVER_PORT=3001 `
+  -p 3000:3000 `
+  --restart always `
   virezee/pern-open-library-frontend:latest
 ```
 
